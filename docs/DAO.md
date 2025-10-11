@@ -1,3 +1,6 @@
+## Directory Structure
+
+```
 src/java/dao/
 ├── user/
 │   ├── UserDAO.java
@@ -28,9 +31,10 @@ src/java/dao/
 │   ├── NotificationDAO.java
 │   └── SystemSettingDAO.java
 └── shared/
-    └── BaseDAO.java       # Chứa hàm tiện ích chung (getConnection, closeResource, v.v.)
+    └── BaseDAO.java
+```
 
-# 📘 DAO Mapping Table
+## 📘 DAO Mapping Table
 
 | Domain | Models | DAOs | Database Tables |
 |--------|---------|------|----------------|
