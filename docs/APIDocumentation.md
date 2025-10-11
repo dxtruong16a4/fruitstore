@@ -225,4 +225,4 @@ public class ProductServlet extends HttpServlet {
 
 ---
 
-*Tài liệu này được cập nhật lần cuối: 15/01/2024*
+*Tài liệu này được cập nhật lần cuối: 11/10/2025*
