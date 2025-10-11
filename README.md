@@ -102,8 +102,6 @@ Chi tiết đầy đủ xem trong [docs/APIDocumentation.md](docs/APIDocumentati
 
 Chi tiết xem trong [docs/UserStories.md](docs/UserStories.md)
 
-## 🧪 Testing
-
 ### Functional Requirements
 
 Chi tiết xem trong [docs/FunctionalRequirements.md](docs/FunctionalRequirements.md)
