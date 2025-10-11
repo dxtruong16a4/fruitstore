@@ -206,3 +206,6 @@ local.config
 # Testing
 /test-output/
 /test-results/
+
+# Github
+.github/
