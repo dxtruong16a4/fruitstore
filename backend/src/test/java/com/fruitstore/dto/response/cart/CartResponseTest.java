@@ -178,10 +178,10 @@ public class CartResponseTest {
 
         // When & Then
         assertThat(response1).isEqualTo(response1); // Same object
-        assertThat(response1).isNotEqualTo(response2); // Different cartId
+        assertThat(response1).isEqualTo(response2); // Same cartId (equals only compares cartId)
         assertThat(response1).isNotEqualTo(response3); // Different cartId
         assertThat(response1.hashCode()).isEqualTo(response1.hashCode());
-        assertThat(response1.hashCode()).isNotEqualTo(response2.hashCode());
+        assertThat(response1.hashCode()).isEqualTo(response2.hashCode()); // Same cartId = same hashCode
     }
 
     @Test

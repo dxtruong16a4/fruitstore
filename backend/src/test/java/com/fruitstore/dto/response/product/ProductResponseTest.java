@@ -123,11 +123,11 @@ public class ProductResponseTest {
 
         // Then
         assertThat(toString).contains("productId=1");
-        assertThat(toString).contains("name=Táo Fuji Nhật Bản");
-        assertThat(toString).contains("description=Táo Fuji nhập khẩu từ Nhật Bản");
+        assertThat(toString).contains("name='Táo Fuji Nhật Bản'"); // String fields have quotes
+        assertThat(toString).contains("description='Táo Fuji nhập khẩu từ Nhật Bản'"); // String fields have quotes
         assertThat(toString).contains("price=150000.00");
         assertThat(toString).contains("stockQuantity=100");
-        assertThat(toString).contains("imageUrl=/images/products/apple-fuji.jpg");
+        assertThat(toString).contains("imageUrl='/images/products/apple-fuji.jpg'"); // String fields have quotes
         assertThat(toString).contains("isActive=true");
     }
 

@@ -118,9 +118,9 @@ public class CategoryResponseTest {
 
         // Then
         assertThat(toString).contains("categoryId=1");
-        assertThat(toString).contains("name=Trái cây tươi");
-        assertThat(toString).contains("description=Các loại trái cây tươi ngon");
-        assertThat(toString).contains("imageUrl=/images/categories/fresh-fruits.jpg");
+        assertThat(toString).contains("name='Trái cây tươi'"); // String fields have quotes
+        assertThat(toString).contains("description='Các loại trái cây tươi ngon'"); // String fields have quotes
+        assertThat(toString).contains("imageUrl='/images/categories/fresh-fruits.jpg'"); // String fields have quotes
         assertThat(toString).contains("isActive=true");
         assertThat(toString).contains("productCount=15");
     }

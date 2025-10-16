@@ -160,7 +160,7 @@ public class ValidateDiscountRequestTest {
         // Given
         ValidateDiscountRequest request = new ValidateDiscountRequest();
         request.setCode("WELCOME10");
-        request.setOrderAmount(new BigDecimal("9999999999.99")); // Too many digits
+        request.setOrderAmount(new BigDecimal("99999999999.99")); // 11 integer digits - this is INVALID!
 
         // When
         Set<ConstraintViolation<ValidateDiscountRequest>> violations = validator.validate(request);

@@ -227,10 +227,10 @@ public class ProductFilterRequestTest {
         assertThat(toString).contains("categoryId=1");
         assertThat(toString).contains("minPrice=50000.00");
         assertThat(toString).contains("maxPrice=200000.00");
-        assertThat(toString).contains("keyword=táo");
+        assertThat(toString).contains("keyword='táo'"); // String fields have quotes
         assertThat(toString).contains("page=0");
         assertThat(toString).contains("size=20");
-        assertThat(toString).contains("sortBy=name");
-        assertThat(toString).contains("sortDirection=asc");
+        assertThat(toString).contains("sortBy='name'"); // String fields have quotes
+        assertThat(toString).contains("sortDirection='asc'"); // String fields have quotes
     }
 }

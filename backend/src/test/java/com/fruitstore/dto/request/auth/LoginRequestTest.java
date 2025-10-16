@@ -203,7 +203,7 @@ class LoginRequestTest {
         Set<ConstraintViolation<LoginRequest>> violations = validator.validate(request);
 
         // Then
-        assertEquals(2, violations.size()); // Both email and password are invalid
+        assertEquals(3, violations.size()); // Email has 1 violation (NotBlank), password has 2 violations (NotBlank + Size)
     }
 
     @Test
