@@ -40,10 +40,10 @@ public class AuthService {
      * Register a new user
      * 
      * @param request registration details
-     * @return user profile response
+     * @return login response with JWT token
      * @throws IllegalArgumentException if email or username already exists
      */
-    public UserProfileResponse register(RegisterRequest request) {
+    public LoginResponse register(RegisterRequest request) {
         // Check if email already exists
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("Email already exists: " + request.getEmail());
@@ -72,8 +72,19 @@ public class AuthService {
         // Save user
         User savedUser = userRepository.save(user);
 
-        // Return user profile response
-        return mapToUserProfileResponse(savedUser);
+        // Generate JWT token for the new user
+        UserDetails userDetails = new CustomUserDetails(savedUser);
+        String token = jwtUtil.generateToken(userDetails);
+
+        // Return login response with token
+        return new LoginResponse(
+                token,
+                savedUser.getUserId(),
+                savedUser.getUsername(),
+                savedUser.getEmail(),
+                savedUser.getFullName(),
+                savedUser.getRole()
+        );
     }
 
     /**

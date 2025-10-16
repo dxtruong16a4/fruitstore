@@ -83,12 +83,15 @@ class AuthServiceTest {
         when(passwordUtil.isPasswordStrong(anyString())).thenReturn(true);
         when(passwordUtil.hashPassword(anyString())).thenReturn("$2a$10$hashedPassword");
         when(userRepository.save(any(User.class))).thenReturn(testUser);
+        when(jwtUtil.generateToken(any())).thenReturn("jwt.token.here");
 
         // When
-        UserProfileResponse response = authService.register(registerRequest);
+        LoginResponse response = authService.register(registerRequest);
 
         // Then
         assertNotNull(response);
+        assertEquals("jwt.token.here", response.getToken());
+        assertEquals("Bearer", response.getTokenType());
         assertEquals(1L, response.getUserId());
         assertEquals("testuser", response.getUsername());
         assertEquals("test@example.com", response.getEmail());
@@ -100,6 +103,7 @@ class AuthServiceTest {
         verify(passwordUtil).isPasswordStrong("Password123");
         verify(passwordUtil).hashPassword("Password123");
         verify(userRepository).save(any(User.class));
+        verify(jwtUtil).generateToken(any());
     }
 
     @Test
@@ -158,12 +162,14 @@ class AuthServiceTest {
         when(passwordUtil.isPasswordStrong(anyString())).thenReturn(true);
         when(passwordUtil.hashPassword(anyString())).thenReturn("$2a$10$hashedPassword");
         when(userRepository.save(any(User.class))).thenReturn(testUser);
+        when(jwtUtil.generateToken(any())).thenReturn("jwt.token.here");
 
         // When
         authService.register(registerRequest);
 
         // Then
         verify(passwordUtil).hashPassword("Password123");
+        verify(jwtUtil).generateToken(any());
     }
 
     @Test
@@ -178,12 +184,14 @@ class AuthServiceTest {
             assertEquals(UserRole.CUSTOMER, user.getRole());
             return testUser;
         });
+        when(jwtUtil.generateToken(any())).thenReturn("jwt.token.here");
 
         // When
         authService.register(registerRequest);
 
         // Then
         verify(userRepository).save(any(User.class));
+        verify(jwtUtil).generateToken(any());
     }
 
     // ===== LOGIN TESTS =====
@@ -487,13 +495,15 @@ class AuthServiceTest {
         when(passwordUtil.isPasswordStrong(anyString())).thenReturn(true);
         when(passwordUtil.hashPassword(anyString())).thenReturn("$2a$10$hashedPassword");
         when(userRepository.save(any(User.class))).thenReturn(testUser);
+        when(jwtUtil.generateToken(any())).thenReturn("jwt.token.here");
 
         // When - Register
-        UserProfileResponse registerResponse = authService.register(registerRequest);
+        LoginResponse registerResponse = authService.register(registerRequest);
 
         // Then - Register
         assertNotNull(registerResponse);
         assertEquals("test@example.com", registerResponse.getEmail());
+        assertEquals("jwt.token.here", registerResponse.getToken());
 
         // Given - Login
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));

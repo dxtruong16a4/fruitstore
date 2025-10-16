@@ -115,7 +115,7 @@ class AuthControllerTest {
     @Test
     void testRegister_Success() throws Exception {
         // Given
-        when(authService.register(any(RegisterRequest.class))).thenReturn(userProfileResponse);
+        when(authService.register(any(RegisterRequest.class))).thenReturn(loginResponse);
 
         // When & Then
         mockMvc.perform(post("/api/auth/register")
@@ -124,6 +124,8 @@ class AuthControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("User registered successfully"))
+                .andExpect(jsonPath("$.data.token").value("jwt.token.here"))
+                .andExpect(jsonPath("$.data.tokenType").value("Bearer"))
                 .andExpect(jsonPath("$.data.userId").value(1))
                 .andExpect(jsonPath("$.data.username").value("testuser"))
                 .andExpect(jsonPath("$.data.email").value("test@example.com"))
@@ -442,7 +444,7 @@ class AuthControllerTest {
     @Test
     void testRegisterAndLogin_Integration() throws Exception {
         // Given - Register
-        when(authService.register(any(RegisterRequest.class))).thenReturn(userProfileResponse);
+        when(authService.register(any(RegisterRequest.class))).thenReturn(loginResponse);
 
         // When - Register
         mockMvc.perform(post("/api/auth/register")

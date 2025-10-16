@@ -37,13 +37,13 @@ public class AuthController {
      * Register a new user
      * 
      * @param request registration details
-     * @return user profile response
+     * @return login response with JWT token
      */
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<UserProfileResponse>> register(
+    public ResponseEntity<ApiResponse<LoginResponse>> register(
             @Valid @RequestBody RegisterRequest request) {
         
-        UserProfileResponse response = authService.register(request);
+        LoginResponse response = authService.register(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success("User registered successfully", response));
