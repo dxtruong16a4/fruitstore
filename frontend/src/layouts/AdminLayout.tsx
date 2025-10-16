@@ -1,0 +1,51 @@
+import React, { useState } from 'react';
+import { Box, Drawer, useTheme, useMediaQuery } from '@mui/material';
+import AdminHeader from '../components/layout/AdminHeader';
+import AdminSidebar from '../components/layout/AdminSidebar';
+import Footer from '../components/layout/Footer';
+
+interface AdminLayoutProps {
+  children: React.ReactNode;
+}
+
+const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  return (
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+      {/* Admin Header */}
+      <AdminHeader onDrawerToggle={handleDrawerToggle} />
+      
+      {/* Admin Sidebar */}
+      <AdminSidebar 
+        mobileOpen={mobileOpen}
+        onDrawerToggle={handleDrawerToggle}
+      />
+      
+      {/* Main Content */}
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { md: `calc(100% - ${240}px)` },
+          ml: { md: `${240}px` },
+          mt: { xs: '64px', md: 0 },
+        }}
+      >
+        {children}
+      </Box>
+      
+      {/* Footer */}
+      <Footer />
+    </Box>
+  );
+};
+
+export default AdminLayout;

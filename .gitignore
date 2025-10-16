@@ -1,5 +1,6 @@
 docs/
 README.md
+.cursor/
 # Compiled class files
 *.class
 
