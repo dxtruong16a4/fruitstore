@@ -256,7 +256,7 @@ class DiscountEntityTest {
         BigDecimal result = discount.calculateDiscountAmount(new BigDecimal("1000.00"));
 
         // Then
-        assertEquals(new BigDecimal("100.00"), result);
+        assertEquals(0, new BigDecimal("100.00").compareTo(result));
     }
 
     @Test
@@ -274,7 +274,7 @@ class DiscountEntityTest {
         BigDecimal result = discount.calculateDiscountAmount(new BigDecimal("1000.00"));
 
         // Then
-        assertEquals(new BigDecimal("50.00"), result);
+        assertEquals(0, new BigDecimal("50.00").compareTo(result));
     }
 
     @Test
@@ -293,7 +293,7 @@ class DiscountEntityTest {
         BigDecimal result = discount.calculateDiscountAmount(new BigDecimal("1000.00"));
 
         // Then
-        assertEquals(new BigDecimal("100.00"), result); // Capped at max discount amount
+        assertEquals(0, new BigDecimal("100.00").compareTo(result)); // Capped at max discount amount
     }
 
     @Test
@@ -311,7 +311,7 @@ class DiscountEntityTest {
         BigDecimal result = discount.calculateDiscountAmount(new BigDecimal("100.00"));
 
         // Then
-        assertEquals(new BigDecimal("100.00"), result); // Discount capped at order amount
+        assertEquals(0, new BigDecimal("100.00").compareTo(result)); // Discount capped at order amount
     }
 
     @Test
@@ -326,7 +326,7 @@ class DiscountEntityTest {
         BigDecimal result = discount.calculateDiscountAmount(new BigDecimal("1000.00"));
 
         // Then
-        assertEquals(BigDecimal.ZERO, result);
+        assertEquals(0, BigDecimal.ZERO.compareTo(result));
     }
 
     @Test

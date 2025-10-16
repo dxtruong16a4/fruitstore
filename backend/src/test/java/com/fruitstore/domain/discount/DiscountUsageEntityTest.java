@@ -53,7 +53,7 @@ class DiscountUsageEntityTest {
         assertEquals(user, discountUsage.getUser());
         assertEquals(order, discountUsage.getOrder());
         assertEquals(discountAmount, discountUsage.getDiscountAmount());
-        assertNotNull(discountUsage.getUsedAt());
+        // usedAt is set by @PrePersist, so it will be null until entity is persisted
     }
 
     @Test
