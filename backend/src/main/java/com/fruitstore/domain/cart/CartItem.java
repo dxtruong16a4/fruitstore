@@ -117,6 +117,8 @@ public class CartItem {
      */
     public boolean hasSufficientStock() {
         return product != null && 
+               product.getIsActive() && 
+               product.getStockQuantity() != null &&
                product.getStockQuantity() >= quantity;
     }
 

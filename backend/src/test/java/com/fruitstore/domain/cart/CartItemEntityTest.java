@@ -6,9 +6,10 @@ import com.fruitstore.domain.user.User;
 import com.fruitstore.domain.user.UserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 import java.math.BigDecimal;
 
@@ -19,9 +20,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * Integration test for CartItem entity mapping
  */
 @DataJpaTest
-@ActiveProfiles("test")
+@TestPropertySource(properties = {
+    "spring.datasource.url=jdbc:h2:mem:testdb",
+    "spring.datasource.driver-class-name=org.h2.Driver",
+    "spring.jpa.hibernate.ddl-auto=create-drop",
+    "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect"
+})
 public class CartItemEntityTest {
 
+    @Autowired
     private TestEntityManager entityManager;
 
     private User user;
