@@ -1,9 +1,23 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import ProfilePage from './pages/ProfilePage';
+import ProductListPage from './pages/ProductListPage';
+import ProductDetailPage from './pages/ProductDetailPage';
+import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
+import OrderHistoryPage from './pages/OrderHistoryPage';
+import OrderDetailPage from './pages/OrderDetailPage';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminProductManagement from './pages/AdminProductManagement';
+import AdminOrderManagement from './pages/AdminOrderManagement';
+import AdminCategoryManagement from './pages/AdminCategoryManagement';
+import AdminDiscountManagement from './pages/AdminDiscountManagement';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
 // Create Material-UI theme
 const theme = createTheme({
@@ -59,13 +73,90 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/products" element={<div>Sản phẩm (Coming Soon)</div>} />
-            <Route path="/cart" element={<div>Giỏ hàng (Coming Soon)</div>} />
-            <Route path="/login" element={<div>Đăng nhập (Coming Soon)</div>} />
-            <Route path="/register" element={<div>Đăng ký (Coming Soon)</div>} />
-            <Route path="/profile" element={<div>Hồ sơ (Coming Soon)</div>} />
-            <Route path="/orders" element={<div>Đơn hàng (Coming Soon)</div>} />
-            <Route path="/admin" element={<div>Quản trị (Coming Soon)</div>} />
+            <Route path="/products" element={<ProductListPage />} />
+            <Route path="/products/:id" element={<ProductDetailPage />} />
+            <Route 
+              path="/cart" 
+              element={
+                <ProtectedRoute>
+                  <CartPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/checkout" 
+              element={
+                <ProtectedRoute>
+                  <CheckoutPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/orders" 
+              element={
+                <ProtectedRoute>
+                  <OrderHistoryPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/orders/:id" 
+              element={
+                <ProtectedRoute>
+                  <OrderDetailPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute requireAdmin>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/products" 
+              element={
+                <ProtectedRoute requireAdmin>
+                  <AdminProductManagement />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/orders" 
+              element={
+                <ProtectedRoute requireAdmin>
+                  <AdminOrderManagement />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/categories" 
+              element={
+                <ProtectedRoute requireAdmin>
+                  <AdminCategoryManagement />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/discounts" 
+              element={
+                <ProtectedRoute requireAdmin>
+                  <AdminDiscountManagement />
+                </ProtectedRoute>
+              } 
+            />
           </Routes>
         </Layout>
       </Router>
