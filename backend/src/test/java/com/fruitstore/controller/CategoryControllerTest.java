@@ -7,13 +7,13 @@ import com.fruitstore.dto.response.category.CategoryResponse;
 import com.fruitstore.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -28,15 +28,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Test class for CategoryController
  */
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@TestPropertySource(properties = {
+    "app.jwt.secret=testSecretKeyForJWTTokenGenerationAndValidationInTests",
+    "app.jwt.expiration=86400000",
+    "app.cors.allowed-origins=http://localhost:3000",
+    "app.cors.allowed-methods=GET,POST,PUT,DELETE,OPTIONS",
+    "app.cors.allowed-headers=*",
+    "app.cors.allow-credentials=true"
+})
 public class CategoryControllerTest {
 
-    @Mock
+    @MockBean
     private CategoryService categoryService;
 
-    @InjectMocks
-    private CategoryController categoryController;
-
+    @Autowired
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
@@ -47,7 +54,6 @@ public class CategoryControllerTest {
 
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
         objectMapper = new ObjectMapper();
 
         category1 = new CategoryResponse();

@@ -15,10 +15,12 @@ import com.fruitstore.util.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -33,7 +35,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Tests for AuthController REST endpoints
  */
-@WebMvcTest(AuthController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@TestPropertySource(properties = {
+    "app.jwt.secret=testSecretKeyForJWTTokenGenerationAndValidationInTests",
+    "app.jwt.expiration=86400000",
+    "spring.security.user.name=admin",
+    "spring.security.user.password=admin",
+    "spring.security.user.roles=ADMIN"
+})
 class AuthControllerTest {
 
     @Autowired
@@ -260,7 +270,7 @@ class AuthControllerTest {
     void testGetProfile_Unauthorized() throws Exception {
         // When & Then
         mockMvc.perform(get("/api/auth/profile"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
 
         verify(authService, never()).getUserProfile(anyLong());
     }
@@ -311,7 +321,7 @@ class AuthControllerTest {
         mockMvc.perform(put("/api/auth/profile")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
 
         verify(authService, never()).updateProfile(anyLong(), any(UpdateProfileRequest.class));
     }
@@ -360,7 +370,7 @@ class AuthControllerTest {
         mockMvc.perform(post("/api/auth/change-password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
 
         verify(authService, never()).changePassword(anyLong(), any(ChangePasswordRequest.class));
     }
@@ -422,7 +432,7 @@ class AuthControllerTest {
     void testGetCurrentUser_Unauthorized() throws Exception {
         // When & Then
         mockMvc.perform(get("/api/auth/me"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
 
         verify(authService, never()).getUserProfile(anyLong());
     }

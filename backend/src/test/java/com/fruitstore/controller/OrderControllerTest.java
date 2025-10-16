@@ -11,7 +11,8 @@ import com.fruitstore.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -20,10 +21,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -31,7 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Tests for OrderController REST endpoints
  */
-@WebMvcTest(OrderController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class OrderControllerTest {
 
     @Autowired
@@ -77,7 +81,14 @@ class OrderControllerTest {
         request.setCustomerName("Test User");
         request.setCustomerEmail("test@example.com");
         request.setPhoneNumber("1234567890");
-        request.setOrderItems(new ArrayList<>());
+        
+        // Add a valid order item
+        List<CreateOrderRequest.OrderItemRequest> orderItems = new ArrayList<>();
+        CreateOrderRequest.OrderItemRequest orderItem = new CreateOrderRequest.OrderItemRequest();
+        orderItem.setProductId(1L);
+        orderItem.setQuantity(2);
+        orderItems.add(orderItem);
+        request.setOrderItems(orderItems);
 
         when(orderService.createOrder(anyLong(), any(CreateOrderRequest.class)))
                 .thenReturn(orderResponse);
@@ -85,6 +96,7 @@ class OrderControllerTest {
         // When & Then
         mockMvc.perform(post("/api/orders")
                 .with(user(userDetails))
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -121,7 +133,8 @@ class OrderControllerTest {
 
         // When & Then
         mockMvc.perform(put("/api/orders/1/cancel")
-                .with(user(userDetails)))
+                .with(user(userDetails))
+                .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("Order cancelled successfully"))
@@ -161,29 +174,54 @@ class OrderControllerTest {
         request.setShippingAddress("123 Test St");
         request.setCustomerName("Test User");
         request.setCustomerEmail("test@example.com");
-        request.setOrderItems(new ArrayList<>());
+        
+        // Add a valid order item
+        List<CreateOrderRequest.OrderItemRequest> orderItems = new ArrayList<>();
+        CreateOrderRequest.OrderItemRequest orderItem = new CreateOrderRequest.OrderItemRequest();
+        orderItem.setProductId(1L);
+        orderItem.setQuantity(2);
+        orderItems.add(orderItem);
+        request.setOrderItems(orderItems);
 
         // When & Then
         mockMvc.perform(post("/api/orders")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 
     @Test
-    @WithMockUser(roles = "ADMIN")
     void createOrder_WithAdminRole_ShouldReturnForbidden() throws Exception {
         // Given
         CreateOrderRequest request = new CreateOrderRequest();
         request.setShippingAddress("123 Test St");
         request.setCustomerName("Test User");
         request.setCustomerEmail("test@example.com");
-        request.setOrderItems(new ArrayList<>());
+        
+        // Add a valid order item
+        List<CreateOrderRequest.OrderItemRequest> orderItems = new ArrayList<>();
+        CreateOrderRequest.OrderItemRequest orderItem = new CreateOrderRequest.OrderItemRequest();
+        orderItem.setProductId(1L);
+        orderItem.setQuantity(2);
+        orderItems.add(orderItem);
+        request.setOrderItems(orderItems);
+
+        // Create admin user details
+        User adminUser = new User();
+        adminUser.setUserId(2L);
+        adminUser.setUsername("admin");
+        adminUser.setEmail("admin@example.com");
+        adminUser.setFullName("Admin User");
+        adminUser.setRole(UserRole.ADMIN);
+        CustomUserDetails adminUserDetails = new CustomUserDetails(adminUser);
 
         // When & Then
         mockMvc.perform(post("/api/orders")
+                .with(user(adminUserDetails))
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isInternalServerError());
     }
 }

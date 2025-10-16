@@ -7,14 +7,17 @@ import com.fruitstore.dto.response.order.OrderListResponse;
 import com.fruitstore.dto.response.order.OrderResponse;
 import com.fruitstore.dto.response.order.OrderSummaryResponse;
 import com.fruitstore.service.OrderService;
+import com.fruitstore.util.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -31,7 +34,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Tests for AdminOrderController REST endpoints
  */
-@WebMvcTest(AdminOrderController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@TestPropertySource(properties = {
+    "app.jwt.secret=testSecretKeyForJWTTokenGenerationAndValidationInTests",
+    "app.jwt.expiration=86400000",
+    "spring.security.user.name=admin",
+    "spring.security.user.password=admin",
+    "spring.security.user.roles=ADMIN"
+})
 class AdminOrderControllerTest {
 
     @Autowired
@@ -42,6 +53,9 @@ class AdminOrderControllerTest {
 
     @MockBean
     private OrderService orderService;
+
+    @MockBean
+    private JwtUtil jwtUtil;
 
     private OrderResponse orderResponse;
     private OrderListResponse orderListResponse;
@@ -82,9 +96,9 @@ class AdminOrderControllerTest {
         mockMvc.perform(get("/api/admin/orders"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data.content").isArray())
-                .andExpect(jsonPath("$.data.content[0].orderId").value(1L))
-                .andExpect(jsonPath("$.data.content[0].orderNumber").value("ORD-001"));
+                .andExpect(jsonPath("$.data.data").isArray())
+                .andExpect(jsonPath("$.data.data[0].orderId").value(1L))
+                .andExpect(jsonPath("$.data.data[0].orderNumber").value("ORD-001"));
     }
 
     @Test
@@ -151,7 +165,7 @@ class AdminOrderControllerTest {
         mockMvc.perform(get("/api/admin/orders/status/pending"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data.content").isArray());
+                .andExpect(jsonPath("$.data.data").isArray());
     }
 
     @Test
@@ -183,7 +197,7 @@ class AdminOrderControllerTest {
     void getAllOrders_WithoutAuthentication_ShouldReturnUnauthorized() throws Exception {
         // When & Then
         mockMvc.perform(get("/api/admin/orders"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 
     @Test

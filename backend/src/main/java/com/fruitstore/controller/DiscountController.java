@@ -5,6 +5,7 @@ import com.fruitstore.dto.request.discount.UpdateDiscountRequest;
 import com.fruitstore.dto.request.discount.ValidateDiscountRequest;
 import com.fruitstore.dto.response.discount.DiscountResponse;
 import com.fruitstore.dto.response.discount.DiscountValidationResponse;
+import com.fruitstore.dto.response.discount.DiscountUsageResponse;
 import com.fruitstore.dto.response.common.ApiResponse;
 import com.fruitstore.service.DiscountService;
 import com.fruitstore.service.DiscountService.DiscountUsageStats;
@@ -218,7 +219,7 @@ public class DiscountController {
      */
     @GetMapping("/{id}/usages")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Page<DiscountUsage>>> getDiscountUsages(
+    public ResponseEntity<ApiResponse<Page<DiscountUsageResponse>>> getDiscountUsages(
             @PathVariable Long id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
@@ -226,7 +227,7 @@ public class DiscountController {
             @RequestParam(defaultValue = "desc") String sortDirection) {
         
         Pageable pageable = createPageable(page, size, sortBy, sortDirection);
-        Page<DiscountUsage> usages = discountService.getDiscountUsages(id, pageable);
+        Page<DiscountUsageResponse> usages = discountService.getDiscountUsages(id, pageable);
         return ResponseEntity.ok(ApiResponse.success(usages));
     }
 
@@ -242,7 +243,7 @@ public class DiscountController {
      */
     @GetMapping("/user/{userId}/usages")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Page<DiscountUsage>>> getUserDiscountUsages(
+    public ResponseEntity<ApiResponse<Page<DiscountUsageResponse>>> getUserDiscountUsages(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
@@ -250,7 +251,7 @@ public class DiscountController {
             @RequestParam(defaultValue = "desc") String sortDirection) {
         
         Pageable pageable = createPageable(page, size, sortBy, sortDirection);
-        Page<DiscountUsage> usages = discountService.getUserDiscountUsages(userId, pageable);
+        Page<DiscountUsageResponse> usages = discountService.getUserDiscountUsages(userId, pageable);
         return ResponseEntity.ok(ApiResponse.success(usages));
     }
 

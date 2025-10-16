@@ -9,6 +9,7 @@ import com.fruitstore.dto.request.discount.CreateDiscountRequest;
 import com.fruitstore.dto.request.discount.UpdateDiscountRequest;
 import com.fruitstore.dto.response.discount.DiscountResponse;
 import com.fruitstore.dto.response.discount.DiscountValidationResponse;
+import com.fruitstore.dto.response.discount.DiscountUsageResponse;
 import com.fruitstore.repository.DiscountRepository;
 import com.fruitstore.repository.DiscountUsageRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -446,7 +447,7 @@ public class DiscountServiceTest {
         when(discountUsageRepository.findByDiscount_DiscountId(1L, pageable)).thenReturn(usagePage);
 
         // When
-        Page<DiscountUsage> result = discountService.getDiscountUsages(1L, pageable);
+        Page<DiscountUsageResponse> result = discountService.getDiscountUsages(1L, pageable);
 
         // Then
         assertThat(result.getContent()).hasSize(1);
@@ -463,11 +464,11 @@ public class DiscountServiceTest {
         when(discountUsageRepository.findByUser_UserId(1L, pageable)).thenReturn(usagePage);
 
         // When
-        Page<DiscountUsage> result = discountService.getUserDiscountUsages(1L, pageable);
+        Page<DiscountUsageResponse> result = discountService.getUserDiscountUsages(1L, pageable);
 
         // Then
         assertThat(result.getContent()).hasSize(1);
-        assertThat(result.getContent().get(0).getUser().getUserId()).isEqualTo(1L);
+        assertThat(result.getContent().get(0).getUserId()).isEqualTo(1L);
     }
 
     @Test

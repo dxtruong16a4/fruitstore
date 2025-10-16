@@ -10,13 +10,13 @@ import com.fruitstore.security.CustomUserDetails;
 import com.fruitstore.service.CartService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,15 +31,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Test class for CartController
  */
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@TestPropertySource(properties = {
+    "app.jwt.secret=testSecretKeyForJWTTokenGenerationAndValidationInTests",
+    "app.jwt.expiration=86400000",
+    "app.cors.allowed-origins=http://localhost:3000",
+    "app.cors.allowed-methods=GET,POST,PUT,DELETE,OPTIONS",
+    "app.cors.allowed-headers=*",
+    "app.cors.allow-credentials=true"
+})
 public class CartControllerTest {
 
-    @Mock
+    @MockBean
     private CartService cartService;
 
-    @InjectMocks
-    private CartController cartController;
-
+    @Autowired
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
     private CustomUserDetails userDetails;
@@ -49,7 +56,6 @@ public class CartControllerTest {
 
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(cartController).build();
         objectMapper = new ObjectMapper();
 
         // Create test user and user details
@@ -100,7 +106,7 @@ public class CartControllerTest {
                 .andExpect(jsonPath("$.data.totalItems").value(3))
                 .andExpect(jsonPath("$.data.subtotal").value(250000.00))
                 .andExpect(jsonPath("$.data.totalAmount").value(275000.00))
-                .andExpect(jsonPath("$.data.isEmpty").value(false));
+                .andExpect(jsonPath("$.data.empty").value(false));
     }
 
     @Test

@@ -66,7 +66,7 @@ public class SecurityConfig {
                 
                 // Public product and category endpoints
                 .requestMatchers("/api/products/**", "/api/categories/**").permitAll()
-                .requestMatchers("/api/discounts/active", "/api/discounts/validate").permitAll()
+                .requestMatchers("/api/discounts/active", "/api/discounts/validate", "/api/discounts/code/**").permitAll()
                 
                 // Admin endpoints - require ADMIN role
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")

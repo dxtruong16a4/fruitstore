@@ -8,6 +8,7 @@ import com.fruitstore.dto.request.discount.CreateDiscountRequest;
 import com.fruitstore.dto.request.discount.UpdateDiscountRequest;
 import com.fruitstore.dto.response.discount.DiscountResponse;
 import com.fruitstore.dto.response.discount.DiscountValidationResponse;
+import com.fruitstore.dto.response.discount.DiscountUsageResponse;
 import com.fruitstore.repository.DiscountRepository;
 import com.fruitstore.repository.DiscountUsageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -335,8 +336,9 @@ public class DiscountService {
      * @return page of discount usages
      */
     @Transactional(readOnly = true)
-    public Page<DiscountUsage> getDiscountUsages(Long discountId, Pageable pageable) {
-        return discountUsageRepository.findByDiscount_DiscountId(discountId, pageable);
+    public Page<DiscountUsageResponse> getDiscountUsages(Long discountId, Pageable pageable) {
+        Page<DiscountUsage> usages = discountUsageRepository.findByDiscount_DiscountId(discountId, pageable);
+        return usages.map(this::mapToDiscountUsageResponse);
     }
 
     /**
@@ -347,8 +349,9 @@ public class DiscountService {
      * @return page of user's discount usages
      */
     @Transactional(readOnly = true)
-    public Page<DiscountUsage> getUserDiscountUsages(Long userId, Pageable pageable) {
-        return discountUsageRepository.findByUser_UserId(userId, pageable);
+    public Page<DiscountUsageResponse> getUserDiscountUsages(Long userId, Pageable pageable) {
+        Page<DiscountUsage> usages = discountUsageRepository.findByUser_UserId(userId, pageable);
+        return usages.map(this::mapToDiscountUsageResponse);
     }
 
     /**
@@ -418,6 +421,23 @@ public class DiscountService {
             discount.getIsActive(),
             discount.getCreatedAt(),
             discount.getUpdatedAt()
+        );
+    }
+
+    /**
+     * Map DiscountUsage entity to DiscountUsageResponse DTO
+     */
+    private DiscountUsageResponse mapToDiscountUsageResponse(DiscountUsage usage) {
+        return new DiscountUsageResponse(
+            usage.getUsageId(),
+            usage.getDiscount() != null ? usage.getDiscount().getDiscountId() : null,
+            usage.getDiscount() != null ? usage.getDiscount().getCode() : null,
+            usage.getUser() != null ? usage.getUser().getUserId() : null,
+            usage.getUser() != null ? usage.getUser().getUsername() : null,
+            usage.getOrder() != null ? usage.getOrder().getOrderId() : null,
+            usage.getOrder() != null ? usage.getOrder().getOrderNumber() : null,
+            usage.getDiscountAmount(),
+            usage.getUsedAt()
         );
     }
 
