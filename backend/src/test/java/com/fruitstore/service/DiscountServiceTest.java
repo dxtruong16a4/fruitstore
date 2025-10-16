@@ -235,7 +235,7 @@ public class DiscountServiceTest {
         // Then
         verify(discountRepository).save(activeDiscount);
         assertThat(activeDiscount.getDescription()).isEqualTo("Updated description");
-        assertThat(activeDiscount.getDiscountValue()).isEqualTo(new BigDecimal("15.00"));
+        assertThat(activeDiscount.getDiscountValue()).isEqualByComparingTo(new BigDecimal("15.00"));
         assertThat(activeDiscount.getUsageLimit()).isEqualTo(75);
     }
 
@@ -285,7 +285,7 @@ public class DiscountServiceTest {
         assertThat(result.isValid()).isTrue();
         assertThat(result.getCode()).isEqualTo("WELCOME10");
         assertThat(result.getMessage()).isEqualTo("Discount is valid");
-        assertThat(result.getCalculatedDiscountAmount()).isEqualTo(new BigDecimal("15000.00"));
+        assertThat(result.getCalculatedDiscountAmount()).isEqualByComparingTo(new BigDecimal("15000.00"));
     }
 
     @Test
@@ -371,7 +371,7 @@ public class DiscountServiceTest {
         BigDecimal result = discountService.applyDiscount("WELCOME10", new BigDecimal("150000.00"));
 
         // Then
-        assertThat(result).isEqualTo(new BigDecimal("15000.00"));
+        assertThat(result).isEqualByComparingTo(new BigDecimal("15000.00"));
     }
 
     @Test
@@ -430,7 +430,7 @@ public class DiscountServiceTest {
         assertThat(result.getDiscountId()).isEqualTo(1L);
         assertThat(result.getCode()).isEqualTo("WELCOME10");
         assertThat(result.getTotalUsages()).isEqualTo(10L);
-        assertThat(result.getTotalDiscountAmount()).isEqualTo(new BigDecimal("150000.00"));
+        assertThat(result.getTotalDiscountAmount()).isEqualByComparingTo(new BigDecimal("150000.00"));
         assertThat(result.getUsedCount()).isEqualTo(10);
         assertThat(result.getUsageLimit()).isEqualTo(100);
         assertThat(result.getRemainingUsage()).isEqualTo(90);
@@ -450,7 +450,7 @@ public class DiscountServiceTest {
 
         // Then
         assertThat(result.getContent()).hasSize(1);
-        assertThat(result.getContent().get(0).getDiscountAmount()).isEqualTo(new BigDecimal("15000.00"));
+        assertThat(result.getContent().get(0).getDiscountAmount()).isEqualByComparingTo(new BigDecimal("15000.00"));
     }
 
     @Test
@@ -546,7 +546,7 @@ public class DiscountServiceTest {
         // Then
         assertThat(result.isValid()).isTrue();
         assertThat(result.getDiscountType()).isEqualTo(DiscountType.FIXED_AMOUNT);
-        assertThat(result.getCalculatedDiscountAmount()).isEqualTo(new BigDecimal("50000.00"));
+        assertThat(result.getCalculatedDiscountAmount()).isEqualByComparingTo(new BigDecimal("50000.00"));
     }
 
     @Test
@@ -572,6 +572,6 @@ public class DiscountServiceTest {
 
         // Then
         assertThat(result.isValid()).isTrue();
-        assertThat(result.getCalculatedDiscountAmount()).isEqualTo(new BigDecimal("20000.00")); // Capped at max
+        assertThat(result.getCalculatedDiscountAmount()).isEqualByComparingTo(new BigDecimal("20000.00")); // Capped at max
     }
 }

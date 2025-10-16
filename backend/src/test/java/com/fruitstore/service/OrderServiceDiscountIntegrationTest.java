@@ -85,6 +85,7 @@ public class OrderServiceDiscountIntegrationTest {
         testCart = new Cart(testUser);
         testCart.setCartId(1L);
         testCartItem = new CartItem(testCart, testProduct, 2);
+        testCartItem.setCartItemId(1L);
         testCart.addCartItem(testCartItem);
 
         // Setup test discount
@@ -135,8 +136,16 @@ public class OrderServiceDiscountIntegrationTest {
         Order savedOrder = new Order();
         savedOrder.setOrderId(1L);
         savedOrder.setTotalAmount(new BigDecimal("18.00")); // 20.00 - 2.00 discount
-        when(orderRepository.save(any(Order.class))).thenReturn(savedOrder);
-        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(new OrderItem());
+        when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> {
+            Order order = invocation.getArgument(0);
+            order.setOrderId(1L);
+            return order;
+        });
+        when(orderItemRepository.save(any(OrderItem.class))).thenAnswer(invocation -> {
+            OrderItem orderItem = invocation.getArgument(0);
+            orderItem.setOrderItemId(1L);
+            return orderItem;
+        });
         when(productRepository.save(any(Product.class))).thenReturn(testProduct);
         when(cartRepository.save(any(Cart.class))).thenReturn(testCart);
 
@@ -157,6 +166,19 @@ public class OrderServiceDiscountIntegrationTest {
         // Arrange
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
         when(cartRepository.findByUser_UserIdWithItemsAndProducts(1L)).thenReturn(Optional.of(testCart));
+        
+        // Mock order creation (needed before discount validation)
+        when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> {
+            Order order = invocation.getArgument(0);
+            order.setOrderId(1L);
+            return order;
+        });
+        when(orderItemRepository.save(any(OrderItem.class))).thenAnswer(invocation -> {
+            OrderItem orderItem = invocation.getArgument(0);
+            orderItem.setOrderItemId(1L);
+            return orderItem;
+        });
+        when(productRepository.save(any(Product.class))).thenReturn(testProduct);
         
         // Mock invalid discount validation
         DiscountValidationResponse validationResponse = new DiscountValidationResponse(
@@ -186,6 +208,19 @@ public class OrderServiceDiscountIntegrationTest {
         // Arrange
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
         when(cartRepository.findByUser_UserIdWithItemsAndProducts(1L)).thenReturn(Optional.of(testCart));
+        
+        // Mock order creation (needed before discount validation)
+        when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> {
+            Order order = invocation.getArgument(0);
+            order.setOrderId(1L);
+            return order;
+        });
+        when(orderItemRepository.save(any(OrderItem.class))).thenAnswer(invocation -> {
+            OrderItem orderItem = invocation.getArgument(0);
+            orderItem.setOrderItemId(1L);
+            return orderItem;
+        });
+        when(productRepository.save(any(Product.class))).thenReturn(testProduct);
         
         // Mock expired discount validation
         DiscountValidationResponse validationResponse = new DiscountValidationResponse(
@@ -217,6 +252,19 @@ public class OrderServiceDiscountIntegrationTest {
         
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
         when(cartRepository.findByUser_UserIdWithItemsAndProducts(1L)).thenReturn(Optional.of(testCart));
+        
+        // Mock order creation (needed before discount validation)
+        when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> {
+            Order order = invocation.getArgument(0);
+            order.setOrderId(1L);
+            return order;
+        });
+        when(orderItemRepository.save(any(OrderItem.class))).thenAnswer(invocation -> {
+            OrderItem orderItem = invocation.getArgument(0);
+            orderItem.setOrderItemId(1L);
+            return orderItem;
+        });
+        when(productRepository.save(any(Product.class))).thenReturn(testProduct);
         
         // Mock discount validation with minimum order amount not met
         DiscountValidationResponse validationResponse = new DiscountValidationResponse(
@@ -250,8 +298,16 @@ public class OrderServiceDiscountIntegrationTest {
         Order savedOrder = new Order();
         savedOrder.setOrderId(1L);
         savedOrder.setTotalAmount(new BigDecimal("20.00")); // No discount applied
-        when(orderRepository.save(any(Order.class))).thenReturn(savedOrder);
-        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(new OrderItem());
+        when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> {
+            Order order = invocation.getArgument(0);
+            order.setOrderId(1L);
+            return order;
+        });
+        when(orderItemRepository.save(any(OrderItem.class))).thenAnswer(invocation -> {
+            OrderItem orderItem = invocation.getArgument(0);
+            orderItem.setOrderItemId(1L);
+            return orderItem;
+        });
         when(productRepository.save(any(Product.class))).thenReturn(testProduct);
         when(cartRepository.save(any(Cart.class))).thenReturn(testCart);
 
@@ -279,8 +335,16 @@ public class OrderServiceDiscountIntegrationTest {
         Order savedOrder = new Order();
         savedOrder.setOrderId(1L);
         savedOrder.setTotalAmount(new BigDecimal("20.00")); // No discount applied
-        when(orderRepository.save(any(Order.class))).thenReturn(savedOrder);
-        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(new OrderItem());
+        when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> {
+            Order order = invocation.getArgument(0);
+            order.setOrderId(1L);
+            return order;
+        });
+        when(orderItemRepository.save(any(OrderItem.class))).thenAnswer(invocation -> {
+            OrderItem orderItem = invocation.getArgument(0);
+            orderItem.setOrderItemId(1L);
+            return orderItem;
+        });
         when(productRepository.save(any(Product.class))).thenReturn(testProduct);
         when(cartRepository.save(any(Cart.class))).thenReturn(testCart);
 
@@ -323,8 +387,16 @@ public class OrderServiceDiscountIntegrationTest {
         Order savedOrder = new Order();
         savedOrder.setOrderId(1L);
         savedOrder.setTotalAmount(new BigDecimal("15.00")); // 20.00 - 5.00 discount
-        when(orderRepository.save(any(Order.class))).thenReturn(savedOrder);
-        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(new OrderItem());
+        when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> {
+            Order order = invocation.getArgument(0);
+            order.setOrderId(1L);
+            return order;
+        });
+        when(orderItemRepository.save(any(OrderItem.class))).thenAnswer(invocation -> {
+            OrderItem orderItem = invocation.getArgument(0);
+            orderItem.setOrderItemId(1L);
+            return orderItem;
+        });
         when(productRepository.save(any(Product.class))).thenReturn(testProduct);
         when(cartRepository.save(any(Cart.class))).thenReturn(testCart);
 
@@ -366,12 +438,33 @@ public class OrderServiceDiscountIntegrationTest {
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
         when(cartRepository.findByUser_UserIdWithItemsAndProducts(1L)).thenReturn(Optional.of(testCart));
 
+        // Mock discount validation
+        DiscountValidationResponse validationResponse = new DiscountValidationResponse(
+                true, "TEST10", "Valid discount", DiscountType.PERCENTAGE,
+                new BigDecimal("10.00"), new BigDecimal("2.00"), new BigDecimal("15.00"),
+                new BigDecimal("5.00"), 100, 0, 100, "Test discount"
+        );
+        when(discountService.validateDiscount("TEST10", new BigDecimal("20.00")))
+                .thenReturn(validationResponse);
+        when(discountRepository.findByCodeIgnoreCase("TEST10"))
+                .thenReturn(Optional.of(testDiscount));
+        when(discountService.applyDiscount("TEST10", new BigDecimal("20.00")))
+                .thenReturn(new BigDecimal("2.00"));
+
         // Mock order creation
         Order savedOrder = new Order();
         savedOrder.setOrderId(1L);
         savedOrder.setTotalAmount(new BigDecimal("20.00"));
-        when(orderRepository.save(any(Order.class))).thenReturn(savedOrder);
-        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(new OrderItem());
+        when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> {
+            Order order = invocation.getArgument(0);
+            order.setOrderId(1L);
+            return order;
+        });
+        when(orderItemRepository.save(any(OrderItem.class))).thenAnswer(invocation -> {
+            OrderItem orderItem = invocation.getArgument(0);
+            orderItem.setOrderItemId(1L);
+            return orderItem;
+        });
         when(productRepository.save(any(Product.class))).thenReturn(testProduct);
         when(cartRepository.save(any(Cart.class))).thenReturn(testCart);
 
@@ -381,6 +474,6 @@ public class OrderServiceDiscountIntegrationTest {
         // Assert
         assertNotNull(result);
         // This method should just call createOrder internally
-        verify(orderRepository).save(any(Order.class));
+        verify(orderRepository, times(2)).save(any(Order.class)); // Called twice: once for initial save, once for final save
     }
 }

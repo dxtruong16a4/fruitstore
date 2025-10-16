@@ -273,11 +273,20 @@ public class ProductServiceTest {
     @Test
     public void testCreateProductCategoryNotFound() {
         // Given
+        CreateProductRequest request = new CreateProductRequest();
+        request.setName("Nho Mỹ");
+        request.setDescription("Nho xanh không hạt nhập khẩu từ Mỹ");
+        request.setPrice(new BigDecimal("200000.00"));
+        request.setStockQuantity(60);
+        request.setImageUrl("/images/products/grape.jpg");
+        request.setCategoryId(999L); // Use non-existent category ID
+        request.setIsActive(true);
+        
         when(productRepository.existsByNameIgnoreCase("Nho Mỹ")).thenReturn(false);
         when(categoryRepository.findById(999L)).thenReturn(Optional.empty());
 
         // When & Then
-        assertThatThrownBy(() -> productService.createProduct(createRequest))
+        assertThatThrownBy(() -> productService.createProduct(request))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Category not found with id: 999");
         verify(productRepository).existsByNameIgnoreCase("Nho Mỹ");

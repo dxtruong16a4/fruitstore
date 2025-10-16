@@ -188,6 +188,7 @@ public class CartServiceTest {
         // Given
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(productRepository.findById(1L)).thenReturn(Optional.of(product1));
+        when(cartRepository.findByUser_UserId(1L)).thenReturn(Optional.of(cart));
         when(cartRepository.findByUser_UserIdWithItemsAndProducts(1L)).thenReturn(Optional.of(cart));
         when(cartItemRepository.findByCart_CartIdAndProduct_ProductId(1L, 1L)).thenReturn(Optional.empty());
         when(cartItemRepository.save(any(CartItem.class))).thenReturn(cartItem1);
@@ -197,8 +198,9 @@ public class CartServiceTest {
 
         // Then
         assertThat(result).isNotNull();
-        verify(userRepository).findById(1L);
+        verify(userRepository, times(2)).findById(1L); // Called in addItemToCart and getCartByUserId
         verify(productRepository).findById(1L);
+        verify(cartRepository, times(2)).findByUser_UserId(1L); // Called in addItemToCart and getCartByUserId
         verify(cartItemRepository).findByCart_CartIdAndProduct_ProductId(1L, 1L);
         verify(cartItemRepository).save(any(CartItem.class));
     }
@@ -206,11 +208,15 @@ public class CartServiceTest {
     @Test
     public void testAddItemToCartProductNotFound() {
         // Given
+        AddToCartRequest request = new AddToCartRequest();
+        request.setProductId(999L);
+        request.setQuantity(2);
+        
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(productRepository.findById(999L)).thenReturn(Optional.empty());
 
         // When & Then
-        assertThatThrownBy(() -> cartService.addItemToCart(1L, addToCartRequest))
+        assertThatThrownBy(() -> cartService.addItemToCart(1L, request))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Product not found with id: 999");
         verify(userRepository).findById(1L);
@@ -255,6 +261,7 @@ public class CartServiceTest {
         // Given
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(productRepository.findById(1L)).thenReturn(Optional.of(product1));
+        when(cartRepository.findByUser_UserId(1L)).thenReturn(Optional.of(cart));
         when(cartRepository.findByUser_UserIdWithItemsAndProducts(1L)).thenReturn(Optional.of(cart));
         when(cartItemRepository.findByCart_CartIdAndProduct_ProductId(1L, 1L)).thenReturn(Optional.of(cartItem1));
         when(cartItemRepository.save(any(CartItem.class))).thenReturn(cartItem1);
@@ -264,6 +271,7 @@ public class CartServiceTest {
 
         // Then
         assertThat(result).isNotNull();
+        verify(cartRepository, times(2)).findByUser_UserId(1L); // Called in addItemToCart and getCartByUserId
         verify(cartItemRepository).save(cartItem1);
     }
 
@@ -280,7 +288,7 @@ public class CartServiceTest {
 
         // Then
         assertThat(result).isNotNull();
-        verify(userRepository).findById(1L);
+        verify(userRepository, times(2)).findById(1L); // Called in updateCartItem and getCartByUserId
         verify(cartItemRepository).findById(1L);
         verify(cartItemRepository).save(cartItem1);
     }
@@ -331,7 +339,7 @@ public class CartServiceTest {
 
         // Then
         assertThat(result).isNotNull();
-        verify(userRepository).findById(1L);
+        verify(userRepository, times(2)).findById(1L); // Called in removeCartItem and getCartByUserId
         verify(cartItemRepository).findById(1L);
         verify(cartItemRepository).delete(cartItem1);
     }
@@ -348,8 +356,8 @@ public class CartServiceTest {
 
         // Then
         assertThat(result).isNotNull();
-        verify(userRepository).findById(1L);
-        verify(cartRepository).findByUser_UserId(1L);
+        verify(userRepository, times(2)).findById(1L); // Called in clearCart and getCartByUserId
+        verify(cartRepository, times(2)).findByUser_UserId(1L); // Called in clearCart and getCartByUserId
         verify(cartItemRepository).deleteByCart_CartId(1L);
     }
 
