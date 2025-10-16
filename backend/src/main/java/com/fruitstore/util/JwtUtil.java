@@ -123,7 +123,12 @@ public class JwtUtil {
      * @return true if expired, false otherwise
      */
     public Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        try {
+            return extractExpiration(token).before(new Date());
+        } catch (Exception e) {
+            // If we can't extract expiration (e.g., token is malformed or expired), consider it expired
+            return true;
+        }
     }
 
     /**
@@ -134,8 +139,13 @@ public class JwtUtil {
      * @return true if token is valid, false otherwise
      */
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        try {
+            final String username = extractUsername(token);
+            return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        } catch (Exception e) {
+            // If we can't validate the token (e.g., malformed or expired), consider it invalid
+            return false;
+        }
     }
 
     /**
@@ -146,8 +156,13 @@ public class JwtUtil {
      * @return true if token is valid, false otherwise
      */
     public Boolean validateToken(String token, String username) {
-        final String extractedUsername = extractUsername(token);
-        return (extractedUsername.equals(username) && !isTokenExpired(token));
+        try {
+            final String extractedUsername = extractUsername(token);
+            return (extractedUsername.equals(username) && !isTokenExpired(token));
+        } catch (Exception e) {
+            // If we can't validate the token (e.g., malformed or expired), consider it invalid
+            return false;
+        }
     }
 
     /**

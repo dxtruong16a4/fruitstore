@@ -119,6 +119,9 @@ class JwtUtilTest {
             fail("Thread interrupted");
         }
 
+        // Reset expiration for validation
+        ReflectionTestUtils.setField(jwtUtil, "expiration", testExpiration);
+
         // When
         Boolean isExpired = jwtUtil.isTokenExpired(token);
 
@@ -228,20 +231,27 @@ class JwtUtilTest {
 
     @Test
     void testGenerateMultipleTokens_ShouldBeDifferent() {
-        // When
-        String token1 = jwtUtil.generateToken(userDetails);
+        // When - Generate tokens with different custom claims to ensure they're different
+        Map<String, Object> claims1 = new HashMap<>();
+        claims1.put("tokenId", "token1");
+        String token1 = jwtUtil.generateToken(claims1, testUsername);
         
-        // Small delay to ensure different issued time
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-            fail("Thread interrupted");
-        }
-        
-        String token2 = jwtUtil.generateToken(userDetails);
+        Map<String, Object> claims2 = new HashMap<>();
+        claims2.put("tokenId", "token2");
+        String token2 = jwtUtil.generateToken(claims2, testUsername);
 
         // Then
-        assertNotEquals(token1, token2); // Different issued timestamps
+        assertNotEquals(token1, token2, "Tokens should be different due to different claims");
+        
+        // Verify both tokens are valid and contain the same username
+        assertEquals(testUsername, jwtUtil.extractUsername(token1));
+        assertEquals(testUsername, jwtUtil.extractUsername(token2));
+        
+        // Verify custom claims are different
+        String tokenId1 = jwtUtil.extractClaim(token1, claims -> claims.get("tokenId", String.class));
+        String tokenId2 = jwtUtil.extractClaim(token2, claims -> claims.get("tokenId", String.class));
+        assertEquals("token1", tokenId1);
+        assertEquals("token2", tokenId2);
     }
 
     @Test
@@ -314,6 +324,34 @@ class JwtUtilTest {
         // Then
         assertTrue(timeDifference > 0);
         assertTrue(timeDifference <= testExpiration);
+    }
+
+    @Test
+    void testGenerateMultipleTokens_WithDelay_ShouldBeDifferent() {
+        // When - Generate tokens with delay to ensure different timestamps
+        String token1 = jwtUtil.generateToken(userDetails);
+        
+        // Wait to ensure different issued time
+        try {
+            Thread.sleep(1000); // 1 second delay
+        } catch (InterruptedException e) {
+            fail("Thread interrupted");
+        }
+        
+        String token2 = jwtUtil.generateToken(userDetails);
+
+        // Then
+        assertNotEquals(token1, token2, "Tokens should be different due to different issued timestamps");
+        
+        // Verify both tokens are valid and contain the same username
+        assertEquals(testUsername, jwtUtil.extractUsername(token1));
+        assertEquals(testUsername, jwtUtil.extractUsername(token2));
+        
+        // Verify expiration times are different (should be about 1 second apart)
+        Date expiration1 = jwtUtil.extractExpiration(token1);
+        Date expiration2 = jwtUtil.extractExpiration(token2);
+        long timeDiff = Math.abs(expiration2.getTime() - expiration1.getTime());
+        assertTrue(timeDiff >= 900, "Expiration times should be at least 900ms apart"); // Allow some tolerance
     }
 
     @Test
