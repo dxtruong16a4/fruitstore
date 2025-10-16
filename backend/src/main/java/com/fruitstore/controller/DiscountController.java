@@ -9,7 +9,6 @@ import com.fruitstore.dto.response.discount.DiscountUsageResponse;
 import com.fruitstore.dto.response.common.ApiResponse;
 import com.fruitstore.service.DiscountService;
 import com.fruitstore.service.DiscountService.DiscountUsageStats;
-import com.fruitstore.domain.discount.DiscountUsage;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -51,10 +50,10 @@ public class DiscountController {
      */
     @GetMapping("/active")
     public ResponseEntity<ApiResponse<Page<DiscountResponse>>> getActiveDiscounts(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "desc") String sortDirection) {
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size,
+            @RequestParam(value = "sortBy", defaultValue = "createdAt") String sortBy,
+            @RequestParam(value = "sortDirection", defaultValue = "desc") String sortDirection) {
         
         Pageable pageable = createPageable(page, size, sortBy, sortDirection);
         Page<DiscountResponse> discounts = discountService.getActiveDiscounts(pageable);
@@ -90,7 +89,7 @@ public class DiscountController {
      * @return discount response
      */
     @GetMapping("/code/{code}")
-    public ResponseEntity<ApiResponse<DiscountResponse>> getDiscountByCode(@PathVariable String code) {
+    public ResponseEntity<ApiResponse<DiscountResponse>> getDiscountByCode(@PathVariable("code") String code) {
         DiscountResponse discount = discountService.getDiscountByCode(code);
         return ResponseEntity.ok(ApiResponse.success(discount));
     }
@@ -105,8 +104,8 @@ public class DiscountController {
      */
     @GetMapping("/available")
     public ResponseEntity<ApiResponse<List<DiscountResponse>>> getAvailableDiscountsForUser(
-            @RequestParam Long userId,
-            @RequestParam BigDecimal orderAmount) {
+            @RequestParam("userId") Long userId,
+            @RequestParam("orderAmount") BigDecimal orderAmount) {
         
         List<DiscountResponse> discounts = discountService.getAvailableDiscountsForUser(userId, orderAmount);
         return ResponseEntity.ok(ApiResponse.success(discounts));
@@ -126,10 +125,10 @@ public class DiscountController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Page<DiscountResponse>>> getAllDiscounts(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "desc") String sortDirection) {
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size,
+            @RequestParam(value = "sortBy", defaultValue = "createdAt") String sortBy,
+            @RequestParam(value = "sortDirection", defaultValue = "desc") String sortDirection) {
         
         Pageable pageable = createPageable(page, size, sortBy, sortDirection);
         Page<DiscountResponse> discounts = discountService.getAllDiscounts(pageable);
@@ -144,7 +143,7 @@ public class DiscountController {
      */
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<DiscountResponse>> getDiscountById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<DiscountResponse>> getDiscountById(@PathVariable("id") Long id) {
         DiscountResponse discount = discountService.getDiscountById(id);
         return ResponseEntity.ok(ApiResponse.success(discount));
     }
@@ -174,7 +173,7 @@ public class DiscountController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<DiscountResponse>> updateDiscount(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @Valid @RequestBody UpdateDiscountRequest request) {
         
         DiscountResponse discount = discountService.updateDiscount(id, request);
@@ -189,7 +188,7 @@ public class DiscountController {
      */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<String>> deleteDiscount(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<String>> deleteDiscount(@PathVariable("id") Long id) {
         discountService.deleteDiscount(id);
         return ResponseEntity.ok(ApiResponse.success("Discount deleted successfully"));
     }
@@ -202,7 +201,7 @@ public class DiscountController {
      */
     @GetMapping("/{id}/stats")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<DiscountUsageStats>> getDiscountUsageStats(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<DiscountUsageStats>> getDiscountUsageStats(@PathVariable("id") Long id) {
         DiscountUsageStats stats = discountService.getDiscountUsageStats(id);
         return ResponseEntity.ok(ApiResponse.success(stats));
     }
@@ -220,11 +219,11 @@ public class DiscountController {
     @GetMapping("/{id}/usages")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Page<DiscountUsageResponse>>> getDiscountUsages(
-            @PathVariable Long id,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "usedAt") String sortBy,
-            @RequestParam(defaultValue = "desc") String sortDirection) {
+            @PathVariable("id") Long id,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size,
+            @RequestParam(value = "sortBy", defaultValue = "usedAt") String sortBy,
+            @RequestParam(value = "sortDirection", defaultValue = "desc") String sortDirection) {
         
         Pageable pageable = createPageable(page, size, sortBy, sortDirection);
         Page<DiscountUsageResponse> usages = discountService.getDiscountUsages(id, pageable);
@@ -244,11 +243,11 @@ public class DiscountController {
     @GetMapping("/user/{userId}/usages")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Page<DiscountUsageResponse>>> getUserDiscountUsages(
-            @PathVariable Long userId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "usedAt") String sortBy,
-            @RequestParam(defaultValue = "desc") String sortDirection) {
+            @PathVariable("userId") Long userId,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size,
+            @RequestParam(value = "sortBy", defaultValue = "usedAt") String sortBy,
+            @RequestParam(value = "sortDirection", defaultValue = "desc") String sortDirection) {
         
         Pageable pageable = createPageable(page, size, sortBy, sortDirection);
         Page<DiscountUsageResponse> usages = discountService.getUserDiscountUsages(userId, pageable);
@@ -265,8 +264,8 @@ public class DiscountController {
     @GetMapping("/user/{userId}/discount/{discountId}/used")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Boolean>> hasUserUsedDiscount(
-            @PathVariable Long userId,
-            @PathVariable Long discountId) {
+            @PathVariable("userId") Long userId,
+            @PathVariable("discountId") Long discountId) {
         
         boolean hasUsed = discountService.hasUserUsedDiscount(userId, discountId);
         return ResponseEntity.ok(ApiResponse.success(hasUsed));
@@ -282,8 +281,8 @@ public class DiscountController {
     @PostMapping("/apply")
     @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<BigDecimal>> applyDiscount(
-            @RequestParam String code,
-            @RequestParam BigDecimal orderAmount) {
+            @RequestParam("code") String code,
+            @RequestParam("orderAmount") BigDecimal orderAmount) {
         
         BigDecimal discountAmount = discountService.applyDiscount(code, orderAmount);
         return ResponseEntity.ok(ApiResponse.success(discountAmount));
@@ -301,10 +300,10 @@ public class DiscountController {
     @PostMapping("/usage")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> recordDiscountUsage(
-            @RequestParam Long discountId,
-            @RequestParam Long userId,
-            @RequestParam(required = false) Long orderId,
-            @RequestParam BigDecimal discountAmount) {
+            @RequestParam("discountId") Long discountId,
+            @RequestParam("userId") Long userId,
+            @RequestParam(value = "orderId", required = false) Long orderId,
+            @RequestParam("discountAmount") BigDecimal discountAmount) {
         
         discountService.recordDiscountUsage(discountId, userId, orderId, discountAmount);
         return ResponseEntity.ok(ApiResponse.success("Discount usage recorded successfully"));
@@ -314,7 +313,64 @@ public class DiscountController {
      * Helper method to create Pageable object
      */
     private Pageable createPageable(int page, int size, String sortBy, String sortDirection) {
-        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
+        // Validate and map sort field names to entity field names
+        String validSortBy = validateAndMapSortField(sortBy);
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), validSortBy);
         return PageRequest.of(page, size, sort);
+    }
+    
+    /**
+     * Validate and map sort field names to entity field names
+     */
+    private String validateAndMapSortField(String sortBy) {
+        if (sortBy == null || sortBy.trim().isEmpty()) {
+            return "createdAt";
+        }
+        
+        // Map common sort field names to actual entity field names
+        switch (sortBy.toLowerCase()) {
+            case "id":
+                return "discountId";
+            case "code":
+                return "code";
+            case "description":
+                return "description";
+            case "discounttype":
+            case "discount_type":
+                return "discountType";
+            case "discountvalue":
+            case "discount_value":
+                return "discountValue";
+            case "minorderamount":
+            case "min_order_amount":
+                return "minOrderAmount";
+            case "maxdiscountamount":
+            case "max_discount_amount":
+                return "maxDiscountAmount";
+            case "usagelimit":
+            case "usage_limit":
+                return "usageLimit";
+            case "usedcount":
+            case "used_count":
+                return "usedCount";
+            case "startdate":
+            case "start_date":
+                return "startDate";
+            case "enddate":
+            case "end_date":
+                return "endDate";
+            case "isactive":
+            case "is_active":
+                return "isActive";
+            case "createdat":
+            case "created_at":
+                return "createdAt";
+            case "updatedat":
+            case "updated_at":
+                return "updatedAt";
+            default:
+                // If the field name is not recognized, default to createdAt
+                return "createdAt";
+        }
     }
 }
