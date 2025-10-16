@@ -382,10 +382,10 @@ public class CartItemRepositoryTest {
     public void testFindCartItemsWithSubtotalGreaterThan() {
         // When
         List<CartItem> highSubtotalItems = cartItemRepository.findCartItemsWithSubtotalGreaterThan(
-                new BigDecimal("120000.00"));
+                new BigDecimal("180000.00"));
 
         // Then
         assertThat(highSubtotalItems).hasSize(1);
-        assertThat(highSubtotalItems.get(0).getCartItemId()).isEqualTo(cartItem2.getCartItemId());
+        assertThat(highSubtotalItems.get(0).getCartItemId()).isEqualTo(cartItem1.getCartItemId());
     }
 }

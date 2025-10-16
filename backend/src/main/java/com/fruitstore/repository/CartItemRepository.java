@@ -2,6 +2,7 @@ package com.fruitstore.repository;
 
 import com.fruitstore.domain.cart.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -143,6 +144,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
      * 
      * @param userId the user ID
      */
+    @Modifying
     @Query("DELETE FROM CartItem ci WHERE ci.cart IN (SELECT c FROM Cart c WHERE c.user.userId = :userId)")
     void deleteByUser_UserId(@Param("userId") Long userId);
 

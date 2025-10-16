@@ -100,6 +100,11 @@ public class CartRepositoryTest {
         cartItem.setProduct(product);
         cartItem.setQuantity(2);
         entityManager.persistAndFlush(cartItem);
+        
+        // Ensure the relationship is properly managed by adding to cart's items list
+        cart1.addCartItem(cartItem);
+        entityManager.flush();
+        entityManager.clear(); // Clear the persistence context to ensure fresh fetch
 
         // When
         Optional<Cart> foundCart = cartRepository.findByUser_UserIdWithItems(user1.getUserId());
@@ -121,6 +126,11 @@ public class CartRepositoryTest {
         cartItem.setProduct(product);
         cartItem.setQuantity(3);
         entityManager.persistAndFlush(cartItem);
+        
+        // Ensure the relationship is properly managed by adding to cart's items list
+        cart1.addCartItem(cartItem);
+        entityManager.flush();
+        entityManager.clear(); // Clear the persistence context to ensure fresh fetch
 
         // When
         Optional<Cart> foundCart = cartRepository.findByUser_UserIdWithItemsAndProducts(user1.getUserId());
@@ -168,6 +178,11 @@ public class CartRepositoryTest {
         CartItem cartItem2 = new CartItem(cart1, product2, 3);
         entityManager.persistAndFlush(cartItem1);
         entityManager.persistAndFlush(cartItem2);
+        
+        // Ensure the relationship is properly managed
+        cart1.addCartItem(cartItem1);
+        cart1.addCartItem(cartItem2);
+        entityManager.flush();
 
         // When
         int totalItems = cartRepository.countTotalItemsByUserId(user1.getUserId());
@@ -187,6 +202,11 @@ public class CartRepositoryTest {
         CartItem cartItem2 = new CartItem(cart1, product2, 3);
         entityManager.persistAndFlush(cartItem1);
         entityManager.persistAndFlush(cartItem2);
+        
+        // Ensure the relationship is properly managed
+        cart1.addCartItem(cartItem1);
+        cart1.addCartItem(cartItem2);
+        entityManager.flush();
 
         // When
         int differentProducts = cartRepository.countDifferentProductsByUserId(user1.getUserId());
@@ -244,6 +264,11 @@ public class CartRepositoryTest {
         CartItem cartItem2 = new CartItem(cart1, product2, 1);
         entityManager.persistAndFlush(cartItem1);
         entityManager.persistAndFlush(cartItem2);
+        
+        // Ensure the relationship is properly managed
+        cart1.addCartItem(cartItem1);
+        cart1.addCartItem(cartItem2);
+        entityManager.flush();
 
         // When
         List<Cart> carts = cartRepository.findCartsWithItemCountGreaterThan(1);
@@ -264,6 +289,11 @@ public class CartRepositoryTest {
         CartItem cartItem2 = new CartItem(cart1, product2, 2);
         entityManager.persistAndFlush(cartItem1);
         entityManager.persistAndFlush(cartItem2);
+        
+        // Ensure the relationship is properly managed
+        cart1.addCartItem(cartItem1);
+        cart1.addCartItem(cartItem2);
+        entityManager.flush();
 
         // When
         List<Cart> carts = cartRepository.findCartsWithTotalQuantityGreaterThan(4);

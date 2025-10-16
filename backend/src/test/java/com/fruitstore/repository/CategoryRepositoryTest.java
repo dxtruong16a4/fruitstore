@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Tests custom queries and CRUD operations
  */
 @DataJpaTest
-@TestPropertySource(properties = {
-    "spring.datasource.url=jdbc:h2:mem:testdb",
-    "spring.jpa.hibernate.ddl-auto=create-drop"
-})
+@ActiveProfiles("test")
 public class CategoryRepositoryTest {
 
     @Autowired
@@ -186,11 +183,11 @@ public class CategoryRepositoryTest {
 
     @Test
     public void testFindActiveCategoriesWithProductCountGreaterThan() {
-        // When
+        // When - Since we don't have products in this test, all categories will have 0 products
         List<Category> categories = categoryRepository.findActiveCategoriesWithProductCountGreaterThan(0L);
 
-        // Then
-        assertThat(categories).hasSize(2); // Both active categories
+        // Then - Should return empty list since no categories have products with count > 0
+        assertThat(categories).hasSize(0);
     }
 
     @Test

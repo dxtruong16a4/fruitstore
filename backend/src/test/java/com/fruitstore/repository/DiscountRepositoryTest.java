@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,10 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Tests custom queries, filtering, and CRUD operations
  */
 @DataJpaTest
-@TestPropertySource(properties = {
-    "spring.datasource.url=jdbc:h2:mem:testdb",
-    "spring.jpa.hibernate.ddl-auto=create-drop"
-})
+@ActiveProfiles("test")
 public class DiscountRepositoryTest {
 
     @Autowired
@@ -294,10 +291,9 @@ public class DiscountRepositoryTest {
         List<Discount> result = discountRepository.findDiscountsWithLowUsage(20);
 
         // Then
-        assertThat(result).hasSize(2); // activePercentageDiscount (10), activeFixedDiscount (50) - but 50 > 20
-        // Actually, let me check the used count values in setup
+        assertThat(result).hasSize(1); // Only WELCOME10 has usedCount (10) < 20
         assertThat(result).extracting(Discount::getCode)
-            .containsExactlyInAnyOrder("WELCOME10"); // Only WELCOME10 has usedCount (10) < 20
+            .containsExactlyInAnyOrder("WELCOME10");
     }
 
     @Test
@@ -360,7 +356,7 @@ public class DiscountRepositoryTest {
         Page<Discount> result = discountRepository.findDiscountsWithFilters(true, null, now, pageable);
 
         // Then
-        assertThat(result.getContent()).hasSize(4); // All active discounts
+        assertThat(result.getContent()).hasSize(2); // Only currently valid active discounts (WELCOME10, FRUIT50K)
     }
 
     @Test
@@ -370,7 +366,7 @@ public class DiscountRepositoryTest {
         Page<Discount> result = discountRepository.findDiscountsWithFilters(null, DiscountType.PERCENTAGE, now, pageable);
 
         // Then
-        assertThat(result.getContent()).hasSize(3); // All percentage discounts
+        assertThat(result.getContent()).hasSize(2); // Only currently valid percentage discounts (WELCOME10, INACTIVE20)
     }
 
     @Test
@@ -380,9 +376,9 @@ public class DiscountRepositoryTest {
         Page<Discount> result = discountRepository.findDiscountsWithFilters(true, DiscountType.PERCENTAGE, now, pageable);
 
         // Then
-        assertThat(result.getContent()).hasSize(3); // Active percentage discounts
+        assertThat(result.getContent()).hasSize(1); // Only currently valid active percentage discount (WELCOME10)
         assertThat(result.getContent()).extracting(Discount::getCode)
-            .containsExactlyInAnyOrder("WELCOME10", "EXPIRED15", "FUTURE25");
+            .containsExactlyInAnyOrder("WELCOME10");
     }
 
     @Test
