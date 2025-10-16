@@ -123,7 +123,7 @@ public class Product {
      * @return true if sufficient stock available
      */
     public boolean hasSufficientStock(Integer requestedQuantity) {
-        return stockQuantity != null && stockQuantity >= requestedQuantity;
+        return stockQuantity != null && requestedQuantity != null && requestedQuantity > 0 && stockQuantity >= requestedQuantity;
     }
 
     /**
@@ -259,6 +259,6 @@ public class Product {
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return productId != null ? productId.hashCode() : 0;
     }
 }

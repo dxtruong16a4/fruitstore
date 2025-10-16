@@ -159,7 +159,7 @@ public class CategoryService {
                 .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + id));
 
         // Check if category has associated products
-        long productCount = productRepository.countByCategory_CategoryIdAndIsActiveTrue(id, true);
+        long productCount = productRepository.countByCategory_CategoryIdAndIsActive(id, true);
         if (productCount > 0) {
             throw new IllegalArgumentException("Cannot delete category with associated products. Product count: " + productCount);
         }
@@ -180,7 +180,7 @@ public class CategoryService {
                 .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + id));
 
         // Check if category has associated products
-        long productCount = productRepository.countByCategory_CategoryIdAndIsActiveTrue(id, true);
+        long productCount = productRepository.countByCategory_CategoryIdAndIsActive(id, true);
         if (productCount > 0) {
             throw new IllegalArgumentException("Cannot permanently delete category with associated products. Product count: " + productCount);
         }
@@ -263,7 +263,7 @@ public class CategoryService {
                 .map(category -> {
                     CategoryResponse response = mapToCategoryResponse(category);
                     // Set product count
-                    long productCount = productRepository.countByCategory_CategoryIdAndIsActiveTrue(category.getCategoryId(), true);
+                    long productCount = productRepository.countByCategory_CategoryIdAndIsActive(category.getCategoryId(), true);
                     response.setProductCount(productCount);
                     return response;
                 })

@@ -189,7 +189,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      * @param isActive the active status
      * @return number of products in the category
      */
-    long countByCategory_CategoryIdAndIsActiveTrue(Long categoryId, Boolean isActive);
+    long countByCategory_CategoryIdAndIsActive(Long categoryId, Boolean isActive);
 
     /**
      * Count products by active status

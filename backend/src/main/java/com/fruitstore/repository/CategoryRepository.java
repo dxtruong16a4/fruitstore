@@ -76,10 +76,10 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     long countByIsActive(Boolean isActive);
 
     /**
-     * Find categories with products count
-     * @return list of categories with their product counts
+     * Find active categories
+     * @return list of active categories
      */
-    @Query("SELECT c FROM Category c LEFT JOIN FETCH c.products p WHERE c.isActive = true")
+    @Query("SELECT c FROM Category c WHERE c.isActive = true")
     List<Category> findActiveCategoriesWithProducts();
 
     /**

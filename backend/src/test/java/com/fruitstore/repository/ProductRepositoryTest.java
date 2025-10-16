@@ -316,8 +316,8 @@ public class ProductRepositoryTest {
     @Test
     public void testCountByCategory_CategoryIdAndIsActiveTrue() {
         // When
-        long count1 = productRepository.countByCategory_CategoryIdAndIsActiveTrue(category1.getCategoryId(), true);
-        long count2 = productRepository.countByCategory_CategoryIdAndIsActiveTrue(category2.getCategoryId(), true);
+        long count1 = productRepository.countByCategory_CategoryIdAndIsActive(category1.getCategoryId(), true);
+        long count2 = productRepository.countByCategory_CategoryIdAndIsActive(category2.getCategoryId(), true);
 
         // Then
         assertThat(count1).isEqualTo(1);

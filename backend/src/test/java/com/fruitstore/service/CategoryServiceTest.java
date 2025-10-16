@@ -224,7 +224,7 @@ public class CategoryServiceTest {
     public void testDeleteCategory() {
         // Given
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category1));
-        when(productRepository.countByCategory_CategoryIdAndIsActiveTrue(1L, true)).thenReturn(0L);
+        when(productRepository.countByCategory_CategoryIdAndIsActive(1L, true)).thenReturn(0L);
         when(categoryRepository.save(any(Category.class))).thenReturn(category1);
 
         // When
@@ -232,7 +232,7 @@ public class CategoryServiceTest {
 
         // Then
         verify(categoryRepository).findById(1L);
-        verify(productRepository).countByCategory_CategoryIdAndIsActiveTrue(1L, true);
+        verify(productRepository).countByCategory_CategoryIdAndIsActive(1L, true);
         verify(categoryRepository).save(any(Category.class));
     }
 
@@ -240,14 +240,14 @@ public class CategoryServiceTest {
     public void testDeleteCategoryWithProducts() {
         // Given
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category1));
-        when(productRepository.countByCategory_CategoryIdAndIsActiveTrue(1L, true)).thenReturn(5L);
+        when(productRepository.countByCategory_CategoryIdAndIsActive(1L, true)).thenReturn(5L);
 
         // When & Then
         assertThatThrownBy(() -> categoryService.deleteCategory(1L))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Cannot delete category with associated products. Product count: 5");
         verify(categoryRepository).findById(1L);
-        verify(productRepository).countByCategory_CategoryIdAndIsActiveTrue(1L, true);
+        verify(productRepository).countByCategory_CategoryIdAndIsActive(1L, true);
         verify(categoryRepository, never()).save(any(Category.class));
     }
 
@@ -255,14 +255,14 @@ public class CategoryServiceTest {
     public void testPermanentlyDeleteCategory() {
         // Given
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category1));
-        when(productRepository.countByCategory_CategoryIdAndIsActiveTrue(1L, true)).thenReturn(0L);
+        when(productRepository.countByCategory_CategoryIdAndIsActive(1L, true)).thenReturn(0L);
 
         // When
         categoryService.permanentlyDeleteCategory(1L);
 
         // Then
         verify(categoryRepository).findById(1L);
-        verify(productRepository).countByCategory_CategoryIdAndIsActiveTrue(1L, true);
+        verify(productRepository).countByCategory_CategoryIdAndIsActive(1L, true);
         verify(categoryRepository).delete(category1);
     }
 
@@ -331,7 +331,7 @@ public class CategoryServiceTest {
         // Given
         List<Category> categories = Arrays.asList(category1);
         when(categoryRepository.findActiveCategoriesWithProducts()).thenReturn(categories);
-        when(productRepository.countByCategory_CategoryIdAndIsActiveTrue(1L, true)).thenReturn(10L);
+        when(productRepository.countByCategory_CategoryIdAndIsActive(1L, true)).thenReturn(10L);
 
         // When
         List<CategoryResponse> result = categoryService.getCategoriesWithProductCounts();
@@ -340,6 +340,6 @@ public class CategoryServiceTest {
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getProductCount()).isEqualTo(10L);
         verify(categoryRepository).findActiveCategoriesWithProducts();
-        verify(productRepository).countByCategory_CategoryIdAndIsActiveTrue(1L, true);
+        verify(productRepository).countByCategory_CategoryIdAndIsActive(1L, true);
     }
 }

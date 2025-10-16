@@ -135,6 +135,6 @@ public class Category {
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return categoryId != null ? categoryId.hashCode() : 0;
     }
 }
