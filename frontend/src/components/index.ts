@@ -16,3 +16,4 @@ export { default as CheckoutForm } from './CheckoutForm';
 export { default as ProfileForm } from './ProfileForm';
 export { default as ChangePasswordForm } from './ChangePasswordForm';
 export { default as SearchBar } from './SearchBar';
+export { default as OrderDetailModal } from './OrderDetailModal';

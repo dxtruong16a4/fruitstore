@@ -2,12 +2,17 @@ import { httpClient } from './axiosClient';
 
 // Order Types
 export interface OrderItem {
-  id: number;
-  productId: number;
-  productName: string;
-  productPrice: number;
+  orderItemId: number;
+  product: {
+    productId: number;
+    name: string;
+    price: number;
+    imageUrl?: string;
+  };
   quantity: number;
+  unitPrice: number;
   subtotal: number;
+  createdAt: string;
 }
 
 export interface OrderResponse {
@@ -22,6 +27,18 @@ export interface OrderResponse {
   customerEmail?: string;
   shippingAddress?: string;
   notes?: string;
+}
+
+export interface OrderDetailResponse extends OrderResponse {
+  orderItems: OrderItem[];
+  shippingAddress: string;
+  customerName: string;
+  customerEmail: string;
+  phoneNumber?: string;
+  notes?: string;
+  shippedAt?: string;
+  deliveredAt?: string;
+  cancelledAt?: string;
 }
 
 export interface OrderListResponse {
@@ -98,6 +115,23 @@ export const orderApi = {
       return {
         success: false,
         message: error.response?.data?.message || 'Failed to fetch order'
+      };
+    }
+  },
+
+  // Get order details by ID (with items)
+  getOrderDetails: async (id: number): Promise<{ success: boolean; data?: OrderDetailResponse; message?: string }> => {
+    try {
+      const response = await httpClient.get<OrderDetailResponse>(`/api/orders/${id}`);
+      return {
+        success: true,
+        data: response.data
+      };
+    } catch (error: any) {
+      console.error('Error fetching order details:', error);
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to fetch order details'
       };
     }
   },

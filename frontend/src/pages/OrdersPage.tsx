@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Container, Typography, Box, Card, CardContent, Chip, Button } from '@mui/material';
 import { Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { orderApi, type OrderResponse } from '../api/orderApi';
+import { orderApi, type OrderResponse, type OrderDetailResponse } from '../api/orderApi';
 import { useAppSelector } from '../redux';
 import ToastContainer from '../components/ToastContainer';
+import OrderDetailModal from '../components/OrderDetailModal';
 import { useToast } from '../hooks/useToast';
 
 const OrdersPage: React.FC = () => {
@@ -18,6 +19,11 @@ const OrdersPage: React.FC = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [sortBy, setSortBy] = useState<'createdAt' | 'totalAmount' | 'status'>('createdAt');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  
+  // Order detail modal state
+  const [selectedOrder, setSelectedOrder] = useState<OrderDetailResponse | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [loadingOrderDetail, setLoadingOrderDetail] = useState(false);
 
   // Fetch orders from API
   const fetchOrders = async () => {
@@ -103,6 +109,9 @@ const OrdersPage: React.FC = () => {
         showSuccess('Order Cancelled', 'Your order has been successfully cancelled');
         // Refresh orders list
         fetchOrders();
+        // Close detail modal if open
+        setIsDetailModalOpen(false);
+        setSelectedOrder(null);
       } else {
         showError('Failed to Cancel Order', response.message || 'Unable to cancel the order');
       }
@@ -117,6 +126,43 @@ const OrdersPage: React.FC = () => {
         showError('Failed to Cancel Order', error.message || 'An unexpected error occurred while cancelling the order');
       }
     }
+  };
+
+  const handleViewOrderDetails = async (orderId: number) => {
+    if (!isAuthenticated) {
+      showError('Authentication Required', 'Please sign in to view order details');
+      navigate('/login');
+      return;
+    }
+
+    try {
+      setLoadingOrderDetail(true);
+      const response = await orderApi.getOrderDetails(orderId);
+      
+      if (response.success && response.data) {
+        setSelectedOrder(response.data);
+        setIsDetailModalOpen(true);
+      } else {
+        showError('Failed to Load Order Details', response.message || 'Unable to load order details');
+      }
+    } catch (error: any) {
+      console.error('Error fetching order details:', error);
+      
+      // Handle authentication errors
+      if (error.status === 401 || error.status === 403) {
+        showError('Authentication Required', 'Please sign in to view order details');
+        navigate('/login');
+      } else {
+        showError('Failed to Load Order Details', error.message || 'An unexpected error occurred while loading order details');
+      }
+    } finally {
+      setLoadingOrderDetail(false);
+    }
+  };
+
+  const handleCloseDetailModal = () => {
+    setIsDetailModalOpen(false);
+    setSelectedOrder(null);
   };
 
   if (loading) {
@@ -209,8 +255,13 @@ const OrdersPage: React.FC = () => {
                   </Typography>
                   
                   <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
-                    <Button size="small" variant="outlined">
-                      View Details
+                    <Button 
+                      size="small" 
+                      variant="outlined"
+                      onClick={() => handleViewOrderDetails(order.orderId)}
+                      disabled={loadingOrderDetail}
+                    >
+                      {loadingOrderDetail ? 'Loading...' : 'View Details'}
                     </Button>
                     {(order.status === 'PENDING' || order.status === 'CONFIRMED') && (
                       <Button 
@@ -274,6 +325,14 @@ const OrdersPage: React.FC = () => {
       <ToastContainer
         toasts={toasts}
         onRemoveToast={removeToast}
+      />
+
+      {/* Order Detail Modal */}
+      <OrderDetailModal
+        order={selectedOrder}
+        isOpen={isDetailModalOpen}
+        onClose={handleCloseDetailModal}
+        onCancelOrder={handleCancelOrder}
       />
     </Container>
   );
