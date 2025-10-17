@@ -19,7 +19,7 @@ export interface Product {
 
 // Product filter interface
 export interface ProductFilter {
-  name?: string;
+  keyword?: string;
   categoryId?: number;
   minPrice?: number;
   maxPrice?: number;

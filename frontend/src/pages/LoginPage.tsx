@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { Eye, EyeOff, Lock, Mail, Loader2, AlertCircle } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, Loader2, AlertCircle, Home } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../redux';
 import { loginStart, loginSuccess, loginFailure } from '../redux/slices/authSlice';
 import { authApi } from '../api/authApi';
@@ -90,6 +90,17 @@ const LoginPage: React.FC = () => {
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Chào mừng trở lại!</h1>
           <p className="text-gray-600">Đăng nhập vào tài khoản FruitStore của bạn</p>
+          
+          {/* Back to Home Button */}
+          <div className="mt-4">
+            <Link
+              to="/"
+              className="inline-flex items-center space-x-2 text-green-600 hover:text-green-700 font-medium transition"
+            >
+              <Home className="w-4 h-4" />
+              <span>Trở về trang chủ</span>
+            </Link>
+          </div>
         </div>
 
         {/* Login Form */}

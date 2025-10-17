@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, Filter, Grid, List, Loader2 } from 'lucide-react';
+import { Search, Filter, Grid, List, Loader2, X } from 'lucide-react';
 import { productApi, type Product } from '../api/productApi';
 import { categoryApi, type Category } from '../api/categoryApi';
 import { useAppSelector, useAppDispatch } from '../redux';
@@ -19,6 +19,7 @@ const ProductsPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [sortBy, setSortBy] = useState<'name' | 'price' | 'createdAt'>('createdAt');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
@@ -26,6 +27,7 @@ const ProductsPage: React.FC = () => {
   const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 1000000 });
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [searchLoading, setSearchLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,6 +53,15 @@ const ProductsPage: React.FC = () => {
     fetchData();
   }, []);
 
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 500); // 500ms delay
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
   useEffect(() => {
     // Handle category filter from URL params
     const categoryId = searchParams.get('category');
@@ -62,12 +73,13 @@ const ProductsPage: React.FC = () => {
   useEffect(() => {
     // Refetch products when filters change
     fetchProducts();
-  }, [selectedCategory, sortBy, sortDirection, priceRange, currentPage]);
+  }, [selectedCategory, sortBy, sortDirection, priceRange, currentPage, debouncedSearchQuery]);
 
   const fetchProducts = async () => {
     try {
+      setSearchLoading(true);
       const filters = {
-        name: searchQuery || undefined,
+        keyword: debouncedSearchQuery || undefined,
         categoryId: selectedCategory || undefined,
         minPrice: priceRange.min > 0 ? priceRange.min : undefined,
         maxPrice: priceRange.max < 1000000 ? priceRange.max : undefined,
@@ -85,12 +97,25 @@ const ProductsPage: React.FC = () => {
       }
     } catch (error) {
       console.error('Error fetching products:', error);
+    } finally {
+      setSearchLoading(false);
     }
   };
 
   const handleSearch = () => {
     setCurrentPage(0);
     fetchProducts();
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery('');
+    setDebouncedSearchQuery('');
+    setCurrentPage(0);
+  };
+
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(0); // Reset to first page when searching
   };
 
   const handleCategoryFilter = (categoryId: number | null) => {
@@ -166,18 +191,32 @@ const ProductsPage: React.FC = () => {
                   <input
                     type="text"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={handleSearchInputChange}
                     onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                     placeholder="Search products..."
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
+                  {searchQuery && (
+                    <button
+                      onClick={handleClearSearch}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
-                <button
-                  onClick={handleSearch}
-                  className="mt-2 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
-                >
-                  Search
-                </button>
+                {searchQuery && (
+                  <div className="mt-2 text-sm text-gray-600">
+                    {searchLoading ? (
+                      <div className="flex items-center">
+                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                        Searching...
+                      </div>
+                    ) : (
+                      <span>Searching for: "{searchQuery}"</span>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Categories */}
@@ -259,9 +298,26 @@ const ProductsPage: React.FC = () => {
           <div className="lg:w-3/4">
             {/* Toolbar */}
             <div className="flex justify-between items-center mb-6">
-              <p className="text-gray-600">
-                Showing {products.length} products
-              </p>
+              <div className="flex flex-col">
+                <p className="text-gray-600">
+                  {searchQuery ? (
+                    <>
+                      {searchLoading ? (
+                        'Searching...'
+                      ) : (
+                        `Found ${products.length} products for "${searchQuery}"`
+                      )}
+                    </>
+                  ) : (
+                    `Showing ${products.length} products`
+                  )}
+                </p>
+                {selectedCategory && (
+                  <p className="text-sm text-gray-500">
+                    Filtered by: {categories.find(c => (c.categoryId || c.id) === selectedCategory)?.name}
+                  </p>
+                )}
+              </div>
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setViewMode('grid')}
@@ -283,12 +339,37 @@ const ProductsPage: React.FC = () => {
             </div>
 
             {/* Products */}
-            <ProductGrid
-              products={products}
-              onAddToCart={handleAddToCart}
-              viewMode={viewMode}
-              showAddToCart={true}
-            />
+            {products.length > 0 ? (
+              <ProductGrid
+                products={products}
+                onAddToCart={handleAddToCart}
+                viewMode={viewMode}
+                showAddToCart={true}
+              />
+            ) : (
+              <div className="text-center py-12">
+                <div className="text-gray-400 mb-4">
+                  <Search className="w-16 h-16 mx-auto" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  {searchQuery ? 'No products found' : 'No products available'}
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  {searchQuery 
+                    ? `We couldn't find any products matching "${searchQuery}". Try adjusting your search terms.`
+                    : 'There are no products available at the moment.'
+                  }
+                </p>
+                {searchQuery && (
+                  <button
+                    onClick={handleClearSearch}
+                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
+                  >
+                    Clear Search
+                  </button>
+                )}
+              </div>
+            )}
 
             {/* Pagination */}
             {totalPages > 1 && (
