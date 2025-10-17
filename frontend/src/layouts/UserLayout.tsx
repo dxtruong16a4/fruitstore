@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Container } from '@mui/material';
-import Header from '../components/layout/Header';
+import Navigation from '../components/layout/Navigation';
 import Footer from '../components/layout/Footer';
 
 interface UserLayoutProps {
@@ -9,15 +9,15 @@ interface UserLayoutProps {
 
 const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <Header />
-      <Box component="main" sx={{ flexGrow: 1 }}>
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+      <Navigation />
+      <main className="flex-1">
         <Container maxWidth="lg" sx={{ py: 3 }}>
           {children}
         </Container>
-      </Box>
+      </main>
       <Footer />
-    </Box>
+    </div>
   );
 };
 
