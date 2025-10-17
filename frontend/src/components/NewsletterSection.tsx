@@ -27,7 +27,6 @@ const NewsletterSection: React.FC<NewsletterSectionProps> = ({
       onSubscribe(email);
     } else {
       // Default behavior
-      console.log('Newsletter subscription:', email);
       alert('Thank you for subscribing!');
     }
   };

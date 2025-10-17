@@ -24,21 +24,21 @@ const ContactSupport: React.FC<ContactSupportProps> = ({
       title: "Live Chat",
       description: "Get instant help from our support team",
       buttonText: "Start Chat",
-      action: () => console.log("Starting live chat...")
+      action: () => null
     },
     {
       icon: <Phone className="w-8 h-8 text-green-600" />,
       title: "Phone Support",
       description: "Call us at (555) 123-4567",
       buttonText: "Call Now",
-      action: () => console.log("Calling support...")
+      action: () => null
     },
     {
       icon: <Mail className="w-8 h-8 text-green-600" />,
       title: "Email Support",
       description: "Send us an email anytime",
       buttonText: "Send Email",
-      action: () => console.log("Opening email...")
+      action: () => null
     }
   ];
 

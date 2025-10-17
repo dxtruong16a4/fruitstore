@@ -38,7 +38,6 @@ const ContactForm: React.FC<ContactFormProps> = ({
       onSubmit(formData);
     } else {
       // Default behavior
-      console.log('Form submitted:', formData);
       alert('Thank you for your message! We\'ll get back to you soon.');
       setFormData({ name: '', email: '', subject: '', message: '' });
     }

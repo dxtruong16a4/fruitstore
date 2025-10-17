@@ -13,3 +13,5 @@ export { default as FeaturesSection } from './FeaturesSection';
 export { default as CategoriesSection } from './CategoriesSection';
 export { default as NewsletterSection } from './NewsletterSection';
 export { default as CheckoutForm } from './CheckoutForm';
+export { default as ProfileForm } from './ProfileForm';
+export { default as ChangePasswordForm } from './ChangePasswordForm';

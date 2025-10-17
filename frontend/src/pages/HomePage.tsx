@@ -30,7 +30,6 @@ const HomePage: React.FC = () => {
         
         // Fetch categories
         const categoriesResponse = await categoryApi.getActiveCategories();
-        console.log('Categories response:', categoriesResponse);
         if (categoriesResponse.success) {
           setCategories(categoriesResponse.data);
         } else {
@@ -52,11 +51,9 @@ const HomePage: React.FC = () => {
           sortDirection: 'desc'
         });
         
-        console.log('Products response:', productsResponse);
         if (productsResponse.success) {
           // API returns products in data.products
           const products = productsResponse.data.products || productsResponse.data.content || productsResponse.data || [];
-          console.log('Setting products:', products);
           setFeaturedProducts(products);
         } else {
           // Set mock products if API fails

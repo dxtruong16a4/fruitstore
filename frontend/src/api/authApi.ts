@@ -30,7 +30,7 @@ export const authApi = {
   },
 
   // Change password
-  changePassword: (passwordData: { currentPassword: string; newPassword: string }): Promise<ApiResponse<void>> => {
+  changePassword: (passwordData: { oldPassword: string; newPassword: string }): Promise<ApiResponse<void>> => {
     return httpClient.post('/api/auth/change-password', passwordData);
   },
 

@@ -10,6 +10,8 @@ export interface User {
   lastName?: string; // Keep for compatibility
   role: 'customer' | 'admin';
   isActive?: boolean; // Keep for compatibility
+  phone?: string;
+  address?: string;
   createdAt: string;
   updatedAt?: string; // Keep for compatibility
 }

@@ -30,8 +30,6 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     e.stopPropagation();
     
-    console.log('Form submitted with data:', { email: formData.email, password: '***' });
-    
     if (!formData.email || !formData.password) {
       dispatch(loginFailure('Vui lòng điền đầy đủ thông tin'));
       return;
@@ -40,7 +38,6 @@ const LoginPage: React.FC = () => {
     dispatch(loginStart());
     
     try {
-      console.log('Calling authApi.login...');
       const response = await authApi.login({
         email: formData.email,
         password: formData.password
@@ -75,7 +72,6 @@ const LoginPage: React.FC = () => {
         dispatch(loginFailure(response.message || 'Đăng nhập thất bại'));
       }
     } catch (error: any) {
-      console.error('Login error:', error);
       dispatch(loginFailure(error.message || 'Lỗi kết nối. Vui lòng thử lại sau.'));
     }
   };
