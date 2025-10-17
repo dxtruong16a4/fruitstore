@@ -264,56 +264,58 @@ const Header: React.FC = () => {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={() => { handleNavigation('/'); handleMenuClose(); }}>
-          <ListItemIcon>
-            <Home fontSize="small" />
-          </ListItemIcon>
-          Trang chủ
-        </MenuItem>
-        <MenuItem onClick={() => { handleNavigation('/products'); handleMenuClose(); }}>
-          <ListItemIcon>
-            <Store fontSize="small" />
-          </ListItemIcon>
-          Sản phẩm
-        </MenuItem>
-        {isAuthenticated && (
-          <>
-            <MenuItem onClick={() => { handleNavigation('/cart'); handleMenuClose(); }}>
-              <ListItemIcon>
-                <ShoppingCart fontSize="small" />
-              </ListItemIcon>
-              Giỏ hàng
-            </MenuItem>
-            <MenuItem onClick={() => { handleNavigation('/orders'); handleMenuClose(); }}>
-              <ListItemIcon>
-                <Assignment fontSize="small" />
-              </ListItemIcon>
-              Đơn hàng
-            </MenuItem>
-            <MenuItem onClick={() => { handleNavigation('/profile'); handleMenuClose(); }}>
-              <ListItemIcon>
-                <Person fontSize="small" />
-              </ListItemIcon>
-              Hồ sơ
-            </MenuItem>
-          </>
-        )}
-        <Divider />
-        {isAuthenticated ? (
-          <MenuItem onClick={handleLogout}>
+        <Box>
+          <MenuItem onClick={() => { handleNavigation('/'); handleMenuClose(); }}>
             <ListItemIcon>
-              <Logout fontSize="small" />
+              <Home fontSize="small" />
             </ListItemIcon>
-            Đăng xuất
+            Trang chủ
           </MenuItem>
-        ) : (
-          <MenuItem onClick={() => { handleNavigation('/login'); handleMenuClose(); }}>
+          <MenuItem onClick={() => { handleNavigation('/products'); handleMenuClose(); }}>
             <ListItemIcon>
-              <Login fontSize="small" />
+              <Store fontSize="small" />
             </ListItemIcon>
-            Đăng nhập
+            Sản phẩm
           </MenuItem>
-        )}
+          {isAuthenticated && (
+            <>
+              <MenuItem onClick={() => { handleNavigation('/cart'); handleMenuClose(); }}>
+                <ListItemIcon>
+                  <ShoppingCart fontSize="small" />
+                </ListItemIcon>
+                Giỏ hàng
+              </MenuItem>
+              <MenuItem onClick={() => { handleNavigation('/orders'); handleMenuClose(); }}>
+                <ListItemIcon>
+                  <Assignment fontSize="small" />
+                </ListItemIcon>
+                Đơn hàng
+              </MenuItem>
+              <MenuItem onClick={() => { handleNavigation('/profile'); handleMenuClose(); }}>
+                <ListItemIcon>
+                  <Person fontSize="small" />
+                </ListItemIcon>
+                Hồ sơ
+              </MenuItem>
+            </>
+          )}
+          <Divider />
+          {isAuthenticated ? (
+            <MenuItem onClick={handleLogout}>
+              <ListItemIcon>
+                <Logout fontSize="small" />
+              </ListItemIcon>
+              Đăng xuất
+            </MenuItem>
+          ) : (
+            <MenuItem onClick={() => { handleNavigation('/login'); handleMenuClose(); }}>
+              <ListItemIcon>
+                <Login fontSize="small" />
+              </ListItemIcon>
+              Đăng nhập
+            </MenuItem>
+          )}
+        </Box>
       </Menu>
     </>
   );

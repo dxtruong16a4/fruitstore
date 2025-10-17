@@ -32,12 +32,12 @@ const HomePage: React.FC = () => {
       try {
         setLoading(true);
         
-        // Fetch categories
+        // Lấy danh mục
         const categoriesResponse = await categoryApi.getActiveCategories();
         if (categoriesResponse.success) {
           setCategories(categoriesResponse.data);
         } else {
-          // Set mock categories for testing
+          // Đặt danh mục giả để kiểm tra
           setCategories([
             { categoryId: 1, name: 'Apples', description: 'Fresh apples', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
             { categoryId: 2, name: 'Tropical', description: 'Tropical fruits', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
@@ -46,7 +46,7 @@ const HomePage: React.FC = () => {
           ]);
         }
 
-        // Fetch featured products (first 6 active products)
+        // Lấy sản phẩm nổi bật (6 sản phẩm hoạt động đầu tiên)
         const productsResponse = await productApi.searchProducts({
           isActive: true,
           page: 0,
@@ -56,11 +56,11 @@ const HomePage: React.FC = () => {
         });
         
         if (productsResponse.success) {
-          // API returns products in data.products
+          // API trả về sản phẩm trong data.products
           const products = productsResponse.data.products || productsResponse.data.content || productsResponse.data || [];
           setFeaturedProducts(products);
         } else {
-          // Set mock products if API fails
+          // Đặt sản phẩm giả nếu API thất bại
           setFeaturedProducts([
             {
               productId: 1,
@@ -104,8 +104,8 @@ const HomePage: React.FC = () => {
           ]);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
-        // Set some mock data for testing
+        console.error('Lỗi khi tải dữ liệu:', error);
+        // Đặt một số dữ liệu giả để kiểm tra
         setFeaturedProducts([
           {
             productId: 1,
@@ -158,13 +158,13 @@ const HomePage: React.FC = () => {
   const handleAddToCart = (product: Product) => {
     try {
       if (!isAuthenticated) {
-        showError('Authentication Required', 'Please sign in to add items to your cart');
+        showError('Yêu cầu xác thực', 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
         navigate('/login');
         return;
       }
       
       if (product.stockQuantity === 0) {
-        showError('Out of Stock', `${product.name} is currently out of stock`);
+        showError('Hết hàng', `${product.name} hiện đang hết hàng`);
         return;
       }
       
@@ -176,9 +176,9 @@ const HomePage: React.FC = () => {
         quantity: 1
       }));
       
-      showSuccess('Added to Cart!', `${product.name} has been added to your cart`);
+      showSuccess('Đã thêm vào giỏ!', `${product.name} đã được thêm vào giỏ hàng của bạn`);
     } catch (error) {
-      showError('Failed to Add Item', 'There was an error adding the item to your cart. Please try again.');
+      showError('Thêm sản phẩm thất bại', 'Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng. Vui lòng thử lại.');
     }
   };
 
@@ -217,7 +217,7 @@ const HomePage: React.FC = () => {
         setSearchResults([]);
       }
     } catch (error) {
-      console.error('Search error:', error);
+      console.error('Lỗi tìm kiếm:', error);
       showError('Lỗi tìm kiếm', 'Đã xảy ra lỗi khi tìm kiếm sản phẩm.');
       setSearchResults([]);
     } finally {
@@ -245,7 +245,7 @@ const HomePage: React.FC = () => {
 
   return (
     <PageLayout>
-      {/* Hero Section */}
+      {/* Phần Hero */}
       <section className="relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -296,7 +296,7 @@ const HomePage: React.FC = () => {
 
       <FeaturesSection />
 
-      {/* Search Section */}
+      {/* Phần tìm kiếm */}
       <section className="py-12 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
@@ -316,7 +316,7 @@ const HomePage: React.FC = () => {
         <CategoriesSection categories={categories} />
       )}
 
-      {/* Search Results or Featured Products */}
+      {/* Kết quả tìm kiếm hoặc Sản phẩm nổi bật */}
       {isSearchMode ? (
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -370,7 +370,7 @@ const HomePage: React.FC = () => {
           </div>
         </section>
       ) : (
-        /* Featured Products */
+        /* Sản phẩm nổi bật */
         featuredProducts.length > 0 && (
           <section className="py-16 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -401,7 +401,7 @@ const HomePage: React.FC = () => {
 
       <NewsletterSection />
 
-      {/* Product Detail Modal */}
+      {/* Modal chi tiết sản phẩm */}
       <ProductDetailModal
         product={selectedProduct}
         isOpen={isModalOpen}
@@ -409,7 +409,7 @@ const HomePage: React.FC = () => {
         onAddToCart={handleAddToCart}
       />
 
-      {/* Toast Notifications */}
+      {/* Thông báo Toast */}
       <ToastContainer
         toasts={toasts}
         onRemoveToast={removeToast}

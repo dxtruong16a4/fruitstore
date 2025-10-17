@@ -102,7 +102,7 @@ const ProductsPage: React.FC = () => {
         setTotalPages(response.data.totalPages || 0);
       }
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error('Lỗi khi tải sản phẩm:', error);
     } finally {
       setSearchLoading(false);
     }
@@ -132,13 +132,13 @@ const ProductsPage: React.FC = () => {
   const handleAddToCart = (product: Product) => {
     try {
       if (!isAuthenticated) {
-        showError('Authentication Required', 'Please sign in to add items to your cart');
+        showError('Yêu cầu xác thực', 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
         navigate('/login');
         return;
       }
       
       if (product.stockQuantity === 0) {
-        showError('Out of Stock', `${product.name} is currently out of stock`);
+        showError('Hết hàng', `${product.name} hiện đang hết hàng`);
         return;
       }
       
@@ -150,9 +150,9 @@ const ProductsPage: React.FC = () => {
         quantity: 1
       }));
       
-      showSuccess('Added to Cart!', `${product.name} has been added to your cart`);
+      showSuccess('Đã thêm vào giỏ!', `${product.name} đã được thêm vào giỏ hàng của bạn`);
     } catch (error) {
-      showError('Failed to Add Item', 'There was an error adding the item to your cart. Please try again.');
+      showError('Thêm sản phẩm thất bại', 'Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng. Vui lòng thử lại.');
     }
   };
 
@@ -408,7 +408,7 @@ const ProductsPage: React.FC = () => {
                     disabled={currentPage === 0}
                     className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Previous
+                    Trước
                   </button>
                   
                   {Array.from({ length: totalPages }, (_, i) => (
@@ -430,7 +430,7 @@ const ProductsPage: React.FC = () => {
                     disabled={currentPage === totalPages - 1}
                     className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Next
+                    Sau
                   </button>
                 </div>
               </div>
