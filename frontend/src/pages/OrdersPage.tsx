@@ -155,7 +155,7 @@ const OrdersPage: React.FC = () => {
               setSortDirection(direction as 'asc' | 'desc');
               setCurrentPage(0);
             }}
-            className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white text-black"
           >
             <option value="createdAt-desc">Newest First</option>
             <option value="createdAt-asc">Oldest First</option>

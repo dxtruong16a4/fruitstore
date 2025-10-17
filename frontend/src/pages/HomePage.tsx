@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Search } from 'lucide-react';
 import { productApi, type Product } from '../api/productApi';
 import { categoryApi, type Category } from '../api/categoryApi';
 import { useAppSelector, useAppDispatch } from '../redux';
 import { addToCart } from '../redux/slices/cartSlice';
-import { ProductGrid, FeaturesSection, CategoriesSection, NewsletterSection } from '../components';
+import { ProductGrid, FeaturesSection, CategoriesSection, NewsletterSection, SearchBar } from '../components';
 import ProductDetailModal from '../components/ProductDetailModal';
 import ToastContainer from '../components/ToastContainer';
 import { useToast } from '../hooks/useToast';
@@ -18,10 +18,14 @@ const HomePage: React.FC = () => {
   const { toasts, removeToast, showSuccess, showError } = useToast();
   
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchMode, setIsSearchMode] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -188,6 +192,45 @@ const HomePage: React.FC = () => {
     setSelectedProduct(null);
   };
 
+  const handleSearch = async (query: string) => {
+    if (!query.trim()) return;
+    
+    try {
+      setSearchLoading(true);
+      setSearchQuery(query);
+      setIsSearchMode(true);
+      
+      const response = await productApi.searchProducts({
+        keyword: query,
+        isActive: true,
+        page: 0,
+        size: 20,
+        sortBy: 'name',
+        sortDirection: 'asc'
+      });
+      
+      if (response.success) {
+        const products = response.data.products || response.data.content || response.data || [];
+        setSearchResults(products);
+      } else {
+        showError('Tìm kiếm thất bại', 'Không thể tìm kiếm sản phẩm. Vui lòng thử lại.');
+        setSearchResults([]);
+      }
+    } catch (error) {
+      console.error('Search error:', error);
+      showError('Lỗi tìm kiếm', 'Đã xảy ra lỗi khi tìm kiếm sản phẩm.');
+      setSearchResults([]);
+    } finally {
+      setSearchLoading(false);
+    }
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery('');
+    setSearchResults([]);
+    setIsSearchMode(false);
+  };
+
 
   if (loading) {
     return (
@@ -253,36 +296,107 @@ const HomePage: React.FC = () => {
 
       <FeaturesSection />
 
+      {/* Search Section */}
+      <section className="py-12 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Tìm kiếm sản phẩm</h2>
+            <p className="text-gray-600 text-lg">Khám phá các loại trái cây tươi ngon nhất</p>
+          </div>
+          <SearchBar
+            onSearch={handleSearch}
+            onClear={handleClearSearch}
+            placeholder="Nhập tên sản phẩm bạn muốn tìm..."
+            className="max-w-2xl mx-auto"
+          />
+        </div>
+      </section>
+
       {categories.length > 0 && (
         <CategoriesSection categories={categories} />
       )}
 
-      {/* Featured Products */}
-      {featuredProducts.length > 0 && (
+      {/* Search Results or Featured Products */}
+      {isSearchMode ? (
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center mb-12">
               <div>
-                <h2 className="text-4xl font-bold text-gray-900 mb-2">Featured Products</h2>
-                <p className="text-gray-600 text-lg">Handpicked just for you</p>
+                <h2 className="text-4xl font-bold text-gray-900 mb-2">
+                  Kết quả tìm kiếm cho "{searchQuery}"
+                </h2>
+                <p className="text-gray-600 text-lg">
+                  {searchLoading ? 'Đang tìm kiếm...' : `Tìm thấy ${searchResults.length} sản phẩm`}
+                </p>
               </div>
               <button 
                 className="text-green-600 font-semibold hover:text-green-700 transition"
-                onClick={() => navigate('/products')}
+                onClick={handleClearSearch}
               >
-                View All →
+                Xóa tìm kiếm
               </button>
             </div>
 
-            <ProductGrid
-              products={featuredProducts}
-              onAddToCart={handleAddToCart}
-              onProductClick={handleProductClick}
-              viewMode="grid"
-              showAddToCart={true}
-            />
+            {searchLoading ? (
+              <div className="text-center py-12">
+                <Loader2 className="w-12 h-12 text-green-600 animate-spin mx-auto mb-4" />
+                <p className="text-gray-600">Đang tìm kiếm sản phẩm...</p>
+              </div>
+            ) : searchResults.length > 0 ? (
+              <ProductGrid
+                products={searchResults}
+                onAddToCart={handleAddToCart}
+                onProductClick={handleProductClick}
+                viewMode="grid"
+                showAddToCart={true}
+              />
+            ) : (
+              <div className="text-center py-12">
+                <div className="text-gray-400 mb-4">
+                  <Search className="w-16 h-16 mx-auto" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Không tìm thấy sản phẩm</h3>
+                <p className="text-gray-600 mb-4">
+                  Không có sản phẩm nào phù hợp với từ khóa "{searchQuery}"
+                </p>
+                <button
+                  onClick={handleClearSearch}
+                  className="text-green-600 font-semibold hover:text-green-700 transition"
+                >
+                  Xem tất cả sản phẩm
+                </button>
+              </div>
+            )}
           </div>
         </section>
+      ) : (
+        /* Featured Products */
+        featuredProducts.length > 0 && (
+          <section className="py-16 bg-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-between items-center mb-12">
+                <div>
+                  <h2 className="text-4xl font-bold text-gray-900 mb-2">Sản phẩm nổi bật</h2>
+                  <p className="text-gray-600 text-lg">Được chọn lọc đặc biệt cho bạn</p>
+                </div>
+                <button 
+                  className="text-green-600 font-semibold hover:text-green-700 transition"
+                  onClick={() => navigate('/products')}
+                >
+                  Xem tất cả →
+                </button>
+              </div>
+
+              <ProductGrid
+                products={featuredProducts}
+                onAddToCart={handleAddToCart}
+                onProductClick={handleProductClick}
+                viewMode="grid"
+                showAddToCart={true}
+              />
+            </div>
+          </section>
+        )
       )}
 
       <NewsletterSection />
