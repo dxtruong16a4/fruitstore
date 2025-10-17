@@ -1,53 +1,335 @@
-import React from 'react';
-import { Container, Typography, Box, Card, CardContent, Button, Grid } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Search, Filter, Grid, List, Loader2 } from 'lucide-react';
+import { productApi, type Product } from '../api/productApi';
+import { categoryApi, type Category } from '../api/categoryApi';
+import { useAppSelector, useAppDispatch } from '../redux';
+import { addToCart } from '../redux/slices/cartSlice';
+import { ProductGrid } from '../components';
+import { PageLayout } from '../components/layout';
 
 const ProductsPage: React.FC = () => {
-  // Mock products data
-  const products = [
-    { id: 1, name: 'Fresh Apples', price: 2.99, category: 'Fruits' },
-    { id: 2, name: 'Sweet Bananas', price: 1.99, category: 'Fruits' },
-    { id: 3, name: 'Juicy Oranges', price: 3.49, category: 'Fruits' },
-    { id: 4, name: 'Ripe Strawberries', price: 4.99, category: 'Berries' },
-    { id: 5, name: 'Fresh Grapes', price: 3.99, category: 'Fruits' },
-    { id: 6, name: 'Sweet Pineapple', price: 5.99, category: 'Tropical' },
-  ];
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [searchParams] = useSearchParams();
+  
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [sortBy, setSortBy] = useState<'name' | 'price' | 'createdAt'>('createdAt');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 1000000 });
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        
+        // Fetch categories
+        const categoriesResponse = await categoryApi.getActiveCategories();
+        if (categoriesResponse.success) {
+          setCategories(categoriesResponse.data);
+        }
+
+        // Fetch products with filters
+        await fetchProducts();
+        
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    // Handle category filter from URL params
+    const categoryId = searchParams.get('category');
+    if (categoryId) {
+      setSelectedCategory(parseInt(categoryId));
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    // Refetch products when filters change
+    fetchProducts();
+  }, [selectedCategory, sortBy, sortDirection, priceRange, currentPage]);
+
+  const fetchProducts = async () => {
+    try {
+      const filters = {
+        name: searchQuery || undefined,
+        categoryId: selectedCategory || undefined,
+        minPrice: priceRange.min > 0 ? priceRange.min : undefined,
+        maxPrice: priceRange.max < 1000000 ? priceRange.max : undefined,
+        page: currentPage,
+        size: 12,
+        sortBy,
+        sortDirection,
+        isActive: true
+      };
+
+      const response = await productApi.searchProducts(filters);
+      if (response.success) {
+        setProducts(response.data.products || []);
+        setTotalPages(response.data.totalPages || 0);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
+  const handleSearch = () => {
+    setCurrentPage(0);
+    fetchProducts();
+  };
+
+  const handleCategoryFilter = (categoryId: number | null) => {
+    setSelectedCategory(categoryId);
+    setCurrentPage(0);
+  };
+
+  const handleAddToCart = (product: Product) => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    
+    dispatch(addToCart({
+      productId: product.productId || product.id || 0,
+      productName: product.name,
+      productPrice: product.price,
+      productImage: product.imageUrl || '',
+      quantity: 1
+    }));
+  };
+
+
+  const getCategoryIcon = (categoryName: string) => {
+    const name = categoryName.toLowerCase();
+    if (name.includes('berry') || name.includes('strawberry') || name.includes('blueberry')) return '🍓';
+    if (name.includes('citrus') || name.includes('orange') || name.includes('lemon')) return '🍊';
+    if (name.includes('tropical') || name.includes('mango') || name.includes('banana')) return '🥭';
+    if (name.includes('apple')) return '🍎';
+    if (name.includes('grape')) return '🍇';
+    if (name.includes('peach')) return '🍑';
+    if (name.includes('quà')) return '🎁';
+    if (name.includes('khẩu')) return '✈️';
+    if (name.includes('sấy')) return '🍯';
+    if (name.includes('tươi')) return '🥬';
+    return '🍎';
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-12 h-12 text-green-600 animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading products...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        🍎 Our Products
-      </Typography>
-      <Typography variant="body1" color="text.secondary" paragraph>
-        Fresh fruits carefully selected for quality and taste
-      </Typography>
+    <PageLayout
+      title="Our Products"
+      subtitle="Fresh fruits carefully selected for quality and taste"
+      showHero={true}
+      navigationProps={{ title: "Products" }}
+    >
 
-      <Grid container spacing={3}>
-        {products.map((product) => (
-          <Grid item xs={12} sm={6} md={4} key={product.id}>
-            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h6" gutterBottom>
-                  {product.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  {product.category}
-                </Typography>
-                <Typography variant="h5" color="primary" gutterBottom>
-                  ${product.price}
-                </Typography>
-                <Button 
-                  variant="contained" 
-                  fullWidth
-                  sx={{ mt: 2 }}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Sidebar Filters */}
+          <div className="lg:w-1/4">
+            <div className="bg-white rounded-2xl shadow-md p-6 sticky top-4">
+              <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                <Filter className="w-5 h-5 mr-2" />
+                Filters
+              </h3>
+
+              {/* Search */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                    placeholder="Search products..."
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  />
+                </div>
+                <button
+                  onClick={handleSearch}
+                  className="mt-2 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
                 >
-                  Add to Cart
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
+                  Search
+                </button>
+              </div>
+
+              {/* Categories */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-3">Categories</label>
+                <div className="space-y-2">
+                  <button
+                    onClick={() => handleCategoryFilter(null)}
+                    className={`w-full text-left px-3 py-2 rounded-lg transition ${
+                      selectedCategory === null 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'hover:bg-gray-100'
+                    }`}
+                  >
+                    All Categories
+                  </button>
+                  {categories.map((category) => (
+                    <button
+                      key={category.categoryId || category.id}
+                      onClick={() => handleCategoryFilter(category.categoryId || category.id || 0)}
+                      className={`w-full text-left px-3 py-2 rounded-lg transition flex items-center ${
+                        selectedCategory === (category.categoryId || category.id)
+                          ? 'bg-green-100 text-green-800' 
+                          : 'hover:bg-gray-100'
+                      }`}
+                    >
+                      <span className="mr-2">{getCategoryIcon(category.name)}</span>
+                      {category.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Sort */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+                <select
+                  value={`${sortBy}-${sortDirection}`}
+                  onChange={(e) => {
+                    const [field, direction] = e.target.value.split('-');
+                    setSortBy(field as 'name' | 'price' | 'createdAt');
+                    setSortDirection(direction as 'asc' | 'desc');
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                >
+                  <option value="createdAt-desc">Newest First</option>
+                  <option value="createdAt-asc">Oldest First</option>
+                  <option value="name-asc">Name A-Z</option>
+                  <option value="name-desc">Name Z-A</option>
+                  <option value="price-asc">Price Low to High</option>
+                  <option value="price-desc">Price High to Low</option>
+                </select>
+              </div>
+
+              {/* Price Range */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+                <div className="space-y-2">
+                  <input
+                    type="number"
+                    placeholder="Min price"
+                    value={priceRange.min || ''}
+                    onChange={(e) => setPriceRange(prev => ({ ...prev, min: parseInt(e.target.value) || 0 }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Max price"
+                    value={priceRange.max === 1000000 ? '' : priceRange.max}
+                    onChange={(e) => setPriceRange(prev => ({ ...prev, max: parseInt(e.target.value) || 1000000 }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Products Grid */}
+          <div className="lg:w-3/4">
+            {/* Toolbar */}
+            <div className="flex justify-between items-center mb-6">
+              <p className="text-gray-600">
+                Showing {products.length} products
+              </p>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 rounded-lg transition ${
+                    viewMode === 'grid' ? 'bg-green-100 text-green-600' : 'text-gray-400 hover:text-gray-600'
+                  }`}
+                >
+                  <Grid className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 rounded-lg transition ${
+                    viewMode === 'list' ? 'bg-green-100 text-green-600' : 'text-gray-400 hover:text-gray-600'
+                  }`}
+                >
+                  <List className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Products */}
+            <ProductGrid
+              products={products}
+              onAddToCart={handleAddToCart}
+              viewMode={viewMode}
+              showAddToCart={true}
+            />
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex justify-center mt-8">
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+                    disabled={currentPage === 0}
+                    className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Previous
+                  </button>
+                  
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentPage(i)}
+                      className={`px-4 py-2 rounded-lg ${
+                        currentPage === i
+                          ? 'bg-green-600 text-white'
+                          : 'border border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                  
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.min(totalPages - 1, prev + 1))}
+                    disabled={currentPage === totalPages - 1}
+                    className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </PageLayout>
   );
 };
 

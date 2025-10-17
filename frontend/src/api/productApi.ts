@@ -3,7 +3,8 @@ import type { ApiResponse, PaginationParams } from '../types';
 
 // Product interface
 export interface Product {
-  id: number;
+  productId: number; // API returns productId
+  id?: number; // Keep for compatibility
   name: string;
   description: string;
   price: number;

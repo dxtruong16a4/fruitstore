@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography, Box, Card, CardContent, Grid, Button } from '@mui/material';
+import { Container, Typography, Box, Card, CardContent, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const AdminPage: React.FC = () => {
@@ -53,34 +53,42 @@ const AdminPage: React.FC = () => {
         Manage your FruitStore from the admin panel
       </Typography>
 
-      <Grid container spacing={3}>
+      <Box 
+        sx={{ 
+          display: 'grid', 
+          gridTemplateColumns: { 
+            xs: '1fr', 
+            sm: 'repeat(2, 1fr)', 
+            md: 'repeat(3, 1fr)' 
+          }, 
+          gap: 3 
+        }}
+      >
         {adminFeatures.map((feature, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Box sx={{ textAlign: 'center', mb: 2 }}>
-                  <Typography variant="h2" component="div">
-                    {feature.icon}
-                  </Typography>
-                </Box>
-                <Typography variant="h6" gutterBottom>
-                  {feature.title}
+          <Card key={index} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <CardContent sx={{ flexGrow: 1 }}>
+              <Box sx={{ textAlign: 'center', mb: 2 }}>
+                <Typography variant="h2" component="div">
+                  {feature.icon}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" paragraph>
-                  {feature.description}
-                </Typography>
-                <Button
-                  variant="contained"
-                  fullWidth
-                  onClick={() => navigate(feature.path)}
-                >
-                  Manage
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
+              </Box>
+              <Typography variant="h6" gutterBottom>
+                {feature.title}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" paragraph>
+                {feature.description}
+              </Typography>
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={() => navigate(feature.path)}
+              >
+                Manage
+              </Button>
+            </CardContent>
+          </Card>
         ))}
-      </Grid>
+      </Box>
 
       <Card sx={{ mt: 4 }}>
         <CardContent>

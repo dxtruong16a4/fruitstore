@@ -3,7 +3,8 @@ import type { ApiResponse } from '../types';
 
 // Category interface
 export interface Category {
-  id: number;
+  categoryId: number; // API returns categoryId
+  id?: number; // Keep for compatibility
   name: string;
   description?: string;
   imageUrl?: string;

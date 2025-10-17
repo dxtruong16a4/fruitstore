@@ -1,152 +1,81 @@
 import React from 'react';
-import { Box, Container, Typography, Link, IconButton } from '@mui/material';
-import { Facebook, Twitter, Instagram, Email, Phone, LocationOn } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { Leaf } from 'lucide-react';
 
-const Footer: React.FC = () => {
-  const currentYear = new Date().getFullYear();
+interface FooterProps {
+  className?: string;
+  showFullFooter?: boolean;
+}
+
+const Footer: React.FC<FooterProps> = ({ 
+  className = '',
+  showFullFooter = true 
+}) => {
+  const navigate = useNavigate();
+
+  if (!showFullFooter) {
+    return (
+      <footer className={`bg-gray-900 text-white py-12 ${className}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <Leaf className="w-8 h-8 text-green-500" />
+            <span className="text-xl font-bold">FruitStore</span>
+          </div>
+          <p className="text-gray-400">&copy; 2025 FruitStore. All rights reserved.</p>
+        </div>
+      </footer>
+    );
+  }
 
   return (
-    <Box
-      component="footer"
-      sx={{
-        backgroundColor: 'primary.main',
-        color: 'primary.contrastText',
-        py: 4,
-        mt: 'auto',
-      }}
-    >
-      <Container maxWidth="lg">
-        <Box 
-          sx={{ 
-            display: 'grid', 
-            gridTemplateColumns: { 
-              xs: '1fr', 
-              sm: 'repeat(2, 1fr)', 
-              md: 'repeat(4, 1fr)' 
-            }, 
-            gap: 4 
-          }}
-        >
-          {/* Company Info */}
-          <Box>
-            <Typography variant="h6" gutterBottom>
-              🍎 FruitStore
-            </Typography>
-            <Typography variant="body2" paragraph>
-              Fresh fruits delivered to your doorstep. Quality guaranteed, 
-              satisfaction assured.
-            </Typography>
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              <IconButton color="inherit" size="small">
-                <Facebook />
-              </IconButton>
-              <IconButton color="inherit" size="small">
-                <Twitter />
-              </IconButton>
-              <IconButton color="inherit" size="small">
-                <Instagram />
-              </IconButton>
-            </Box>
-          </Box>
+    <footer className={`bg-gray-900 text-white py-12 ${className}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid md:grid-cols-4 gap-8 mb-8">
+          <div>
+            <div className="flex items-center space-x-2 mb-4">
+              <Leaf className="w-8 h-8 text-green-500" />
+              <span className="text-xl font-bold">FruitStore</span>
+            </div>
+            <p className="text-gray-400">
+              Your trusted source for fresh, organic fruits delivered daily.
+            </p>
+          </div>
 
-          {/* Quick Links */}
-          <Box>
-            <Typography variant="h6" gutterBottom>
-              Quick Links
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Link href="/" color="inherit" underline="hover">
-                Home
-              </Link>
-              <Link href="/products" color="inherit" underline="hover">
-                Products
-              </Link>
-              <Link href="/cart" color="inherit" underline="hover">
-                Cart
-              </Link>
-              <Link href="/orders" color="inherit" underline="hover">
-                Orders
-              </Link>
-            </Box>
-          </Box>
+          <div>
+            <h4 className="font-semibold mb-4">Quick Links</h4>
+            <ul className="space-y-2 text-gray-400">
+              <li><button onClick={() => navigate('/')} className="hover:text-green-500 transition">Home</button></li>
+              <li><button onClick={() => navigate('/products')} className="hover:text-green-500 transition">Shop</button></li>
+              <li><button onClick={() => navigate('/about')} className="hover:text-green-500 transition">About Us</button></li>
+              <li><button onClick={() => navigate('/contact')} className="hover:text-green-500 transition">Contact</button></li>
+            </ul>
+          </div>
 
-          {/* Customer Service */}
-          <Box>
-            <Typography variant="h6" gutterBottom>
-              Customer Service
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Link href="/contact" color="inherit" underline="hover">
-                Contact Us
-              </Link>
-              <Link href="/faq" color="inherit" underline="hover">
-                FAQ
-              </Link>
-              <Link href="/shipping" color="inherit" underline="hover">
-                Shipping Info
-              </Link>
-              <Link href="/returns" color="inherit" underline="hover">
-                Returns
-              </Link>
-            </Box>
-          </Box>
+          <div>
+            <h4 className="font-semibold mb-4">Customer Service</h4>
+            <ul className="space-y-2 text-gray-400">
+              <li><button onClick={() => navigate('/help')} className="hover:text-green-500 transition">Help Center</button></li>
+              <li><button onClick={() => navigate('/track-order')} className="hover:text-green-500 transition">Track Order</button></li>
+              <li><button onClick={() => navigate('/returns')} className="hover:text-green-500 transition">Returns</button></li>
+              <li><button onClick={() => navigate('/shipping-info')} className="hover:text-green-500 transition">Shipping Info</button></li>
+            </ul>
+          </div>
 
-          {/* Contact Info */}
-          <Box>
-            <Typography variant="h6" gutterBottom>
-              Contact Info
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Email fontSize="small" />
-                <Typography variant="body2">
-                  info@fruitstore.com
-                </Typography>
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Phone fontSize="small" />
-                <Typography variant="body2">
-                  +1 (555) 123-4567
-                </Typography>
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <LocationOn fontSize="small" />
-                <Typography variant="body2">
-                  123 Fruit Street, City, State 12345
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
-        </Box>
+          <div>
+            <h4 className="font-semibold mb-4">Contact Us</h4>
+            <ul className="space-y-2 text-gray-400">
+              <li>Email: hello@fruitstore.com</li>
+              <li>Phone: (555) 123-4567</li>
+              <li>Address: 123 Fresh Street</li>
+            </ul>
+          </div>
+        </div>
 
-        <Box sx={{ borderTop: 1, borderColor: 'divider', mt: 3, pt: 3 }}>
-          <Box 
-            sx={{ 
-              display: 'flex', 
-              flexDirection: { xs: 'column', md: 'row' }, 
-              justifyContent: 'space-between', 
-              alignItems: 'center', 
-              gap: 2 
-            }}
-          >
-            <Typography variant="body2" color="inherit">
-              © {currentYear} FruitStore. All rights reserved.
-            </Typography>
-            <Box sx={{ display: 'flex', gap: 2, justifyContent: { xs: 'flex-start', md: 'flex-end' } }}>
-              <Link href="/privacy" color="inherit" underline="hover" variant="body2">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" color="inherit" underline="hover" variant="body2">
-                Terms of Service
-              </Link>
-              <Link href="/cookies" color="inherit" underline="hover" variant="body2">
-                Cookie Policy
-              </Link>
-            </Box>
-          </Box>
-        </Box>
-      </Container>
-    </Box>
+        <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
+          <p>&copy; 2025 FruitStore. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Drawer, useTheme, useMediaQuery } from '@mui/material';
+import { Box } from '@mui/material';
 import AdminHeader from '../components/layout/AdminHeader';
 import AdminSidebar from '../components/layout/AdminSidebar';
 import Footer from '../components/layout/Footer';
@@ -9,8 +9,6 @@ interface AdminLayoutProps {
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
