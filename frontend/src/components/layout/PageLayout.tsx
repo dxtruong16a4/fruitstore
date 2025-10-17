@@ -1,5 +1,5 @@
 import React from 'react';
-import Navigation from './Navigation';
+import Header from './Header';
 import Footer from './Footer';
 import HeroSection from '../HeroSection';
 
@@ -8,13 +8,8 @@ interface PageLayoutProps {
   title?: string;
   subtitle?: string;
   showHero?: boolean;
-  showNavigation?: boolean;
+  showHeader?: boolean;
   showFooter?: boolean;
-  navigationProps?: {
-    title?: string;
-    showCart?: boolean;
-    showAuth?: boolean;
-  };
   heroProps?: {
     showSearch?: boolean;
     searchPlaceholder?: string;
@@ -31,16 +26,15 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   title,
   subtitle,
   showHero = false,
-  showNavigation = true,
+  showHeader = true,
   showFooter = true,
-  navigationProps = {},
   heroProps = {},
   footerProps = {},
   className = ''
 }) => {
   return (
     <div className={`min-h-screen bg-gradient-to-b from-green-50 to-white ${className}`}>
-      {showNavigation && <Navigation {...navigationProps} />}
+      {showHeader && <Header />}
       
       {showHero && title && (
         <HeroSection

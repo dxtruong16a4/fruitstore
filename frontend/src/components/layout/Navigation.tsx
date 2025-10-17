@@ -59,7 +59,7 @@ const Navigation: React.FC<NavigationProps> = ({
               onClick={() => navigate('/products')}
               className="text-gray-700 hover:text-green-600 transition font-medium"
             >
-              Shop
+              Cửa hàng
             </button>
             {isAuthenticated && (
               <>
@@ -67,19 +67,19 @@ const Navigation: React.FC<NavigationProps> = ({
                   onClick={() => navigate('/cart')}
                   className="text-gray-700 hover:text-green-600 transition font-medium"
                 >
-                  Cart
+                  Giỏ hàng
                 </button>
                 <button 
                   onClick={() => navigate('/orders')}
                   className="text-gray-700 hover:text-green-600 transition font-medium"
                 >
-                  Orders
+                  Đơn hàng
                 </button>
                 <button 
                   onClick={() => navigate('/profile')}
                   className="text-gray-700 hover:text-green-600 transition font-medium"
                 >
-                  Profile
+                  Hồ sơ
                 </button>
               </>
             )}
@@ -118,14 +118,14 @@ const Navigation: React.FC<NavigationProps> = ({
                   onClick={handleLogout}
                   className="hidden md:block text-gray-700 hover:text-green-600 transition font-medium"
                 >
-                  Logout
+                  Đăng xuất
                 </button>
               ) : (
                 <button 
                   onClick={() => navigate('/login')}
                   className="hidden md:block bg-green-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-green-700 transition"
                 >
-                  Sign In
+                  Đăng nhập
                 </button>
               )
             )}
@@ -141,13 +141,13 @@ const Navigation: React.FC<NavigationProps> = ({
               onClick={() => handleNavigation('/')}
               className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50 rounded-md transition"
             >
-              Home
+              Trang chủ
             </button>
             <button
               onClick={() => handleNavigation('/products')}
               className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50 rounded-md transition"
             >
-              Shop
+              Cửa hàng
             </button>
             
             {isAuthenticated && (
@@ -157,7 +157,7 @@ const Navigation: React.FC<NavigationProps> = ({
                   className="w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50 rounded-md transition flex items-center"
                 >
                   <ShoppingCart className="w-5 h-5 mr-3" />
-                  Cart
+                  Giỏ hàng
                   {totalItems > 0 && (
                     <span className="ml-auto bg-green-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                       {totalItems}
@@ -168,14 +168,14 @@ const Navigation: React.FC<NavigationProps> = ({
                   onClick={() => handleNavigation('/orders')}
                   className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50 rounded-md transition"
                 >
-                  Orders
+                  Đơn hàng
                 </button>
                 <button
                   onClick={() => handleNavigation('/profile')}
                   className="w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50 rounded-md transition flex items-center"
                 >
                   <User className="w-5 h-5 mr-3" />
-                  Profile
+                  Hồ sơ
                 </button>
               </>
             )}
@@ -187,14 +187,14 @@ const Navigation: React.FC<NavigationProps> = ({
                     onClick={handleLogout}
                     className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50 rounded-md transition"
                   >
-                    Logout
+                    Đăng xuất
                   </button>
                 ) : (
                   <button
                     onClick={() => handleNavigation('/login')}
                     className="block w-full text-left px-3 py-2 text-base font-medium text-white bg-green-600 hover:bg-green-700 rounded-md transition"
                   >
-                    Sign In
+                    Đăng nhập
                   </button>
                 )}
               </div>

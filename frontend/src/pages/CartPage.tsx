@@ -8,6 +8,7 @@ import ToastContainer from '../components/ToastContainer';
 import { useToast } from '../hooks/useToast';
 import CheckoutForm from '../components/CheckoutForm';
 import { orderApi, type CreateOrderRequest } from '../api/orderApi';
+import { PageLayout } from '../components/layout';
 
 const CartPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -21,7 +22,7 @@ const CartPage: React.FC = () => {
     const item = items.find(item => item.id === itemId);
     dispatch(removeFromCart(itemId));
     if (item) {
-      showWarning('Item Removed', `${item.productName} has been removed from your cart`);
+      showWarning('Đã xóa sản phẩm', `${item.productName} đã được xóa khỏi giỏ hàng của bạn`);
     }
   };
 
@@ -35,12 +36,12 @@ const CartPage: React.FC = () => {
 
   const handleClearCart = () => {
     dispatch(clearCart());
-    showSuccess('Cart Cleared', 'All items have been removed from your cart');
+    showSuccess('Đã xóa giỏ hàng', 'Tất cả sản phẩm đã được xóa khỏi giỏ hàng của bạn');
   };
 
   const handleCheckout = () => {
     if (items.length === 0) {
-      showWarning('Empty Cart', 'Please add items to your cart before checkout');
+      showWarning('Giỏ hàng trống', 'Vui lòng thêm sản phẩm vào giỏ hàng trước khi thanh toán');
       return;
     }
     setCheckoutOpen(true);
@@ -64,18 +65,18 @@ const CartPage: React.FC = () => {
         
         // Show success message
         showSuccess(
-          'Order Placed Successfully!', 
-          `Your order #${response.data.orderNumber} has been placed. Total: $${response.data.totalAmount.toFixed(2)}`
+          'Đặt hàng thành công!', 
+          `Đơn hàng #${response.data.orderNumber} của bạn đã được đặt. Tổng cộng: $${response.data.totalAmount.toFixed(2)}`
         );
         
         // Close checkout dialog
         setCheckoutOpen(false);
       } else {
-        showError('Order Failed', response.message || 'Failed to create order. Please try again.');
+        showError('Đặt hàng thất bại', response.message || 'Không thể tạo đơn hàng. Vui lòng thử lại.');
       }
     } catch (error) {
       console.error('Checkout error:', error);
-      showError('Order Failed', 'An unexpected error occurred. Please try again.');
+      showError('Đặt hàng thất bại', 'Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.');
     } finally {
       setIsProcessing(false);
     }
@@ -88,19 +89,20 @@ const CartPage: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    <PageLayout>
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        🛒 Shopping Cart
+        🛒 Giỏ hàng
       </Typography>
 
       {items.length === 0 ? (
         <Card>
           <CardContent sx={{ textAlign: 'center', py: 4 }}>
             <Typography variant="h6" gutterBottom>
-              Your cart is empty
+              Giỏ hàng của bạn trống
             </Typography>
             <Typography variant="body2" color="text.secondary" paragraph>
-              Add some products to get started
+              Thêm một số sản phẩm để bắt đầu
             </Typography>
           </CardContent>
         </Card>
@@ -114,7 +116,7 @@ const CartPage: React.FC = () => {
                     <ListItem>
                       <ListItemText
                         primary={item.productName}
-                        secondary={`$${item.productPrice} each`}
+                        secondary={`$${item.productPrice} mỗi cái`}
                       />
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <Button
@@ -140,7 +142,7 @@ const CartPage: React.FC = () => {
                           size="small"
                           onClick={() => handleRemoveItem(item.id)}
                         >
-                          Remove
+                          Xóa
                         </Button>
                       </Box>
                     </ListItem>
@@ -155,10 +157,10 @@ const CartPage: React.FC = () => {
             <CardContent>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                 <Typography variant="h6">
-                  Total Items: {totalItems}
+                  Tổng sản phẩm: {totalItems}
                 </Typography>
                 <Typography variant="h5" color="primary">
-                  Total: ${totalAmount.toFixed(2)}
+                  Tổng cộng: ${totalAmount.toFixed(2)}
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', gap: 2 }}>
@@ -166,14 +168,14 @@ const CartPage: React.FC = () => {
                   variant="outlined"
                   onClick={handleClearCart}
                 >
-                  Clear Cart
+                  Xóa giỏ hàng
                 </Button>
                 <Button
                   variant="contained"
                   onClick={handleCheckout}
                   sx={{ flexGrow: 1 }}
                 >
-                  Proceed to Checkout
+                  Tiến hành thanh toán
                 </Button>
               </Box>
             </CardContent>
@@ -194,7 +196,8 @@ const CartPage: React.FC = () => {
         onConfirm={handleCheckoutConfirm}
         loading={isProcessing}
       />
-    </Container>
+      </Container>
+    </PageLayout>
   );
 };
 

@@ -7,6 +7,7 @@ import { useAppSelector } from '../redux';
 import ToastContainer from '../components/ToastContainer';
 import OrderDetailModal from '../components/OrderDetailModal';
 import { useToast } from '../hooks/useToast';
+import { PageLayout } from '../components/layout';
 
 const OrdersPage: React.FC = () => {
   const navigate = useNavigate();
@@ -179,7 +180,8 @@ const OrdersPage: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    <PageLayout>
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
         <Box>
           <Typography variant="h4" component="h1" gutterBottom>
@@ -335,6 +337,7 @@ const OrdersPage: React.FC = () => {
         onCancelOrder={handleCancelOrder}
       />
     </Container>
+    </PageLayout>
   );
 };
 

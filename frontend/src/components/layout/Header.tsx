@@ -71,13 +71,13 @@ const Header: React.FC = () => {
   };
 
   const navigationItems = [
-    { label: 'Home', path: '/', icon: <Home /> },
-    { label: 'Products', path: '/products', icon: <Store /> },
+    { label: 'Trang chủ', path: '/', icon: <Home /> },
+    { label: 'Sản phẩm', path: '/products', icon: <Store /> },
   ];
 
   const protectedItems = [
-    { label: 'Cart', path: '/cart', icon: <ShoppingCart />, badge: totalItems },
-    { label: 'Orders', path: '/orders', icon: <Assignment /> },
+    { label: 'Giỏ hàng', path: '/cart', icon: <ShoppingCart />, badge: totalItems },
+    { label: 'Đơn hàng', path: '/orders', icon: <Assignment /> },
   ];
 
   const drawer = (
@@ -200,7 +200,7 @@ const Header: React.FC = () => {
                   onClick={() => handleNavigation('/login')}
                   startIcon={<Login />}
                 >
-                  Login
+                  Đăng nhập
                 </Button>
               )}
             </Box>
@@ -234,13 +234,13 @@ const Header: React.FC = () => {
           <ListItemIcon>
             <Home fontSize="small" />
           </ListItemIcon>
-          Home
+          Trang chủ
         </MenuItem>
         <MenuItem onClick={() => { handleNavigation('/products'); handleMenuClose(); }}>
           <ListItemIcon>
             <Store fontSize="small" />
           </ListItemIcon>
-          Products
+          Sản phẩm
         </MenuItem>
         {isAuthenticated && (
           <>
@@ -248,13 +248,13 @@ const Header: React.FC = () => {
               <ListItemIcon>
                 <ShoppingCart fontSize="small" />
               </ListItemIcon>
-              Cart
+              Giỏ hàng
             </MenuItem>
             <MenuItem onClick={() => { handleNavigation('/orders'); handleMenuClose(); }}>
               <ListItemIcon>
                 <Assignment fontSize="small" />
               </ListItemIcon>
-              Orders
+              Đơn hàng
             </MenuItem>
           </>
         )}
@@ -264,14 +264,14 @@ const Header: React.FC = () => {
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>
-            Logout
+            Đăng xuất
           </MenuItem>
         ) : (
           <MenuItem onClick={() => { handleNavigation('/login'); handleMenuClose(); }}>
             <ListItemIcon>
               <Login fontSize="small" />
             </ListItemIcon>
-            Login
+            Đăng nhập
           </MenuItem>
         )}
       </Menu>

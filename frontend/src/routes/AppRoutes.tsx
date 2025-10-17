@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAppSelector } from '../redux';
 
 // Layout imports
-import { UserLayout, AdminLayout } from '../layouts';
+import { AdminLayout } from '../layouts';
 
 // Page imports
 import HomePage from '../pages/HomePage';
@@ -48,35 +48,28 @@ const AppRoutes: React.FC = () => {
       <Route path="/returns" element={<ReturnsPage />} />
       <Route path="/shipping-info" element={<ShippingInfoPage />} />
       
-      {/* Protected Routes with UserLayout */}
       <Route 
         path="/cart" 
         element={
-          <UserLayout>
             <ProtectedRoute>
               <CartPage />
             </ProtectedRoute>
-          </UserLayout>
         } 
       />
       <Route 
         path="/orders" 
         element={
-          <UserLayout>
             <ProtectedRoute>
               <OrdersPage />
             </ProtectedRoute>
-          </UserLayout>
         } 
       />
       <Route 
         path="/profile" 
         element={
-          <UserLayout>
             <ProtectedRoute>
               <ProfilePage />
             </ProtectedRoute>
-          </UserLayout>
         } 
       />
       
@@ -104,9 +97,7 @@ const AppRoutes: React.FC = () => {
       
       {/* 404 Route */}
       <Route path="*" element={
-        <UserLayout>
           <NotFoundPage />
-        </UserLayout>
       } />
     </Routes>
   );

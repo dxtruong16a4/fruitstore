@@ -21,7 +21,7 @@ const Footer: React.FC<FooterProps> = ({
             <Leaf className="w-8 h-8 text-green-500" />
             <span className="text-xl font-bold">FruitStore</span>
           </div>
-          <p className="text-gray-400">&copy; 2025 FruitStore. All rights reserved.</p>
+          <p className="text-gray-400">&copy; 2025 FruitStore. Tất cả quyền được bảo lưu.</p>
         </div>
       </footer>
     );
@@ -37,42 +37,42 @@ const Footer: React.FC<FooterProps> = ({
               <span className="text-xl font-bold">FruitStore</span>
             </div>
             <p className="text-gray-400">
-              Your trusted source for fresh, organic fruits delivered daily.
+              Nguồn cung cấp trái cây tươi, hữu cơ đáng tin cậy được giao hàng hàng ngày.
             </p>
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
+            <h4 className="font-semibold mb-4">Liên kết nhanh</h4>
             <ul className="space-y-2 text-gray-400">
-              <li><button onClick={() => navigate('/')} className="hover:text-green-500 transition">Home</button></li>
-              <li><button onClick={() => navigate('/products')} className="hover:text-green-500 transition">Shop</button></li>
-              <li><button onClick={() => navigate('/about')} className="hover:text-green-500 transition">About Us</button></li>
-              <li><button onClick={() => navigate('/contact')} className="hover:text-green-500 transition">Contact</button></li>
+              <li><button onClick={() => navigate('/')} className="hover:text-green-500 transition">Trang chủ</button></li>
+              <li><button onClick={() => navigate('/products')} className="hover:text-green-500 transition">Cửa hàng</button></li>
+              <li><button onClick={() => navigate('/about')} className="hover:text-green-500 transition">Về chúng tôi</button></li>
+              <li><button onClick={() => navigate('/contact')} className="hover:text-green-500 transition">Liên hệ</button></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4">Customer Service</h4>
+            <h4 className="font-semibold mb-4">Dịch vụ khách hàng</h4>
             <ul className="space-y-2 text-gray-400">
-              <li><button onClick={() => navigate('/help')} className="hover:text-green-500 transition">Help Center</button></li>
-              <li><button onClick={() => navigate('/track-order')} className="hover:text-green-500 transition">Track Order</button></li>
-              <li><button onClick={() => navigate('/returns')} className="hover:text-green-500 transition">Returns</button></li>
-              <li><button onClick={() => navigate('/shipping-info')} className="hover:text-green-500 transition">Shipping Info</button></li>
+              <li><button onClick={() => navigate('/help')} className="hover:text-green-500 transition">Trung tâm trợ giúp</button></li>
+              <li><button onClick={() => navigate('/track-order')} className="hover:text-green-500 transition">Theo dõi đơn hàng</button></li>
+              <li><button onClick={() => navigate('/returns')} className="hover:text-green-500 transition">Đổi trả</button></li>
+              <li><button onClick={() => navigate('/shipping-info')} className="hover:text-green-500 transition">Thông tin giao hàng</button></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4">Contact Us</h4>
+            <h4 className="font-semibold mb-4">Liên hệ với chúng tôi</h4>
             <ul className="space-y-2 text-gray-400">
               <li>Email: hello@fruitstore.com</li>
-              <li>Phone: (555) 123-4567</li>
-              <li>Address: 123 Fresh Street</li>
+              <li>Điện thoại: (555) 123-4567</li>
+              <li>Địa chỉ: 123 Fresh Street</li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
-          <p>&copy; 2025 FruitStore. All rights reserved.</p>
+          <p>&copy; 2025 FruitStore. Tất cả quyền được bảo lưu.</p>
         </div>
       </div>
     </footer>
