@@ -1,4 +1,4 @@
-import httpClient from './axiosClient';
+import { httpClient } from './axiosClient';
 import type { 
   LoginRequest, 
   RegisterRequest, 

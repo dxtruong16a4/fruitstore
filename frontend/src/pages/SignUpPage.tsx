@@ -85,11 +85,29 @@ const SignUpPage: React.FC = () => {
       });
 
       if (response.success) {
+        // Create user object from response data
+        const userData = {
+          userId: response.data.userId,
+          id: response.data.userId, // Keep for compatibility
+          username: response.data.username,
+          email: response.data.email,
+          fullName: response.data.fullName,
+          firstName: response.data.fullName.split(' ')[0], // Extract first name
+          lastName: response.data.fullName.split(' ').slice(1).join(' '), // Extract last name
+          role: response.data.role,
+          isActive: true, // Default value
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+
         // Store token and user data
         localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        localStorage.setItem('user', JSON.stringify(userData));
         
-        dispatch(loginSuccess(response.data));
+        dispatch(loginSuccess({
+          token: response.data.token,
+          user: userData
+        }));
         navigate('/', { replace: true });
       } else {
         dispatch(loginFailure(response.message || 'Đăng ký thất bại'));

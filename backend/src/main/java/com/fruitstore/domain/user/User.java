@@ -50,7 +50,7 @@ public class User {
     @Column(name = "address", columnDefinition = "TEXT")
     private String address;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = UserRoleConverter.class)
     @Column(name = "role", nullable = false, length = 10)
     private UserRole role = UserRole.CUSTOMER;
 

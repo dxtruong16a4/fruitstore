@@ -1,5 +1,8 @@
 package com.fruitstore.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * Enum representing user roles in the system
  */
@@ -13,6 +16,7 @@ public enum UserRole {
         this.value = value;
     }
 
+    @JsonValue
     public String getValue() {
         return value;
     }
@@ -20,6 +24,7 @@ public enum UserRole {
     /**
      * Convert database string value to enum
      */
+    @JsonCreator
     public static UserRole fromValue(String value) {
         for (UserRole role : UserRole.values()) {
             if (role.value.equalsIgnoreCase(value)) {

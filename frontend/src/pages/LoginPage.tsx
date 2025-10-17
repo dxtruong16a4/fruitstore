@@ -28,6 +28,9 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation();
+    
+    console.log('Form submitted with data:', { email: formData.email, password: '***' });
     
     if (!formData.email || !formData.password) {
       dispatch(loginFailure('Vui lòng điền đầy đủ thông tin'));
@@ -37,17 +40,36 @@ const LoginPage: React.FC = () => {
     dispatch(loginStart());
     
     try {
+      console.log('Calling authApi.login...');
       const response = await authApi.login({
         email: formData.email,
         password: formData.password
       });
 
       if (response.success) {
+        // Create user object from response data
+        const userData = {
+          userId: response.data.userId,
+          id: response.data.userId, // Keep for compatibility
+          username: response.data.username,
+          email: response.data.email,
+          fullName: response.data.fullName,
+          firstName: response.data.fullName.split(' ')[0], // Extract first name
+          lastName: response.data.fullName.split(' ').slice(1).join(' '), // Extract last name
+          role: response.data.role,
+          isActive: true, // Default value
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+
         // Store token and user data
         localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        localStorage.setItem('user', JSON.stringify(userData));
         
-        dispatch(loginSuccess(response.data));
+        dispatch(loginSuccess({
+          token: response.data.token,
+          user: userData
+        }));
         navigate(from, { replace: true });
       } else {
         dispatch(loginFailure(response.message || 'Đăng nhập thất bại'));
@@ -79,7 +101,7 @@ const LoginPage: React.FC = () => {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6" onInvalid={(e) => e.preventDefault()}>
             {/* Email Field */}
             <div className="floating-input">
               <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />

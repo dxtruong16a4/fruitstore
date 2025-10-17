@@ -1,15 +1,17 @@
 // Common types for the application
 
 export interface User {
-  id: number;
+  userId: number;
+  id?: number; // Keep for compatibility
   username: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  role: 'CUSTOMER' | 'ADMIN';
-  isActive: boolean;
+  fullName: string;
+  firstName?: string; // Keep for compatibility
+  lastName?: string; // Keep for compatibility
+  role: 'customer' | 'admin';
+  isActive?: boolean; // Keep for compatibility
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string; // Keep for compatibility
 }
 
 export interface LoginRequest {
@@ -28,7 +30,13 @@ export interface RegisterRequest {
 
 export interface LoginResponse {
   token: string;
-  user: User;
+  tokenType?: string;
+  userId: number;
+  username: string;
+  email: string;
+  fullName: string;
+  role: 'customer' | 'admin';
+  user?: User; // Keep for compatibility
 }
 
 export interface ApiResponse<T> {
