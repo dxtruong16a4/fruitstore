@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { authApi } from '../../api/authApi';
 import { loginSuccess, loginFailure, logout } from '../slices/authSlice';
+import { loadCartFromBackend } from './cartThunks';
 
 // Thunk to restore authentication state from token
 export const restoreAuth = createAsyncThunk(
@@ -21,6 +22,8 @@ export const restoreAuth = createAsyncThunk(
           user: response.data, 
           token 
         }));
+        // Load cart from backend after successful authentication
+        dispatch(loadCartFromBackend());
         return response.data;
       } else {
         // Token is invalid, clear it
@@ -44,6 +47,8 @@ export const loginUser = createAsyncThunk(
       
       if (response.success && response.data) {
         dispatch(loginSuccess(response.data));
+        // Load cart from backend after successful login
+        dispatch(loadCartFromBackend());
         return response.data;
       } else {
         return rejectWithValue(response.message || 'Login failed');

@@ -36,9 +36,9 @@ const OrdersPage: React.FC = () => {
         sortDirection
       });
 
-      if (response.success) {
-        setOrders(response.data.orders);
-        setTotalPages(response.data.totalPages);
+      if (response.success && response.data) {
+        setOrders(response.data.data || []);
+        setTotalPages(response.data.totalPages || 0);
       } else {
         showError('Failed to Load Orders', response.message || 'Unable to fetch your orders');
         // Set empty orders array on error
@@ -166,7 +166,7 @@ const OrdersPage: React.FC = () => {
         </Box>
       </Box>
 
-      {orders.length === 0 ? (
+      {!orders || orders.length === 0 ? (
         <Card>
           <CardContent sx={{ textAlign: 'center', py: 4 }}>
             <Typography variant="h6" gutterBottom>
@@ -180,8 +180,8 @@ const OrdersPage: React.FC = () => {
       ) : (
         <>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {orders.map((order) => (
-              <Card key={order.id}>
+            {orders && orders.map((order) => (
+              <Card key={order.orderId}>
                 <CardContent>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
                     <Box>
@@ -205,7 +205,7 @@ const OrdersPage: React.FC = () => {
                   </Box>
                   
                   <Typography variant="body2" gutterBottom>
-                    Items: {order.items.map(item => `${item.productName} (x${item.quantity})`).join(', ')}
+                    Items: {order.totalItems} items
                   </Typography>
                   
                   <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
@@ -217,7 +217,7 @@ const OrdersPage: React.FC = () => {
                         size="small" 
                         color="error" 
                         variant="outlined"
-                        onClick={() => handleCancelOrder(order.id)}
+                        onClick={() => handleCancelOrder(order.orderId)}
                       >
                         Cancel Order
                       </Button>

@@ -101,27 +101,27 @@ axiosClient.interceptors.response.use(
 export const httpClient = {
   // GET request
   get: <T>(url: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> => {
-    return axiosClient.get(url, config);
+    return axiosClient.get(url, config) as Promise<ApiResponse<T>>;
   },
 
   // POST request
   post: <T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<ApiResponse<T>> => {
-    return axiosClient.post(url, data, config);
+    return axiosClient.post(url, data, config) as Promise<ApiResponse<T>>;
   },
 
   // PUT request
   put: <T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<ApiResponse<T>> => {
-    return axiosClient.put(url, data, config);
+    return axiosClient.put(url, data, config) as Promise<ApiResponse<T>>;
   },
 
   // PATCH request
   patch: <T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<ApiResponse<T>> => {
-    return axiosClient.patch(url, data, config);
+    return axiosClient.patch(url, data, config) as Promise<ApiResponse<T>>;
   },
 
   // DELETE request
   delete: <T>(url: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> => {
-    return axiosClient.delete(url, config);
+    return axiosClient.delete(url, config) as Promise<ApiResponse<T>>;
   },
 
   // Upload file

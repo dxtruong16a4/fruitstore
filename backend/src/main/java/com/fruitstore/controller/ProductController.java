@@ -48,10 +48,10 @@ public class ProductController {
      */
     @GetMapping
     public ResponseEntity<ApiResponse<Page<ProductResponse>>> getAllProducts(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDirection) {
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size,
+            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+            @RequestParam(value = "sortDirection", defaultValue = "asc") String sortDirection) {
         
         Pageable pageable = createPageable(page, size, sortBy, sortDirection);
         Page<ProductResponse> products = productService.getAllProducts(pageable);
@@ -98,10 +98,10 @@ public class ProductController {
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<ApiResponse<Page<ProductResponse>>> getProductsByCategory(
             @PathVariable Long categoryId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDirection) {
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size,
+            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+            @RequestParam(value = "sortDirection", defaultValue = "asc") String sortDirection) {
         
         Pageable pageable = createPageable(page, size, sortBy, sortDirection);
         Page<ProductResponse> products = productService.getProductsByCategory(categoryId, pageable);
@@ -137,10 +137,10 @@ public class ProductController {
     @GetMapping("/search/name")
     public ResponseEntity<ApiResponse<Page<ProductResponse>>> searchProductsByName(
             @RequestParam String name,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDirection) {
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size,
+            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+            @RequestParam(value = "sortDirection", defaultValue = "asc") String sortDirection) {
         
         Pageable pageable = createPageable(page, size, sortBy, sortDirection);
         Page<ProductResponse> products = productService.searchProductsByName(name, pageable);
@@ -178,10 +178,10 @@ public class ProductController {
     @GetMapping("/categories")
     public ResponseEntity<ApiResponse<Page<ProductResponse>>> getProductsByCategories(
             @RequestParam List<Long> categoryIds,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDirection) {
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size,
+            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+            @RequestParam(value = "sortDirection", defaultValue = "asc") String sortDirection) {
         
         Pageable pageable = createPageable(page, size, sortBy, sortDirection);
         Page<ProductResponse> products = productService.getProductsByCategories(categoryIds, pageable);
@@ -308,7 +308,7 @@ public class ProductController {
      */
     @GetMapping("/admin/low-stock")
     public ResponseEntity<ApiResponse<List<ProductResponse>>> getLowStockProducts(
-            @RequestParam(defaultValue = "10") Integer threshold) {
+            @RequestParam(value = "threshold", defaultValue = "10") Integer threshold) {
         
         List<ProductResponse> products = productService.getLowStockProducts(threshold);
         return ResponseEntity.ok(ApiResponse.success(products));
@@ -323,7 +323,7 @@ public class ProductController {
      */
     @GetMapping("/admin/top-stock")
     public ResponseEntity<ApiResponse<List<ProductResponse>>> getTopProductsByStock(
-            @RequestParam(defaultValue = "10") Integer limit) {
+            @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
         
         List<ProductResponse> products = productService.getTopProductsByStock(limit);
         return ResponseEntity.ok(ApiResponse.success(products));

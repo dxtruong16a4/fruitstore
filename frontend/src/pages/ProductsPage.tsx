@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Search, Filter, Grid, List, Loader2, X } from 'lucide-react';
 import { productApi, type Product } from '../api/productApi';

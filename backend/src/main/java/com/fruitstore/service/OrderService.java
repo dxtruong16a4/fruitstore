@@ -46,6 +46,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final CartRepository cartRepository;
+    private final CartService cartService;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final DiscountService discountService;
@@ -53,12 +54,13 @@ public class OrderService {
 
     @Autowired
     public OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository,
-                       CartRepository cartRepository, UserRepository userRepository, 
+                       CartRepository cartRepository, CartService cartService, UserRepository userRepository, 
                        ProductRepository productRepository, DiscountService discountService,
                        DiscountRepository discountRepository) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.cartRepository = cartRepository;
+        this.cartService = cartService;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.discountService = discountService;
@@ -78,10 +80,16 @@ public class OrderService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
 
-        // Get user's cart
+        // Get user's cart (this will create cart if it doesn't exist)
         Cart cart = cartRepository.findByUser_UserIdWithItemsAndProducts(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Cart not found for user: " + userId));
+                .orElseGet(() -> {
+                    // If cart doesn't exist, create it using CartService
+                    cartService.getCartByUserId(userId);
+                    return cartRepository.findByUser_UserIdWithItemsAndProducts(userId)
+                            .orElseThrow(() -> new IllegalArgumentException("Failed to create cart for user: " + userId));
+                });
 
+        
         // Validate cart is not empty
         if (cart.isEmpty()) {
             throw new IllegalArgumentException("Cannot create order from empty cart");
@@ -94,19 +102,25 @@ public class OrderService {
             }
         }
 
-        // Create order
+        // Calculate total amount from cart items first
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        for (CartItem cartItem : cart.getCartItems()) {
+            BigDecimal subtotal = cartItem.getProduct().getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity()));
+            totalAmount = totalAmount.add(subtotal);
+        }
+
+        // Create order with calculated total amount
         Order order = new Order(user, request.getShippingAddress(), request.getCustomerName(), 
                                request.getCustomerEmail(), request.getPhoneNumber());
         order.setNotes(request.getNotes());
+        order.setTotalAmount(totalAmount);
         order = orderRepository.save(order);
 
         // Create order items from cart items
-        BigDecimal totalAmount = BigDecimal.ZERO;
         for (CartItem cartItem : cart.getCartItems()) {
             OrderItem orderItem = new OrderItem(order, cartItem.getProduct(), cartItem.getQuantity());
             orderItem = orderItemRepository.save(orderItem);
             order.addOrderItem(orderItem);
-            totalAmount = totalAmount.add(orderItem.getSubtotal());
 
             // Update product stock
             cartItem.getProduct().reduceStock(cartItem.getQuantity());
@@ -287,8 +301,11 @@ public class OrderService {
             case CONFIRMED:
                 order.confirm();
                 break;
-            case DELIVERED:
+            case SHIPPED:
                 order.ship();
+                break;
+            case DELIVERED:
+                order.deliver();
                 break;
             case CANCELLED:
                 order.cancel();

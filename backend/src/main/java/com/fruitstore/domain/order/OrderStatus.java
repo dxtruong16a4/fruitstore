@@ -6,6 +6,7 @@ package com.fruitstore.domain.order;
 public enum OrderStatus {
     PENDING("pending"),
     CONFIRMED("confirmed"),
+    SHIPPED("shipped"),
     DELIVERED("delivered"),
     CANCELLED("cancelled");
 
@@ -29,6 +30,18 @@ public enum OrderStatus {
             }
         }
         throw new IllegalArgumentException("Invalid order status: " + value);
+    }
+
+    /**
+     * Convert enum name to enum (handles both uppercase and lowercase)
+     */
+    public static OrderStatus fromName(String name) {
+        try {
+            return OrderStatus.valueOf(name.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            // Try to find by value (case insensitive)
+            return fromValue(name);
+        }
     }
 
     /**

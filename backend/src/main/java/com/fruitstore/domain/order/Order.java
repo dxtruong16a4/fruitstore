@@ -40,7 +40,6 @@ public class Order {
     private User user;
 
     @NotNull(message = "Order status is required")
-    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
     private OrderStatus status = OrderStatus.PENDING;
 
@@ -176,7 +175,7 @@ public class Order {
         if (this.status != OrderStatus.CONFIRMED) {
             throw new IllegalStateException("Only confirmed orders can be shipped");
         }
-        this.status = OrderStatus.DELIVERED;
+        this.status = OrderStatus.SHIPPED;
         this.shippedAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
@@ -185,9 +184,10 @@ public class Order {
      * Mark the order as delivered
      */
     public void deliver() {
-        if (this.status != OrderStatus.DELIVERED) {
+        if (this.status != OrderStatus.SHIPPED) {
             throw new IllegalStateException("Only shipped orders can be delivered");
         }
+        this.status = OrderStatus.DELIVERED;
         this.deliveredAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }

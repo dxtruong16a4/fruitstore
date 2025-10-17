@@ -1,4 +1,4 @@
-import { axiosClient } from './axiosClient';
+import { httpClient } from './axiosClient';
 
 // Order Types
 export interface OrderItem {
@@ -11,23 +11,25 @@ export interface OrderItem {
 }
 
 export interface OrderResponse {
-  id: number;
+  orderId: number;
   orderNumber: string;
   status: 'PENDING' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
   totalAmount: number;
   createdAt: string;
   updatedAt: string;
-  items: OrderItem[];
+  totalItems: number;
+  customerName?: string;
+  customerEmail?: string;
   shippingAddress?: string;
   notes?: string;
 }
 
 export interface OrderListResponse {
-  orders: OrderResponse[];
+  data: OrderResponse[];
   totalElements: number;
   totalPages: number;
   currentPage: number;
-  size: number;
+  pageSize: number;
   hasNext: boolean;
   hasPrevious: boolean;
 }
@@ -42,12 +44,12 @@ export interface OrderStatistics {
 }
 
 export interface CreateOrderRequest {
-  items: Array<{
-    productId: number;
-    quantity: number;
-  }>;
-  shippingAddress?: string;
+  shippingAddress: string;
+  customerName: string;
+  customerEmail: string;
+  phoneNumber?: string;
   notes?: string;
+  discountCode?: string;
 }
 
 // API Functions
@@ -60,21 +62,21 @@ export const orderApi = {
     sortDirection?: 'asc' | 'desc';
   } = {}): Promise<{ success: boolean; data: OrderListResponse; message?: string }> => {
     try {
-      const response = await axiosClient.get('/api/orders', { params });
+      const response = await httpClient.get<OrderListResponse>('/api/orders', { params });
       return {
         success: true,
-        data: response.data.data
+        data: response.data
       };
     } catch (error: any) {
       console.error('Error fetching orders:', error);
       return {
         success: false,
         data: {
-          orders: [],
+          data: [],
           totalElements: 0,
           totalPages: 0,
           currentPage: 0,
-          size: 10,
+          pageSize: 10,
           hasNext: false,
           hasPrevious: false
         },
@@ -86,10 +88,10 @@ export const orderApi = {
   // Get order by ID
   getOrderById: async (id: number): Promise<{ success: boolean; data?: OrderResponse; message?: string }> => {
     try {
-      const response = await axiosClient.get(`/api/orders/${id}`);
+      const response = await httpClient.get<OrderResponse>(`/api/orders/${id}`);
       return {
         success: true,
-        data: response.data.data
+        data: response.data
       };
     } catch (error: any) {
       console.error('Error fetching order:', error);
@@ -103,10 +105,10 @@ export const orderApi = {
   // Get order by order number
   getOrderByOrderNumber: async (orderNumber: string): Promise<{ success: boolean; data?: OrderResponse; message?: string }> => {
     try {
-      const response = await axiosClient.get(`/api/orders/number/${orderNumber}`);
+      const response = await httpClient.get<OrderResponse>(`/api/orders/number/${orderNumber}`);
       return {
         success: true,
-        data: response.data.data
+        data: response.data
       };
     } catch (error: any) {
       console.error('Error fetching order by number:', error);
@@ -120,11 +122,11 @@ export const orderApi = {
   // Cancel order
   cancelOrder: async (id: number): Promise<{ success: boolean; data?: OrderResponse; message?: string }> => {
     try {
-      const response = await axiosClient.put(`/api/orders/${id}/cancel`);
+      const response = await httpClient.put<OrderResponse>(`/api/orders/${id}/cancel`);
       return {
         success: true,
-        data: response.data.data,
-        message: response.data.message
+        data: response.data,
+        message: response.message
       };
     } catch (error: any) {
       console.error('Error cancelling order:', error);
@@ -141,21 +143,21 @@ export const orderApi = {
     size?: number;
   } = {}): Promise<{ success: boolean; data: OrderListResponse; message?: string }> => {
     try {
-      const response = await axiosClient.get(`/api/orders/status/${status}`, { params });
+      const response = await httpClient.get<OrderListResponse>(`/api/orders/status/${status}`, { params });
       return {
         success: true,
-        data: response.data.data
+        data: response.data
       };
     } catch (error: any) {
       console.error('Error fetching orders by status:', error);
       return {
         success: false,
         data: {
-          orders: [],
+          data: [],
           totalElements: 0,
           totalPages: 0,
           currentPage: 0,
-          size: 10,
+          pageSize: 10,
           hasNext: false,
           hasPrevious: false
         },
@@ -171,21 +173,21 @@ export const orderApi = {
     size?: number;
   } = {}): Promise<{ success: boolean; data: OrderListResponse; message?: string }> => {
     try {
-      const response = await axiosClient.get('/api/orders/recent', { params });
+      const response = await httpClient.get<OrderListResponse>('/api/orders/recent', { params });
       return {
         success: true,
-        data: response.data.data
+        data: response.data
       };
     } catch (error: any) {
       console.error('Error fetching recent orders:', error);
       return {
         success: false,
         data: {
-          orders: [],
+          data: [],
           totalElements: 0,
           totalPages: 0,
           currentPage: 0,
-          size: 10,
+          pageSize: 10,
           hasNext: false,
           hasPrevious: false
         },
@@ -200,21 +202,21 @@ export const orderApi = {
     size?: number;
   } = {}): Promise<{ success: boolean; data: OrderListResponse; message?: string }> => {
     try {
-      const response = await axiosClient.get('/api/orders/cancellable', { params });
+      const response = await httpClient.get<OrderListResponse>('/api/orders/cancellable', { params });
       return {
         success: true,
-        data: response.data.data
+        data: response.data
       };
     } catch (error: any) {
       console.error('Error fetching cancellable orders:', error);
       return {
         success: false,
         data: {
-          orders: [],
+          data: [],
           totalElements: 0,
           totalPages: 0,
           currentPage: 0,
-          size: 10,
+          pageSize: 10,
           hasNext: false,
           hasPrevious: false
         },
@@ -226,10 +228,10 @@ export const orderApi = {
   // Check if order can be cancelled
   canCancelOrder: async (id: number): Promise<{ success: boolean; data?: boolean; message?: string }> => {
     try {
-      const response = await axiosClient.get(`/api/orders/${id}/can-cancel`);
+      const response = await httpClient.get<boolean>(`/api/orders/${id}/can-cancel`);
       return {
         success: true,
-        data: response.data.data
+        data: response.data
       };
     } catch (error: any) {
       console.error('Error checking if order can be cancelled:', error);
@@ -244,10 +246,10 @@ export const orderApi = {
   // Get order statistics
   getOrderStatistics: async (): Promise<{ success: boolean; data?: OrderStatistics; message?: string }> => {
     try {
-      const response = await axiosClient.get('/api/orders/statistics');
+      const response = await httpClient.get<OrderStatistics>('/api/orders/statistics');
       return {
         success: true,
-        data: response.data.data
+        data: response.data
       };
     } catch (error: any) {
       console.error('Error fetching order statistics:', error);
@@ -261,11 +263,11 @@ export const orderApi = {
   // Create order from cart
   createOrder: async (request: CreateOrderRequest): Promise<{ success: boolean; data?: OrderResponse; message?: string }> => {
     try {
-      const response = await axiosClient.post('/api/orders', request);
+      const response = await httpClient.post<OrderResponse>('/api/orders', request);
       return {
         success: true,
-        data: response.data.data,
-        message: response.data.message
+        data: response.data,
+        message: response.message
       };
     } catch (error: any) {
       console.error('Error creating order:', error);

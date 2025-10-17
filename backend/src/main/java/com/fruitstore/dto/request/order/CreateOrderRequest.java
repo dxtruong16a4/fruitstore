@@ -36,7 +36,6 @@ public class CreateOrderRequest {
     @Size(max = 50, message = "Discount code must not exceed 50 characters")
     private String discountCode;
 
-    @NotEmpty(message = "Order items are required")
     @Valid
     private List<OrderItemRequest> orderItems;
 

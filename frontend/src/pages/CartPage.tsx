@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Typography, Box, Card, CardContent, Button, List, ListItem, ListItemText, Divider } from '@mui/material';
 import { useAppSelector, useAppDispatch } from '../redux';
 import { clearCart, removeFromCart, updateQuantity } from '../redux/slices/cartSlice';
+import { syncCartWithBackend } from '../redux/thunks/cartThunks';
 import type { CartItem } from '../redux/slices/cartSlice';
 import ToastContainer from '../components/ToastContainer';
 import { useToast } from '../hooks/useToast';
+import CheckoutForm from '../components/CheckoutForm';
+import { orderApi, type CreateOrderRequest } from '../api/orderApi';
 
 const CartPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { items, totalItems, totalAmount } = useAppSelector((state) => state.cart);
-  const { toasts, removeToast, showSuccess, showWarning } = useToast();
+  const { toasts, removeToast, showSuccess, showWarning, showError } = useToast();
+  
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleRemoveItem = (itemId: number) => {
     const item = items.find(item => item.id === itemId);
@@ -33,8 +39,52 @@ const CartPage: React.FC = () => {
   };
 
   const handleCheckout = () => {
-    // TODO: Implement checkout logic
-    console.log('Proceeding to checkout...');
+    if (items.length === 0) {
+      showWarning('Empty Cart', 'Please add items to your cart before checkout');
+      return;
+    }
+    setCheckoutOpen(true);
+  };
+
+  const handleCheckoutConfirm = async (orderData: CreateOrderRequest) => {
+    setIsProcessing(true);
+    
+    try {
+      // First, sync the local cart with the backend
+      if (items.length > 0) {
+        await dispatch(syncCartWithBackend(items)).unwrap();
+      }
+      
+      // Then create the order
+      const response = await orderApi.createOrder(orderData);
+      
+      if (response.success && response.data) {
+        // Clear the cart after successful order creation
+        dispatch(clearCart());
+        
+        // Show success message
+        showSuccess(
+          'Order Placed Successfully!', 
+          `Your order #${response.data.orderNumber} has been placed. Total: $${response.data.totalAmount.toFixed(2)}`
+        );
+        
+        // Close checkout dialog
+        setCheckoutOpen(false);
+      } else {
+        showError('Order Failed', response.message || 'Failed to create order. Please try again.');
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      showError('Order Failed', 'An unexpected error occurred. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleCheckoutClose = () => {
+    if (!isProcessing) {
+      setCheckoutOpen(false);
+    }
   };
 
   return (
@@ -135,6 +185,14 @@ const CartPage: React.FC = () => {
       <ToastContainer
         toasts={toasts}
         onRemoveToast={removeToast}
+      />
+
+      {/* Checkout Dialog */}
+      <CheckoutForm
+        open={checkoutOpen}
+        onClose={handleCheckoutClose}
+        onConfirm={handleCheckoutConfirm}
+        loading={isProcessing}
       />
     </Container>
   );
