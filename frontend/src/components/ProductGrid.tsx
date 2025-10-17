@@ -6,6 +6,7 @@ interface ProductGridProps {
   products: Product[];
   onAddToCart: (product: Product) => void;
   onToggleFavorite?: (product: Product) => void;
+  onProductClick?: (product: Product) => void;
   viewMode?: 'grid' | 'list';
   showAddToCart?: boolean;
   className?: string;
@@ -15,6 +16,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
   products,
   onAddToCart,
   onToggleFavorite,
+  onProductClick,
   viewMode = 'grid',
   showAddToCart = true,
   className = ''
@@ -41,6 +43,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
           product={product}
           onAddToCart={onAddToCart}
           onToggleFavorite={onToggleFavorite}
+          onProductClick={onProductClick}
           viewMode={viewMode}
           showAddToCart={showAddToCart}
         />

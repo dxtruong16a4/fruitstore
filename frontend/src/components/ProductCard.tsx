@@ -6,6 +6,7 @@ interface ProductCardProps {
   product: Product;
   onAddToCart: (product: Product) => void;
   onToggleFavorite?: (product: Product) => void;
+  onProductClick?: (product: Product) => void;
   viewMode?: 'grid' | 'list';
   showAddToCart?: boolean;
   className?: string;
@@ -15,6 +16,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   product,
   onAddToCart,
   onToggleFavorite,
+  onProductClick,
   viewMode = 'grid',
   showAddToCart = true,
   className = ''
@@ -40,8 +42,19 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const contentClasses = `p-6 ${viewMode === 'list' ? 'flex-1' : ''}`;
 
+  const handleCardClick = () => {
+    if (onProductClick) {
+      onProductClick(product);
+    }
+  };
+
+  const handleAddToCartClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click when clicking Add to Cart button
+    onAddToCart(product);
+  };
+
   return (
-    <div className={cardClasses}>
+    <div className={cardClasses} onClick={handleCardClick} style={{ cursor: onProductClick ? 'pointer' : 'default' }}>
       <div className={imageClasses}>
         <img
           src={product.imageUrl || 'https://images.pexels.com/photos/672101/pexels-photo-672101.jpeg?auto=compress&cs=tinysrgb&w=400'}
@@ -51,7 +64,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
         
         {onToggleFavorite && (
           <button 
-            onClick={() => onToggleFavorite(product)}
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent card click when clicking favorite button
+              onToggleFavorite(product);
+            }}
             className="absolute top-4 right-4 p-2 bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition hover:bg-red-50"
           >
             <Heart className="w-5 h-5 text-gray-600 hover:text-red-500" />
@@ -84,7 +100,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
         {showAddToCart && (
           <button 
-            onClick={() => onAddToCart(product)}
+            onClick={handleAddToCartClick}
             className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition flex items-center justify-center space-x-2"
           >
             <ShoppingCart className="w-5 h-5" />

@@ -1,7 +1,6 @@
-import httpClient from './axiosClient';
-import type { ApiResponse, PaginationParams } from '../types';
+import { axiosClient } from './axiosClient';
 
-// Order interfaces
+// Order Types
 export interface OrderItem {
   id: number;
   productId: number;
@@ -11,181 +10,269 @@ export interface OrderItem {
   subtotal: number;
 }
 
-export interface Order {
+export interface OrderResponse {
   id: number;
   orderNumber: string;
-  userId: number;
-  customerName: string;
-  customerEmail: string;
-  customerPhone?: string;
-  shippingAddress: string;
+  status: 'PENDING' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
   totalAmount: number;
-  status: 'PENDING' | 'CONFIRMED' | 'DELIVERED' | 'CANCELLED';
-  items: OrderItem[];
   createdAt: string;
   updatedAt: string;
-}
-
-export interface CreateOrderRequest {
-  customerName: string;
-  customerEmail: string;
-  customerPhone?: string;
-  shippingAddress: string;
-  discountCode?: string;
-}
-
-export interface UpdateOrderStatusRequest {
-  status: 'PENDING' | 'CONFIRMED' | 'DELIVERED' | 'CANCELLED';
+  items: OrderItem[];
+  shippingAddress?: string;
   notes?: string;
+}
+
+export interface OrderListResponse {
+  orders: OrderResponse[];
+  totalElements: number;
+  totalPages: number;
+  currentPage: number;
+  size: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
 }
 
 export interface OrderStatistics {
   totalOrders: number;
   totalAmount: number;
+  averageOrderValue: number;
   pendingOrders: number;
-  confirmedOrders: number;
   deliveredOrders: number;
   cancelledOrders: number;
-  averageOrderValue: number;
 }
 
-// Order API endpoints (Customer)
-export const orderApi = {
-  // Create order from cart
-  createOrder: (orderData: CreateOrderRequest): Promise<ApiResponse<Order>> => {
-    return httpClient.post('/api/orders', orderData);
-  },
+export interface CreateOrderRequest {
+  items: Array<{
+    productId: number;
+    quantity: number;
+  }>;
+  shippingAddress?: string;
+  notes?: string;
+}
 
-  // Get user orders with pagination
-  getOrdersByUser: (params?: PaginationParams): Promise<ApiResponse<any>> => {
-    return httpClient.get('/api/orders', { params });
+// API Functions
+export const orderApi = {
+  // Get orders for authenticated user with pagination
+  getOrders: async (params: {
+    page?: number;
+    size?: number;
+    sortBy?: string;
+    sortDirection?: 'asc' | 'desc';
+  } = {}): Promise<{ success: boolean; data: OrderListResponse; message?: string }> => {
+    try {
+      const response = await axiosClient.get('/api/orders', { params });
+      return {
+        success: true,
+        data: response.data.data
+      };
+    } catch (error: any) {
+      console.error('Error fetching orders:', error);
+      return {
+        success: false,
+        data: {
+          orders: [],
+          totalElements: 0,
+          totalPages: 0,
+          currentPage: 0,
+          size: 10,
+          hasNext: false,
+          hasPrevious: false
+        },
+        message: error.response?.data?.message || 'Failed to fetch orders'
+      };
+    }
   },
 
   // Get order by ID
-  getOrderById: (id: number): Promise<ApiResponse<Order>> => {
-    return httpClient.get(`/api/orders/${id}`);
+  getOrderById: async (id: number): Promise<{ success: boolean; data?: OrderResponse; message?: string }> => {
+    try {
+      const response = await axiosClient.get(`/api/orders/${id}`);
+      return {
+        success: true,
+        data: response.data.data
+      };
+    } catch (error: any) {
+      console.error('Error fetching order:', error);
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to fetch order'
+      };
+    }
   },
 
   // Get order by order number
-  getOrderByOrderNumber: (orderNumber: string): Promise<ApiResponse<Order>> => {
-    return httpClient.get(`/api/orders/number/${orderNumber}`);
+  getOrderByOrderNumber: async (orderNumber: string): Promise<{ success: boolean; data?: OrderResponse; message?: string }> => {
+    try {
+      const response = await axiosClient.get(`/api/orders/number/${orderNumber}`);
+      return {
+        success: true,
+        data: response.data.data
+      };
+    } catch (error: any) {
+      console.error('Error fetching order by number:', error);
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to fetch order'
+      };
+    }
   },
 
   // Cancel order
-  cancelOrder: (id: number): Promise<ApiResponse<Order>> => {
-    return httpClient.put(`/api/orders/${id}/cancel`);
+  cancelOrder: async (id: number): Promise<{ success: boolean; data?: OrderResponse; message?: string }> => {
+    try {
+      const response = await axiosClient.put(`/api/orders/${id}/cancel`);
+      return {
+        success: true,
+        data: response.data.data,
+        message: response.data.message
+      };
+    } catch (error: any) {
+      console.error('Error cancelling order:', error);
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to cancel order'
+      };
+    }
   },
 
   // Get orders by status
-  getOrdersByStatus: (status: string, params?: PaginationParams): Promise<ApiResponse<any>> => {
-    return httpClient.get(`/api/orders/status/${status}`, { params });
+  getOrdersByStatus: async (status: string, params: {
+    page?: number;
+    size?: number;
+  } = {}): Promise<{ success: boolean; data: OrderListResponse; message?: string }> => {
+    try {
+      const response = await axiosClient.get(`/api/orders/status/${status}`, { params });
+      return {
+        success: true,
+        data: response.data.data
+      };
+    } catch (error: any) {
+      console.error('Error fetching orders by status:', error);
+      return {
+        success: false,
+        data: {
+          orders: [],
+          totalElements: 0,
+          totalPages: 0,
+          currentPage: 0,
+          size: 10,
+          hasNext: false,
+          hasPrevious: false
+        },
+        message: error.response?.data?.message || 'Failed to fetch orders'
+      };
+    }
   },
 
   // Get recent orders
-  getRecentOrders: (days: number = 30, params?: PaginationParams): Promise<ApiResponse<any>> => {
-    return httpClient.get('/api/orders/recent', {
-      params: { days, ...params }
-    });
+  getRecentOrders: async (params: {
+    days?: number;
+    page?: number;
+    size?: number;
+  } = {}): Promise<{ success: boolean; data: OrderListResponse; message?: string }> => {
+    try {
+      const response = await axiosClient.get('/api/orders/recent', { params });
+      return {
+        success: true,
+        data: response.data.data
+      };
+    } catch (error: any) {
+      console.error('Error fetching recent orders:', error);
+      return {
+        success: false,
+        data: {
+          orders: [],
+          totalElements: 0,
+          totalPages: 0,
+          currentPage: 0,
+          size: 10,
+          hasNext: false,
+          hasPrevious: false
+        },
+        message: error.response?.data?.message || 'Failed to fetch recent orders'
+      };
+    }
   },
 
   // Get cancellable orders
-  getCancellableOrders: (params?: PaginationParams): Promise<ApiResponse<any>> => {
-    return httpClient.get('/api/orders/cancellable', { params });
+  getCancellableOrders: async (params: {
+    page?: number;
+    size?: number;
+  } = {}): Promise<{ success: boolean; data: OrderListResponse; message?: string }> => {
+    try {
+      const response = await axiosClient.get('/api/orders/cancellable', { params });
+      return {
+        success: true,
+        data: response.data.data
+      };
+    } catch (error: any) {
+      console.error('Error fetching cancellable orders:', error);
+      return {
+        success: false,
+        data: {
+          orders: [],
+          totalElements: 0,
+          totalPages: 0,
+          currentPage: 0,
+          size: 10,
+          hasNext: false,
+          hasPrevious: false
+        },
+        message: error.response?.data?.message || 'Failed to fetch cancellable orders'
+      };
+    }
   },
 
   // Check if order can be cancelled
-  canCancelOrder: (id: number): Promise<ApiResponse<boolean>> => {
-    return httpClient.get(`/api/orders/${id}/can-cancel`);
+  canCancelOrder: async (id: number): Promise<{ success: boolean; data?: boolean; message?: string }> => {
+    try {
+      const response = await axiosClient.get(`/api/orders/${id}/can-cancel`);
+      return {
+        success: true,
+        data: response.data.data
+      };
+    } catch (error: any) {
+      console.error('Error checking if order can be cancelled:', error);
+      return {
+        success: false,
+        data: false,
+        message: error.response?.data?.message || 'Failed to check order cancellation status'
+      };
+    }
   },
 
-  // Get user order statistics
-  getOrderStatisticsByUser: (): Promise<ApiResponse<OrderStatistics>> => {
-    return httpClient.get('/api/orders/statistics');
-  },
-};
-
-// Admin Order API endpoints
-export const adminOrderApi = {
-  // Get all orders with pagination (Admin)
-  getAllOrders: (params?: PaginationParams): Promise<ApiResponse<any>> => {
-    return httpClient.get('/api/admin/orders', { params });
-  },
-
-  // Get order by ID (Admin)
-  getOrderById: (id: number): Promise<ApiResponse<Order>> => {
-    return httpClient.get(`/api/admin/orders/${id}`);
-  },
-
-  // Get order by order number (Admin)
-  getOrderByOrderNumber: (orderNumber: string): Promise<ApiResponse<Order>> => {
-    return httpClient.get(`/api/admin/orders/number/${orderNumber}`);
+  // Get order statistics
+  getOrderStatistics: async (): Promise<{ success: boolean; data?: OrderStatistics; message?: string }> => {
+    try {
+      const response = await axiosClient.get('/api/orders/statistics');
+      return {
+        success: true,
+        data: response.data.data
+      };
+    } catch (error: any) {
+      console.error('Error fetching order statistics:', error);
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to fetch order statistics'
+      };
+    }
   },
 
-  // Update order status (Admin)
-  updateOrderStatus: (id: number, statusData: UpdateOrderStatusRequest): Promise<ApiResponse<Order>> => {
-    return httpClient.put(`/api/admin/orders/${id}/status`, statusData);
-  },
-
-  // Cancel order (Admin)
-  cancelOrder: (id: number): Promise<ApiResponse<Order>> => {
-    return httpClient.put(`/api/admin/orders/${id}/cancel`);
-  },
-
-  // Get orders with filters (Admin)
-  getOrdersWithFilters: (filters: {
-    userId?: number;
-    status?: string;
-    minAmount?: number;
-    maxAmount?: number;
-    customerName?: string;
-    customerEmail?: string;
-    startDate?: string;
-    endDate?: string;
-    page?: number;
-    size?: number;
-  }): Promise<ApiResponse<any>> => {
-    return httpClient.get('/api/admin/orders/filter', { params: filters });
-  },
-
-  // Get orders by status (Admin)
-  getOrdersByStatus: (status: string, params?: PaginationParams): Promise<ApiResponse<any>> => {
-    return httpClient.get(`/api/admin/orders/status/${status}`, { params });
-  },
-
-  // Get recent orders (Admin)
-  getRecentOrders: (days: number = 7, params?: PaginationParams): Promise<ApiResponse<any>> => {
-    return httpClient.get('/api/admin/orders/recent', {
-      params: { days, ...params }
-    });
-  },
-
-  // Get cancellable orders (Admin)
-  getCancellableOrders: (params?: PaginationParams): Promise<ApiResponse<any>> => {
-    return httpClient.get('/api/admin/orders/cancellable', { params });
-  },
-
-  // Get order statistics (Admin)
-  getOrderStatistics: (): Promise<ApiResponse<OrderStatistics>> => {
-    return httpClient.get('/api/admin/orders/statistics');
-  },
-
-  // Get order count by status (Admin)
-  getOrderCountByStatus: (status: string): Promise<ApiResponse<number>> => {
-    return httpClient.get(`/api/admin/orders/count/status/${status}`);
-  },
-
-  // Get order count by user (Admin)
-  getOrderCountByUser: (userId: number): Promise<ApiResponse<number>> => {
-    return httpClient.get(`/api/admin/orders/count/user/${userId}`);
-  },
-
-  // Get order count by user and status (Admin)
-  getOrderCountByUserAndStatus: (userId: number, status: string): Promise<ApiResponse<number>> => {
-    return httpClient.get(`/api/admin/orders/count/user/${userId}/status/${status}`);
-  },
-
-  // Check if order can be cancelled (Admin)
-  canCancelOrder: (id: number): Promise<ApiResponse<boolean>> => {
-    return httpClient.get(`/api/admin/orders/${id}/can-cancel`);
-  },
+  // Create order from cart
+  createOrder: async (request: CreateOrderRequest): Promise<{ success: boolean; data?: OrderResponse; message?: string }> => {
+    try {
+      const response = await axiosClient.post('/api/orders', request);
+      return {
+        success: true,
+        data: response.data.data,
+        message: response.data.message
+      };
+    } catch (error: any) {
+      console.error('Error creating order:', error);
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to create order'
+      };
+    }
+  }
 };

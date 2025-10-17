@@ -1,5 +1,8 @@
 export { default as ProductCard } from './ProductCard';
 export { default as ProductGrid } from './ProductGrid';
+export { default as ProductDetailModal } from './ProductDetailModal';
+export { default as Toast } from './Toast';
+export { default as ToastContainer } from './ToastContainer';
 export { default as HeroSection } from './HeroSection';
 export { default as ContactForm } from './ContactForm';
 export { default as ContactInfo } from './ContactInfo';

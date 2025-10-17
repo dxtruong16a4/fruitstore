@@ -3,13 +3,20 @@ import { Container, Typography, Box, Card, CardContent, Button, List, ListItem, 
 import { useAppSelector, useAppDispatch } from '../redux';
 import { clearCart, removeFromCart, updateQuantity } from '../redux/slices/cartSlice';
 import type { CartItem } from '../redux/slices/cartSlice';
+import ToastContainer from '../components/ToastContainer';
+import { useToast } from '../hooks/useToast';
 
 const CartPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { items, totalItems, totalAmount } = useAppSelector((state) => state.cart);
+  const { toasts, removeToast, showSuccess, showWarning } = useToast();
 
   const handleRemoveItem = (itemId: number) => {
+    const item = items.find(item => item.id === itemId);
     dispatch(removeFromCart(itemId));
+    if (item) {
+      showWarning('Item Removed', `${item.productName} has been removed from your cart`);
+    }
   };
 
   const handleUpdateQuantity = (itemId: number, newQuantity: number) => {
@@ -22,6 +29,7 @@ const CartPage: React.FC = () => {
 
   const handleClearCart = () => {
     dispatch(clearCart());
+    showSuccess('Cart Cleared', 'All items have been removed from your cart');
   };
 
   const handleCheckout = () => {
@@ -122,6 +130,12 @@ const CartPage: React.FC = () => {
           </Card>
         </Box>
       )}
+
+      {/* Toast Notifications */}
+      <ToastContainer
+        toasts={toasts}
+        onRemoveToast={removeToast}
+      />
     </Container>
   );
 };

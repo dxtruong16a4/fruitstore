@@ -6,16 +6,22 @@ import { categoryApi, type Category } from '../api/categoryApi';
 import { useAppSelector, useAppDispatch } from '../redux';
 import { addToCart } from '../redux/slices/cartSlice';
 import { ProductGrid, FeaturesSection, CategoriesSection, NewsletterSection } from '../components';
+import ProductDetailModal from '../components/ProductDetailModal';
+import ToastContainer from '../components/ToastContainer';
+import { useToast } from '../hooks/useToast';
 import { PageLayout } from '../components/layout';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { toasts, removeToast, showSuccess, showError } = useToast();
   
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -149,18 +155,40 @@ const HomePage: React.FC = () => {
   }, []);
 
   const handleAddToCart = (product: Product) => {
-    if (!isAuthenticated) {
-      navigate('/login');
-      return;
+    try {
+      if (!isAuthenticated) {
+        showError('Authentication Required', 'Please sign in to add items to your cart');
+        navigate('/login');
+        return;
+      }
+      
+      if (product.stockQuantity === 0) {
+        showError('Out of Stock', `${product.name} is currently out of stock`);
+        return;
+      }
+      
+      dispatch(addToCart({
+        productId: product.productId || product.id || 0,
+        productName: product.name,
+        productPrice: product.price,
+        productImage: product.imageUrl || '',
+        quantity: 1
+      }));
+      
+      showSuccess('Added to Cart!', `${product.name} has been added to your cart`);
+    } catch (error) {
+      showError('Failed to Add Item', 'There was an error adding the item to your cart. Please try again.');
     }
-    
-    dispatch(addToCart({
-      productId: product.productId || product.id || 0,
-      productName: product.name,
-      productPrice: product.price,
-      productImage: product.imageUrl || '',
-      quantity: 1
-    }));
+  };
+
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
   };
 
 
@@ -252,6 +280,7 @@ const HomePage: React.FC = () => {
             <ProductGrid
               products={featuredProducts}
               onAddToCart={handleAddToCart}
+              onProductClick={handleProductClick}
               viewMode="grid"
               showAddToCart={true}
             />
@@ -260,6 +289,20 @@ const HomePage: React.FC = () => {
       )}
 
       <NewsletterSection />
+
+      {/* Product Detail Modal */}
+      <ProductDetailModal
+        product={selectedProduct}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onAddToCart={handleAddToCart}
+      />
+
+      {/* Toast Notifications */}
+      <ToastContainer
+        toasts={toasts}
+        onRemoveToast={removeToast}
+      />
     </PageLayout>
   );
 };
