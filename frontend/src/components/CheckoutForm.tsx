@@ -61,21 +61,21 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
     const newErrors: Record<string, string> = {};
 
     if (!formData.shippingAddress.trim()) {
-      newErrors.shippingAddress = 'Shipping address is required';
+      newErrors.shippingAddress = 'Địa chỉ giao hàng là bắt buộc';
     }
 
     if (!formData.customerName.trim()) {
-      newErrors.customerName = 'Customer name is required';
+      newErrors.customerName = 'Tên khách hàng là bắt buộc';
     }
 
     if (!formData.customerEmail.trim()) {
-      newErrors.customerEmail = 'Customer email is required';
+      newErrors.customerEmail = 'Email khách hàng là bắt buộc';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.customerEmail)) {
-      newErrors.customerEmail = 'Please enter a valid email address';
+      newErrors.customerEmail = 'Vui lòng nhập địa chỉ email hợp lệ';
     }
 
     if (formData.phoneNumber && !/^[0-9+\-\s()]+$/.test(formData.phoneNumber)) {
-      newErrors.phoneNumber = 'Please enter a valid phone number';
+      newErrors.phoneNumber = 'Vui lòng nhập số điện thoại hợp lệ';
     }
 
     setErrors(newErrors);
@@ -119,10 +119,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
     >
       <DialogTitle>
         <Typography variant="h5" component="div">
-          🛒 Checkout
+          🛒 Thanh toán
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Review your order and provide shipping details
+          Xem đơn hàng và cung cấp thông tin giao hàng
         </Typography>
       </DialogTitle>
 
@@ -131,7 +131,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
           {/* Order Summary */}
           <Box sx={{ mb: 3 }}>
             <Typography variant="h6" gutterBottom>
-              Order Summary
+              Tóm tắt đơn hàng
             </Typography>
             <Box sx={{ bgcolor: 'grey.50', p: 2, borderRadius: 1 }}>
               {items.map((item) => (
@@ -156,13 +156,13 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
 
           {/* Shipping Information */}
           <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-            Shipping Information
+            Thông tin giao hàng
           </Typography>
 
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <TextField
               fullWidth
-              label="Customer Name *"
+              label="Tên khách hàng *"
               value={formData.customerName}
               onChange={handleInputChange('customerName')}
               error={!!errors.customerName}
@@ -172,7 +172,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
 
             <TextField
               fullWidth
-              label="Email Address *"
+              label="Email *"
               type="email"
               value={formData.customerEmail}
               onChange={handleInputChange('customerEmail')}
@@ -183,7 +183,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
 
             <TextField
               fullWidth
-              label="Phone Number"
+              label="Số điện thoại"
               value={formData.phoneNumber}
               onChange={handleInputChange('phoneNumber')}
               error={!!errors.phoneNumber}
@@ -193,7 +193,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
 
             <TextField
               fullWidth
-              label="Shipping Address *"
+              label="Địa chỉ giao hàng *"
               multiline
               rows={3}
               value={formData.shippingAddress}
@@ -205,21 +205,21 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
 
             <TextField
               fullWidth
-              label="Order Notes"
+              label="Ghi chú đơn hàng"
               multiline
               rows={2}
               value={formData.notes}
               onChange={handleInputChange('notes')}
-              helperText="Any special instructions for your order"
+              helperText="Bất kỳ hướng dẫn đặc biệt nào cho đơn hàng của bạn"
               disabled={loading}
             />
 
             <TextField
               fullWidth
-              label="Discount Code"
+              label="Mã giảm giá"
               value={formData.discountCode}
               onChange={handleInputChange('discountCode')}
-              helperText="Enter a discount code if you have one"
+              helperText="Nhập mã giảm giá nếu bạn có"
               disabled={loading}
             />
           </Box>
@@ -232,7 +232,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
           disabled={loading}
           size="large"
         >
-          Cancel
+          Hủy
         </Button>
         <Button
           onClick={handleSubmit}
@@ -241,7 +241,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
           size="large"
           startIcon={loading ? <CircularProgress size={20} /> : null}
         >
-          {loading ? 'Processing...' : 'Place Order'}
+          {loading ? 'Đang xử lý...' : 'Đặt đơn hàng'}
         </Button>
       </DialogActions>
     </Dialog>

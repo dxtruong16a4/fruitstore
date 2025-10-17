@@ -5,10 +5,9 @@ import { PageLayout } from '../components/layout';
 const AboutPage: React.FC = () => {
   return (
     <PageLayout
-      title="About FruitStore"
-      subtitle="We're passionate about bringing you the freshest, highest-quality fruits from local farms to your doorstep."
+      title="Về FruitStore"
+      subtitle="Chúng tôi đam mê và làm việc tốt nhất."
       showHero={true}
-      navigationProps={{ title: "About Us" }}
     >
 
       {/* Our Story */}
@@ -16,21 +15,10 @@ const AboutPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">Tuyên ngôn</h2>
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                  Founded in 2020, FruitStore began with a simple mission: to connect people with the freshest, 
-                  most delicious fruits available. What started as a small family business has grown into 
-                  a trusted online marketplace serving thousands of satisfied customers.
-                </p>
-                <p>
-                  We work directly with local farmers and suppliers to ensure that every piece of fruit 
-                  meets our high standards for quality, freshness, and taste. Our commitment to sustainable 
-                  farming practices means you can enjoy your favorite fruits while supporting local communities.
-                </p>
-                <p>
-                  Today, we're proud to offer a wide selection of seasonal fruits, exotic varieties, 
-                  and organic options, all delivered fresh to your door with care and attention to detail.
+                  FruitStore được thành lập vào năm 2025 với sứ mệnh đơn giản: kết nối mọi người với trái cây tươi nhất, ngon nhất.
                 </p>
               </div>
             </div>
@@ -49,8 +37,8 @@ const AboutPage: React.FC = () => {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Values</h2>
-            <p className="text-gray-600 text-lg">What drives us every day</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Giá trị cốt lõi</h2>
+            <p className="text-gray-600 text-lg">Những điều mà chúng tôi tin tưởng vào mỗi ngày</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -58,32 +46,32 @@ const AboutPage: React.FC = () => {
               <div className="inline-block p-4 bg-green-100 rounded-full mb-4">
                 <Heart className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Quality First</h3>
-              <p className="text-gray-600">We never compromise on the quality and freshness of our fruits.</p>
+              <h3 className="text-xl font-semibold mb-2">Chất lượng</h3>
+              <p className="text-gray-600">Chúng tôi không bao giờ để lỡ chất lượng và tươi nhất của trái cây.</p>
             </div>
 
             <div className="text-center p-6 rounded-2xl hover:bg-green-50 transition">
               <div className="inline-block p-4 bg-green-100 rounded-full mb-4">
                 <Users className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Community</h3>
-              <p className="text-gray-600">Supporting local farmers and building lasting relationships.</p>
+              <h3 className="text-xl font-semibold mb-2">Cộng đồng</h3>
+              <p className="text-gray-600">Hỗ trợ nông dân địa phương và xây dựng mối quan hệ lâu dài.</p>
             </div>
 
             <div className="text-center p-6 rounded-2xl hover:bg-green-50 transition">
               <div className="inline-block p-4 bg-green-100 rounded-full mb-4">
                 <Globe className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Sustainability</h3>
-              <p className="text-gray-600">Committed to eco-friendly practices and sustainable farming.</p>
+              <h3 className="text-xl font-semibold mb-2">Bền vững</h3>
+              <p className="text-gray-600">Chúng tôi cam kết với những thói quen sạch và bền vững.</p>
             </div>
 
             <div className="text-center p-6 rounded-2xl hover:bg-green-50 transition">
               <div className="inline-block p-4 bg-green-100 rounded-full mb-4">
                 <Award className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Excellence</h3>
-              <p className="text-gray-600">Striving for excellence in every aspect of our service.</p>
+              <h3 className="text-xl font-semibold mb-2">Tuyệt vời</h3>
+              <p className="text-gray-600">Chúng tôi luôn cố gắng để làm việc tốt nhất.</p>
             </div>
           </div>
         </div>
@@ -93,36 +81,36 @@ const AboutPage: React.FC = () => {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
-            <p className="text-gray-600 text-lg">The passionate people behind FruitStore</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Gặp gỡ đội ngũ</h2>
+            <p className="text-gray-600 text-lg">Những người đam mê và làm việc tốt nhất</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-r from-green-400 to-emerald-400 flex items-center justify-center">
-                <span className="text-4xl text-white font-bold">JS</span>
+                <span className="text-4xl text-white font-bold">DT</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">John Smith</h3>
-              <p className="text-green-600 font-medium mb-2">Founder & CEO</p>
-              <p className="text-gray-600 text-sm">Passionate about fresh produce and sustainable farming practices.</p>
+              <h3 className="text-xl font-semibold mb-2">Đỗ Xuân Trường</h3>
+              <p className="text-green-600 font-medium mb-2">Tổng giám đốc</p>
+              <p className="text-gray-600 text-sm">Đam mê và làm việc tốt nhất.</p>
             </div>
 
             <div className="text-center">
               <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-r from-green-400 to-emerald-400 flex items-center justify-center">
-                <span className="text-4xl text-white font-bold">MJ</span>
+                <span className="text-4xl text-white font-bold">MN</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Maria Johnson</h3>
-              <p className="text-green-600 font-medium mb-2">Head of Operations</p>
-              <p className="text-gray-600 text-sm">Ensuring every order is handled with care and attention to detail.</p>
+              <h3 className="text-xl font-semibold mb-2">Nguyễn Minh Ngọc</h3>
+              <p className="text-green-600 font-medium mb-2">Trưởng phòng vận hành</p>
+              <p className="text-gray-600 text-sm">Đảm bảo rằng mọi đơn hàng đều được xử lý với cẩn thận và chú ý đến chi tiết.</p>
             </div>
 
             <div className="text-center">
               <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-r from-green-400 to-emerald-400 flex items-center justify-center">
-                <span className="text-4xl text-white font-bold">DW</span>
+                <span className="text-4xl text-white font-bold">NV</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">David Wilson</h3>
-              <p className="text-green-600 font-medium mb-2">Quality Assurance</p>
-              <p className="text-gray-600 text-sm">Making sure only the best fruits make it to your table.</p>
+              <h3 className="text-xl font-semibold mb-2">Nguyễn Văn B</h3>
+              <p className="text-green-600 font-medium mb-2">Kiểm tra chất lượng</p>
+              <p className="text-gray-600 text-sm">Đảm bảo rằng chỉ có trái cây tốt nhất đến được bàn của bạn.</p>
             </div>
           </div>
         </div>

@@ -21,23 +21,23 @@ const ContactSupport: React.FC<ContactSupportProps> = ({
   const defaultMethods: ContactMethod[] = [
     {
       icon: <MessageCircle className="w-8 h-8 text-green-600" />,
-      title: "Live Chat",
-      description: "Get instant help from our support team",
-      buttonText: "Start Chat",
+      title: "Chat trực tiếp",
+      description: "Nhận trợ giúp tức thời từ đội hỗ trợ của chúng tôi",
+      buttonText: "Bắt đầu Chat",
       action: () => null
     },
     {
       icon: <Phone className="w-8 h-8 text-green-600" />,
-      title: "Phone Support",
-      description: "Call us at (555) 123-4567",
-      buttonText: "Call Now",
+      title: "Hỗ trợ điện thoại",
+      description: "Gọi cho chúng tôi tại +84 909 090 909",
+      buttonText: "Gọi ngay",
       action: () => null
     },
     {
       icon: <Mail className="w-8 h-8 text-green-600" />,
-      title: "Email Support",
-      description: "Send us an email anytime",
-      buttonText: "Send Email",
+      title: "Hỗ trợ email",
+      description: "Gửi email cho chúng tôi bất cứ lúc nào",
+      buttonText: "Gửi email",
       action: () => null
     }
   ];
@@ -48,8 +48,8 @@ const ContactSupport: React.FC<ContactSupportProps> = ({
     <section className={`py-16 ${className}`}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Still need help?</h2>
-          <p className="text-gray-600 text-lg">Our support team is here to assist you</p>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">Cần trợ giúp?</h2>
+          <p className="text-gray-600 text-lg">Đội hỗ trợ của chúng tôi sẵn sàng giúp bạn</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">

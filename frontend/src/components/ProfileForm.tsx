@@ -32,17 +32,17 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, onSubmit, isLoading }) 
     const newErrors: Record<string, string> = {};
 
     if (!formData.fullName.trim()) {
-      newErrors.fullName = 'Full name is required';
+      newErrors.fullName = 'Tên đầy đủ là bắt buộc';
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'Email là bắt buộc';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = 'Vui lòng nhập địa chỉ email hợp lệ';
     }
 
     if (formData.phone && !/^[0-9+\-\s()]+$/.test(formData.phone)) {
-      newErrors.phone = 'Please enter a valid phone number';
+      newErrors.phone = 'Vui lòng nhập số điện thoại hợp lệ';
     }
 
     setErrors(newErrors);
@@ -97,8 +97,8 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, onSubmit, isLoading }) 
               <CheckCircle className="w-5 h-5 text-green-600" />
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-green-800">Profile Updated Successfully!</h4>
-              <p className="text-sm text-green-700">Your profile information has been updated successfully.</p>
+              <h4 className="text-sm font-semibold text-green-800">Thông tin tài khoản đã được cập nhật thành công!</h4>
+              <p className="text-sm text-green-700">Thông tin tài khoản của bạn đã được cập nhật thành công.</p>
             </div>
           </div>
         </div>
@@ -111,8 +111,8 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, onSubmit, isLoading }) 
             <UserIcon className="w-5 h-5 text-green-600" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900" style={{ textAlign: 'left' }}>Personal Information</h3>
-            <p className="text-sm text-gray-600">Update your personal details and contact information</p>
+            <h3 className="text-lg font-semibold text-gray-900" style={{ textAlign: 'left' }}>Thông tin tài khoản</h3>
+            <p className="text-sm text-gray-600">Cập nhật thông tin tài khoản của bạn</p>
           </div>
         </div>
       </div>
@@ -123,7 +123,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, onSubmit, isLoading }) 
           <div className="space-y-2">
             <label htmlFor="fullName" className="flex items-center text-sm font-medium text-gray-700">
               <UserIcon className="w-4 h-4 mr-2 text-green-600" />
-              Full Name
+              Tên đầy đủ
               <span className="text-red-500 ml-1">*</span>
             </label>
             <div className="relative">
@@ -138,7 +138,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, onSubmit, isLoading }) 
                     ? 'border-red-300 bg-red-50' 
                     : 'border-gray-300 bg-white hover:border-green-400 focus:bg-white'
                 }`}
-                placeholder="Enter your full name"
+                placeholder="Nhập tên đầy đủ của bạn"
               />
             </div>
             {errors.fullName && (
@@ -153,7 +153,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, onSubmit, isLoading }) 
           <div className="space-y-2">
             <label htmlFor="email" className="flex items-center text-sm font-medium text-gray-700">
               <Mail className="w-4 h-4 mr-2 text-green-600" />
-              Email Address
+              Email
               <span className="text-red-500 ml-1">*</span>
             </label>
             <div className="relative">
@@ -168,7 +168,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, onSubmit, isLoading }) 
                     ? 'border-red-300 bg-red-50' 
                     : 'border-gray-300 bg-white hover:border-green-400 focus:bg-white'
                 }`}
-                placeholder="Enter your email address"
+                placeholder="Nhập địa chỉ email của bạn"
               />
             </div>
             {errors.email && (
@@ -183,7 +183,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, onSubmit, isLoading }) 
           <div className="space-y-2">
             <label htmlFor="phone" className="flex items-center text-sm font-medium text-gray-700">
               <Phone className="w-4 h-4 mr-2 text-green-600" />
-              Phone Number
+              Số điện thoại
             </label>
             <div className="relative">
               <input
@@ -197,7 +197,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, onSubmit, isLoading }) 
                     ? 'border-red-300 bg-red-50' 
                     : 'border-gray-300 bg-white hover:border-green-400 focus:bg-white'
                 }`}
-                placeholder="Enter your phone number"
+                placeholder="Nhập số điện thoại của bạn"
               />
             </div>
             {errors.phone && (
@@ -212,7 +212,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, onSubmit, isLoading }) 
           <div className="space-y-2 lg:col-span-2">
             <label htmlFor="address" className="flex items-center text-sm font-medium text-gray-700">
               <MapPin className="w-4 h-4 mr-2 text-green-600" />
-              Address
+              Địa chỉ
             </label>
             <div className="relative">
               <textarea
@@ -222,7 +222,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, onSubmit, isLoading }) 
                 onChange={handleChange}
                 rows={4}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white hover:border-green-400 focus:bg-white resize-none"
-                placeholder="Enter your full address"
+                placeholder="Nhập địa chỉ cụ thể của bạn"
               />
             </div>
           </div>
@@ -240,7 +240,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user, onSubmit, isLoading }) 
             ) : (
               <Save className="w-5 h-5 mr-3" />
             )}
-            {isLoading ? 'Updating Profile...' : 'Update Profile'}
+            {isLoading ? 'Đang cập nhật thông tin tài khoản...' : 'Cập nhật thông tin tài khoản'}
           </button>
         </div>
       </form>

@@ -8,19 +8,19 @@ const ReturnsPage: React.FC = () => {
   const [returnItems, setReturnItems] = useState<string[]>([]);
 
   const returnReasons = [
-    'Damaged or defective item',
-    'Wrong item received',
-    'Item not as described',
-    'Quality not satisfactory',
-    'Changed my mind',
-    'Ordered by mistake',
-    'Other'
+    'Sản phẩm bị hư hỏng hoặc lỗi',
+    'Sản phẩm nhận sai',
+    'Sản phẩm không như mô tả',
+    'Chất lượng không đáp ứng',
+    'Thay đổi ý muốn',
+    'Đặt hàng bị nhầm',
+    'Khác (vui lòng chỉ rõ)'
   ];
 
   const mockOrderItems = [
-    { id: 1, name: 'Organic Apples', quantity: 2, price: 12.99 },
-    { id: 2, name: 'Fresh Bananas', quantity: 1, price: 4.99 },
-    { id: 3, name: 'Mixed Berries', quantity: 1, price: 8.99 }
+    { id: 1, name: 'Táo hữu cơ', quantity: 2, price: 12.99 },
+    { id: 2, name: 'Chuối tươi', quantity: 1, price: 4.99 },
+    { id: 3, name: 'Trái cây hỗn hợp', quantity: 1, price: 8.99 }
   ];
 
   const handleItemSelect = (itemId: number) => {
@@ -40,41 +40,40 @@ const ReturnsPage: React.FC = () => {
 
   return (
     <PageLayout
-      title="Returns & Refunds"
-      subtitle="We want you to be completely satisfied with your fresh fruit order."
+      title="Trả hàng & Hoàn trả"
+      subtitle="Chúng tôi muốn bạn hoàn toàn hài lòng với đơn hàng trái cây của bạn."
       showHero={true}
-      navigationProps={{ title: "Returns & Refunds" }}
     >
 
       {/* Return Policy */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Return Policy</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Chính sách trả hàng của chúng tôi</h2>
             
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="w-6 h-6 text-green-600 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900">30-Day Return Window</h3>
-                    <p className="text-gray-600 text-sm">Return items within 30 days of delivery for a full refund.</p>
+                    <h3 className="font-semibold text-gray-900">30 ngày trả hàng</h3>
+                    <p className="text-gray-600 text-sm">Trả hàng trong vòng 30 ngày từ ngày giao hàng để nhận được hoàn trả đầy đủ.</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="w-6 h-6 text-green-600 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900">Quality Guarantee</h3>
-                    <p className="text-gray-600 text-sm">Not satisfied with quality? We'll make it right, guaranteed.</p>
+                    <h3 className="font-semibold text-gray-900">Đảm bảo chất lượng</h3>
+                    <p className="text-gray-600 text-sm">Không hài lòng với chất lượng? Chúng tôi sẽ giải quyết nó, đảm bảo.</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="w-6 h-6 text-green-600 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900">Free Return Shipping</h3>
-                    <p className="text-gray-600 text-sm">We cover return shipping costs for quality issues.</p>
+                    <h3 className="font-semibold text-gray-900">Vận chuyển trả hàng miễn phí</h3>
+                    <p className="text-gray-600 text-sm">Chúng tôi bao gồm chi phí vận chuyển trả hàng cho các vấn đề về chất lượng.</p>
                   </div>
                 </div>
               </div>
@@ -83,24 +82,24 @@ const ReturnsPage: React.FC = () => {
                 <div className="flex items-start space-x-3">
                   <Clock className="w-6 h-6 text-blue-600 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900">Quick Processing</h3>
-                    <p className="text-gray-600 text-sm">Refunds processed within 3-5 business days.</p>
+                    <h3 className="font-semibold text-gray-900">Xử lý nhanh</h3>
+                    <p className="text-gray-600 text-sm">Tiền hoàn được xử lý trong vòng 3-5 ngày làm việc sau khi chúng tôi nhận được trả hàng của bạn.</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start space-x-3">
                   <AlertCircle className="w-6 h-6 text-orange-600 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900">Fresh Items</h3>
-                    <p className="text-gray-600 text-sm">Perishable items must be returned within 48 hours.</p>
+                    <h3 className="font-semibold text-gray-900">Sản phẩm tươi sống</h3>
+                    <p className="text-gray-600 text-sm">Sản phẩm tươi sống nên được trả trong vòng 48 giờ nếu có vấn đề về chất lượng.</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start space-x-3">
                   <Package className="w-6 h-6 text-purple-600 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900">Original Packaging</h3>
-                    <p className="text-gray-600 text-sm">Items should be returned in original packaging when possible.</p>
+                    <h3 className="font-semibold text-gray-900">Bao bì gốc</h3>
+                    <p className="text-gray-600 text-sm">Sản phẩm nên được trả trong bao bì gốc khi có thể.</p>
                   </div>
                 </div>
               </div>
@@ -112,13 +111,13 @@ const ReturnsPage: React.FC = () => {
       {/* Return Request Form */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Start a Return</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Bắt đầu trả hàng</h2>
           
           <form onSubmit={handleSubmitReturn} className="space-y-8">
             {/* Order Number */}
             <div>
               <label htmlFor="orderNumber" className="block text-sm font-medium text-gray-700 mb-2">
-                Order Number
+                Số đơn hàng
               </label>
               <input
                 type="text"
@@ -127,14 +126,14 @@ const ReturnsPage: React.FC = () => {
                 onChange={(e) => setOrderNumber(e.target.value)}
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg text-white placeholder-gray-300 bg-gray-800 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="Enter your order number"
+                placeholder="Nhập số đơn hàng của bạn"
               />
             </div>
 
             {/* Items to Return */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-4">
-                Select Items to Return
+                Chọn sản phẩm để trả hàng
               </label>
               <div className="space-y-3">
                 {mockOrderItems.map((item) => (
@@ -151,7 +150,7 @@ const ReturnsPage: React.FC = () => {
                         <span className="font-medium text-gray-900">{item.name}</span>
                         <span className="text-gray-600">${item.price}</span>
                       </div>
-                      <span className="text-sm text-gray-500">Quantity: {item.quantity}</span>
+                      <span className="text-sm text-gray-500">Số lượng: {item.quantity}</span>
                     </label>
                   </div>
                 ))}
@@ -161,7 +160,7 @@ const ReturnsPage: React.FC = () => {
             {/* Return Reason */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-4">
-                Reason for Return
+                Lý do trả hàng
               </label>
               <div className="grid grid-cols-1 gap-3">
                 {returnReasons.map((reason) => (
@@ -183,13 +182,13 @@ const ReturnsPage: React.FC = () => {
             {/* Additional Comments */}
             <div>
               <label htmlFor="comments" className="block text-sm font-medium text-gray-700 mb-2">
-                Additional Comments (Optional)
+                Bình luận bổ sung
               </label>
               <textarea
                 id="comments"
                 rows={4}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg text-white placeholder-gray-300 bg-gray-800 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="Please provide any additional details about your return..."
+                placeholder="Vui lòng cung cấp bất kỳ chi tiết bổ sung nào về trả hàng của bạn..."
               />
             </div>
 
@@ -201,7 +200,7 @@ const ReturnsPage: React.FC = () => {
                 className="bg-green-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 mx-auto"
               >
                 <ArrowLeft className="w-5 h-5" />
-                <span>Submit Return Request</span>
+                <span>Gửi yêu cầu trả hàng</span>
               </button>
             </div>
           </form>
@@ -211,27 +210,27 @@ const ReturnsPage: React.FC = () => {
       {/* FAQ Section */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Return FAQ</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Câu hỏi thường gặp về trả hàng</h2>
           
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">How long do I have to return items?</h3>
-              <p className="text-gray-600">You have 30 days from the delivery date to return most items. Fresh produce should be returned within 48 hours if there are quality issues.</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Bao lâu tôi có thể trả hàng?</h3>
+              <p className="text-gray-600">Bạn có 30 ngày từ ngày giao hàng để trả hàng cho hầu hết các sản phẩm. Sản phẩm tươi sống nên được trả trong vòng 48 giờ nếu có vấn đề về chất lượng.</p>
             </div>
             
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Do I have to pay for return shipping?</h3>
-              <p className="text-gray-600">We provide free return shipping for quality issues, damaged items, or wrong items. For other reasons, return shipping costs may apply.</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Tôi có phải trả phí vận chuyển trả hàng không?</h3>
+              <p className="text-gray-600">Chúng tôi cung cấp vận chuyển trả hàng miễn phí cho các vấn đề về chất lượng, sản phẩm bị hư hỏng, hoặc sản phẩm sai. Đối với các lý do khác, chi phí vận chuyển trả hàng có thể áp dụng.</p>
             </div>
             
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">How will I receive my refund?</h3>
-              <p className="text-gray-600">Refunds are processed to your original payment method within 3-5 business days after we receive your return.</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Tôi sẽ nhận được tiền hoàn như thế nào?</h3>
+              <p className="text-gray-600">Tiền hoàn được xử lý đến phương thức thanh toán gốc của bạn trong vòng 3-5 ngày làm việc sau khi chúng tôi nhận được trả hàng của bạn.</p>
             </div>
             
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Can I exchange items instead of returning?</h3>
-              <p className="text-gray-600">Yes! Contact our customer service team and we'll help you arrange an exchange for similar items.</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Tôi có thể đổi sản phẩm thay vì trả hàng không?</h3>
+              <p className="text-gray-600">Có! Liên hệ với đội ngũ dịch vụ khách hàng của chúng tôi và chúng tôi sẽ giúp bạn sắp xếp đổi sản phẩm cho các sản phẩm tương tự.</p>
             </div>
           </div>
         </div>

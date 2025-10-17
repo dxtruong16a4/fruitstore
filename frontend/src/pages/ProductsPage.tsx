@@ -50,7 +50,7 @@ const ProductsPage: React.FC = () => {
         await fetchProducts();
         
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Lỗi khi tải dữ liệu:', error);
       } finally {
         setLoading(false);
       }
@@ -187,7 +187,7 @@ const ProductsPage: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-green-600 animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Loading products...</p>
+          <p className="text-gray-600">Đang tải sản phẩm...</p>
         </div>
       </div>
     );
@@ -195,10 +195,9 @@ const ProductsPage: React.FC = () => {
 
   return (
     <PageLayout
-      title="Our Products"
-      subtitle="Fresh fruits carefully selected for quality and taste"
+      title="Sản phẩm của chúng tôi"
+      subtitle="Quả trái cây tươi được chọn cẩn thận cho chất lượng và vị"
       showHero={true}
-      navigationProps={{ title: "Products" }}
     >
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -208,12 +207,12 @@ const ProductsPage: React.FC = () => {
             <div className="bg-white rounded-2xl shadow-md p-6 sticky top-4">
               <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
                 <Filter className="w-5 h-5 mr-2" />
-                Filters
+                Bộ lọc
               </h3>
 
               {/* Search */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Tìm kiếm</label>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <input
@@ -221,7 +220,7 @@ const ProductsPage: React.FC = () => {
                     value={searchQuery}
                     onChange={handleSearchInputChange}
                     onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                    placeholder="Search products..."
+                    placeholder="Tìm kiếm sản phẩm..."
                     className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                   {searchQuery && (
@@ -238,10 +237,10 @@ const ProductsPage: React.FC = () => {
                     {searchLoading ? (
                       <div className="flex items-center">
                         <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                        Searching...
+                        Đang tìm kiếm...
                       </div>
                     ) : (
-                      <span>Searching for: "{searchQuery}"</span>
+                      <span>Đang tìm kiếm: "{searchQuery}"</span>
                     )}
                   </div>
                 )}
@@ -249,7 +248,7 @@ const ProductsPage: React.FC = () => {
 
               {/* Categories */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-3">Categories</label>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Danh mục</label>
                 <div className="space-y-2">
                   <button
                     onClick={() => handleCategoryFilter(null)}
@@ -259,7 +258,7 @@ const ProductsPage: React.FC = () => {
                         : 'hover:bg-gray-100'
                     }`}
                   >
-                    All Categories
+                    Tất cả danh mục
                   </button>
                   {categories.map((category) => (
                     <button
@@ -280,7 +279,7 @@ const ProductsPage: React.FC = () => {
 
               {/* Sort */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Sắp xếp theo</label>
                 <select
                   value={`${sortBy}-${sortDirection}`}
                   onChange={(e) => {
@@ -290,29 +289,29 @@ const ProductsPage: React.FC = () => {
                   }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 >
-                  <option value="createdAt-desc">Newest First</option>
-                  <option value="createdAt-asc">Oldest First</option>
-                  <option value="name-asc">Name A-Z</option>
-                  <option value="name-desc">Name Z-A</option>
-                  <option value="price-asc">Price Low to High</option>
-                  <option value="price-desc">Price High to Low</option>
+                  <option value="createdAt-desc">Mới nhất</option>
+                  <option value="createdAt-asc">Cũ nhất</option>
+                  <option value="name-asc">Tên A-Z</option>
+                  <option value="name-desc">Tên Z-A</option>
+                  <option value="price-asc">Giá thấp đến cao</option>
+                  <option value="price-desc">Giá cao đến thấp</option>
                 </select>
               </div>
 
               {/* Price Range */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Khoảng giá</label>
                 <div className="space-y-2">
                   <input
                     type="number"
-                    placeholder="Min price"
+                    placeholder="Giá thấp nhất"
                     value={priceRange.min || ''}
                     onChange={(e) => setPriceRange(prev => ({ ...prev, min: parseInt(e.target.value) || 0 }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                   <input
                     type="number"
-                    placeholder="Max price"
+                    placeholder="Giá cao nhất"
                     value={priceRange.max === 1000000 ? '' : priceRange.max}
                     onChange={(e) => setPriceRange(prev => ({ ...prev, max: parseInt(e.target.value) || 1000000 }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent"
@@ -331,18 +330,18 @@ const ProductsPage: React.FC = () => {
                   {searchQuery ? (
                     <>
                       {searchLoading ? (
-                        'Searching...'
+                        'Đang tìm kiếm...'
                       ) : (
-                        `Found ${products.length} products for "${searchQuery}"`
+                        `Tìm thấy ${products.length} sản phẩm cho "${searchQuery}"`
                       )}
                     </>
                   ) : (
-                    `Showing ${products.length} products`
+                    `Hiển thị ${products.length} sản phẩm`
                   )}
                 </p>
                 {selectedCategory && (
                   <p className="text-sm text-gray-500">
-                    Filtered by: {categories.find(c => (c.categoryId || c.id) === selectedCategory)?.name}
+                    Lọc theo: {categories.find(c => (c.categoryId || c.id) === selectedCategory)?.name}
                   </p>
                 )}
               </div>
@@ -381,12 +380,12 @@ const ProductsPage: React.FC = () => {
                   <Search className="w-16 h-16 mx-auto" />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  {searchQuery ? 'No products found' : 'No products available'}
+                  {searchQuery ? 'Không tìm thấy sản phẩm' : 'Không có sản phẩm nào'}
                 </h3>
                 <p className="text-gray-600 mb-4">
                   {searchQuery 
-                    ? `We couldn't find any products matching "${searchQuery}". Try adjusting your search terms.`
-                    : 'There are no products available at the moment.'
+                    ? `Không tìm thấy sản phẩm nào phù hợp với "${searchQuery}". Vui lòng điều chỉnh từ khóa tìm kiếm của bạn.`
+                    : 'Không có sản phẩm nào có sẵn tại thời điểm hiện tại.'
                   }
                 </p>
                 {searchQuery && (
@@ -394,7 +393,7 @@ const ProductsPage: React.FC = () => {
                     onClick={handleClearSearch}
                     className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
                   >
-                    Clear Search
+                    Xóa tìm kiếm
                   </button>
                 )}
               </div>

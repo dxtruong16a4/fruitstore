@@ -12,17 +12,17 @@ const NotFoundPage: React.FC = () => {
           404
         </Typography>
         <Typography variant="h4" component="h2" gutterBottom>
-          Page Not Found
+          Trang không tìm thấy
         </Typography>
         <Typography variant="body1" color="text.secondary" paragraph>
-          The page you're looking for doesn't exist.
+          Trang bạn đang tìm kiếm không tồn tại.
         </Typography>
         <Button
           variant="contained"
           onClick={() => navigate('/')}
           sx={{ mt: 2 }}
         >
-          Go Home
+          Quay về trang chủ
         </Button>
       </Box>
     </Container>

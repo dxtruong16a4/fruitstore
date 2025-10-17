@@ -26,25 +26,25 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onSubmit, isLoa
     const newErrors: Record<string, string> = {};
 
     if (!formData.currentPassword) {
-      newErrors.currentPassword = 'Current password is required';
+      newErrors.currentPassword = 'Mật khẩu hiện tại là bắt buộc';
     }
 
     if (!formData.newPassword) {
-      newErrors.newPassword = 'New password is required';
+      newErrors.newPassword = 'Mật khẩu mới là bắt buộc';
     } else if (formData.newPassword.length < 8) {
-      newErrors.newPassword = 'Password must be at least 8 characters long';
+      newErrors.newPassword = 'Mật khẩu phải có ít nhất 8 ký tự';
     } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.newPassword)) {
-      newErrors.newPassword = 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
+      newErrors.newPassword = 'Mật khẩu phải chứa ít nhất một chữ cái viết hoa, một chữ cái viết thường và một số';
     }
 
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your new password';
+      newErrors.confirmPassword = 'Vui lòng xác nhận mật khẩu mới';
     } else if (formData.newPassword !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      newErrors.confirmPassword = 'Mật khẩu không khớp';
     }
 
     if (formData.currentPassword === formData.newPassword) {
-      newErrors.newPassword = 'New password must be different from current password';
+      newErrors.newPassword = 'Mật khẩu mới phải khác với mật khẩu hiện tại';
     }
 
     setErrors(newErrors);
@@ -130,8 +130,8 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onSubmit, isLoa
             <Lock className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900" style={{ textAlign: 'left' }}>Change Password</h3>
-            <p className="text-sm text-gray-600">Update your password to keep your account secure</p>
+            <h3 className="text-lg font-semibold text-gray-900" style={{ textAlign: 'left' }}>Đổi mật khẩu</h3>
+            <p className="text-sm text-gray-600">Cập nhật mật khẩu để giữ cho tài khoản của bạn an toàn</p>
           </div>
         </div>
       </div>
@@ -146,24 +146,24 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onSubmit, isLoa
           </div>
           <div className="flex-1">
             <h4 className="text-sm font-semibold text-amber-800 mb-3" style={{ textAlign: 'left' }}>
-              Password Requirements
+              Yêu cầu mật khẩu
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-amber-700">
               <div className="flex items-center space-x-2">
                 <div className="w-1.5 h-1.5 bg-amber-500 rounded-full"></div>
-                <span>At least 8 characters long</span>
+                <span>Ít nhất 8 ký tự</span>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="w-1.5 h-1.5 bg-amber-500 rounded-full"></div>
-                <span>Contains uppercase letter</span>
+                <span>Chứa chữ cái viết hoa</span>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="w-1.5 h-1.5 bg-amber-500 rounded-full"></div>
-                <span>Contains lowercase letter</span>
+                <span>Chứa chữ cái viết thường</span>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="w-1.5 h-1.5 bg-amber-500 rounded-full"></div>
-                <span>Contains at least one number</span>
+                <span>Chứa ít nhất một số</span>
               </div>
             </div>
           </div>
@@ -177,7 +177,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onSubmit, isLoa
           <div className="space-y-2">
             <label htmlFor="currentPassword" className="flex items-center text-sm font-medium text-gray-700">
               <Lock className="w-4 h-4 mr-2 text-blue-600" />
-              Current Password
+              Mật khẩu hiện tại
               <span className="text-red-500 ml-1">*</span>
             </label>
             <div className="relative">
@@ -192,7 +192,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onSubmit, isLoa
                     ? 'border-red-300 bg-red-50' 
                     : 'border-gray-300 bg-white hover:border-blue-400 focus:bg-white'
                 }`}
-                placeholder="Enter your current password"
+                placeholder="Nhập mật khẩu hiện tại"
               />
               <button
                 type="button"
@@ -218,7 +218,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onSubmit, isLoa
           <div className="space-y-2">
             <label htmlFor="newPassword" className="flex items-center text-sm font-medium text-gray-700">
               <Lock className="w-4 h-4 mr-2 text-blue-600" />
-              New Password
+              Mật khẩu mới
               <span className="text-red-500 ml-1">*</span>
             </label>
             <div className="relative">
@@ -233,7 +233,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onSubmit, isLoa
                     ? 'border-red-300 bg-red-50' 
                     : 'border-gray-300 bg-white hover:border-blue-400 focus:bg-white'
                 }`}
-                placeholder="Enter your new password"
+                placeholder="Nhập mật khẩu mới"
               />
               <button
                 type="button"
@@ -259,7 +259,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onSubmit, isLoa
           <div className="space-y-2">
             <label htmlFor="confirmPassword" className="flex items-center text-sm font-medium text-gray-700">
               <Lock className="w-4 h-4 mr-2 text-blue-600" />
-              Confirm New Password
+              Xác nhận mật khẩu mới
               <span className="text-red-500 ml-1">*</span>
             </label>
             <div className="relative">
@@ -274,7 +274,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onSubmit, isLoa
                     ? 'border-red-300 bg-red-50' 
                     : 'border-gray-300 bg-white hover:border-blue-400 focus:bg-white'
                 }`}
-                placeholder="Confirm your new password"
+                placeholder="Xác nhận mật khẩu mới"
               />
               <button
                 type="button"
@@ -309,7 +309,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onSubmit, isLoa
             ) : (
               <Save className="w-5 h-5 mr-3" />
             )}
-            {isLoading ? 'Changing Password...' : 'Change Password'}
+            {isLoading ? 'Đang thay đổi mật khẩu...' : 'Thay đổi mật khẩu'}
           </button>
         </div>
       </form>

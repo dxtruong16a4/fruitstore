@@ -18,8 +18,8 @@ interface CategoriesSectionProps {
 
 const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   categories,
-  title = "Shop by Category",
-  subtitle = "Explore our wide selection of fresh fruits",
+  title = "Mua theo danh mục",
+  subtitle = "Khám phá sự đa dạng của trái cây tươi ngon",
   maxCategories = 4,
   className = ''
 }) => {

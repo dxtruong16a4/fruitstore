@@ -5,49 +5,49 @@ import { PageLayout } from '../components/layout';
 const ShippingInfoPage: React.FC = () => {
   const shippingOptions = [
     {
-      name: 'Same-Day Delivery',
+      name: 'Giao hàng ngay',
       icon: <Zap className="w-8 h-8 text-yellow-600" />,
-      description: 'Get your fresh fruits delivered the same day',
-      time: '2-4 hours',
+      description: 'Nhận trái cây tươi ngay trong ngày',
+      time: '2-4 giờ',
       cost: '$9.99',
-      freeThreshold: 'Orders over $75',
-      features: ['Order before 2 PM', 'Temperature-controlled delivery', 'Real-time tracking']
+      freeThreshold: 'Đơn hàng trên $75',
+      features: ['Đặt hàng trước 2 PM', 'Giao hàng được kiểm soát nhiệt độ', 'Theo dõi thực tế']
     },
     {
-      name: 'Next-Day Delivery',
+      name: 'Giao hàng ngày mai',
       icon: <Truck className="w-8 h-8 text-blue-600" />,
-      description: 'Standard delivery for next business day',
-      time: '24 hours',
+      description: 'Giao hàng tiêu chuẩn cho ngày mai làm việc',
+      time: '24 giờ',
       cost: '$5.99',
-      freeThreshold: 'Orders over $50',
-      features: ['Order by 6 PM', 'Scheduled delivery windows', 'Quality guarantee']
+      freeThreshold: 'Đơn hàng trên $50',
+      features: ['Đặt hàng trước 6 PM', 'Cửa hàng giao hàng được lên lịch', 'Đảm bảo chất lượng']
     },
     {
-      name: 'Scheduled Delivery',
+      name: 'Giao hàng được lên lịch',
       icon: <Clock className="w-8 h-8 text-purple-600" />,
-      description: 'Choose your preferred delivery date and time',
-      time: 'Flexible',
+      description: 'Chọn ngày và giờ giao hàng theo ý muốn của bạn',
+      time: 'Linh hoạt',
       cost: '$3.99',
-      freeThreshold: 'Orders over $30',
-      features: ['Pick your time slot', 'Weekly subscriptions available', 'Perfect for planning']
+      freeThreshold: 'Đơn hàng trên $30',
+      features: ['Chọn thời gian giao hàng', 'Có sẵn gói giao hàng hàng tuần', 'Phù hợp cho việc lên lịch']
     },
     {
-      name: 'Free Standard',
+      name: 'Giao hàng miễn phí tiêu chuẩn',
       icon: <Package className="w-8 h-8 text-green-600" />,
-      description: 'Complimentary delivery on qualifying orders',
-      time: '2-3 business days',
-      cost: 'FREE',
-      freeThreshold: 'Orders over $25',
-      features: ['No minimum order', 'Eco-friendly packaging', 'Standard tracking']
+      description: 'Giao hàng miễn phí trên đơn hàng đáp ứng điều kiện',
+      time: '2-3 ngày làm việc',
+      cost: 'MIỄN PHÍ',
+      freeThreshold: 'Đơn hàng trên $25',
+      features: ['Không có đơn hàng tối thiểu', 'Bao bì thân thiện với môi trường', 'Theo dõi tiêu chuẩn']
     }
   ];
 
   const deliveryAreas = [
-    { city: 'New York', state: 'NY', status: 'Available', coverage: 'All boroughs' },
+    { city: 'Thành phố Hồ Chí Minh', state: 'HCM', status: 'Có sẵn', coverage: 'Tất cả quận huyện' },
     { city: 'Los Angeles', state: 'CA', status: 'Available', coverage: 'LA County' },
-    { city: 'Chicago', state: 'IL', status: 'Available', coverage: 'Cook County' },
-    { city: 'Houston', state: 'TX', status: 'Available', coverage: 'Harris County' },
-    { city: 'Phoenix', state: 'AZ', status: 'Available', coverage: 'Maricopa County' },
+    { city: 'Hà Nội', state: 'HN', status: 'Có sẵn', coverage: 'Tất cả quận huyện' },
+    { city: 'Đà Nẵng', state: 'DN', status: 'Có sẵn', coverage: 'Tất cả quận huyện' },
+    { city: 'Hải Phòng', state: 'HP', status: 'Có sẵn', coverage: 'Tất cả quận huyện' },
     { city: 'Philadelphia', state: 'PA', status: 'Coming Soon', coverage: 'Limited areas' },
     { city: 'San Antonio', state: 'TX', status: 'Available', coverage: 'Bexar County' },
     { city: 'San Diego', state: 'CA', status: 'Available', coverage: 'San Diego County' }
@@ -55,41 +55,40 @@ const ShippingInfoPage: React.FC = () => {
 
   const packagingInfo = [
     {
-      title: 'Temperature Control',
-      description: 'All fresh fruits are packed with ice packs and insulated containers to maintain optimal temperature.',
+      title: 'Kiểm soát nhiệt độ',
+      description: 'Tất cả trái cây tươi được đóng gói với băng đá và thùng cách nhiệt để duy trì nhiệt độ tối ưu.',
       icon: '❄️'
     },
     {
-      title: 'Eco-Friendly Materials',
-      description: 'We use recyclable and biodegradable packaging materials whenever possible.',
+      title: 'Vật liệu thân thiện với môi trường',
+      description: 'Chúng tôi sử dụng vật liệu bao bì có thể tái sử dụng và phân hủy sinh học khi có thể.',
       icon: '🌱'
     },
     {
-      title: 'Protective Packaging',
-      description: 'Each fruit is carefully wrapped to prevent bruising and maintain freshness during transit.',
+      title: 'Bao bì bảo vệ',
+      description: 'Mỗi trái cây được bao bì bảo vệ cẩn thận để tránh vỡ và duy trì tươi ngon trong quá trình vận chuyển.',
       icon: '🛡️'
     },
     {
-      title: 'Quality Inspection',
-      description: 'Every order is inspected before packaging to ensure only the best quality fruits are sent.',
+      title: 'Kiểm tra chất lượng',
+      description: 'Mọi đơn hàng được kiểm tra trước khi đóng gói để đảm bảo chỉ có trái cây tốt nhất được gửi.',
       icon: '✅'
     }
   ];
 
   return (
     <PageLayout
-      title="Shipping Information"
-      subtitle="Fast, reliable delivery of fresh fruits to your doorstep."
+      title="Thông tin giao hàng"
+      subtitle="Giao hàng nhanh chóng, đáng tin cậy và trái cây tươi đến cửa hàng của bạn."
       showHero={true}
-      navigationProps={{ title: "Shipping Information" }}
     >
 
       {/* Shipping Options */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Delivery Options</h2>
-            <p className="text-gray-600 text-lg">Choose the delivery option that works best for you</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Các tùy chọn giao hàng</h2>
+            <p className="text-gray-600 text-lg">Chọn tùy chọn giao hàng phù hợp nhất cho bạn</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
@@ -107,21 +106,21 @@ const ShippingInfoPage: React.FC = () => {
 
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">Delivery Time:</span>
+                    <span className="text-gray-600">Thời gian giao hàng:</span>
                     <span className="font-semibold text-gray-900">{option.time}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">Cost:</span>
+                    <span className="text-gray-600">Chi phí:</span>
                     <span className="font-semibold text-green-600">{option.cost}</span>
                   </div>
                   <div className="flex justify-between items-center py-2">
-                    <span className="text-gray-600">Free on:</span>
+                    <span className="text-gray-600">Miễn phí trên:</span>
                     <span className="font-semibold text-gray-900">{option.freeThreshold}</span>
                   </div>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-3">Features:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">Tính năng:</h4>
                   <ul className="space-y-2">
                     {option.features.map((feature, featureIndex) => (
                       <li key={featureIndex} className="flex items-center space-x-2 text-sm text-gray-600">
@@ -141,8 +140,8 @@ const ShippingInfoPage: React.FC = () => {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Delivery Areas</h2>
-            <p className="text-gray-600 text-lg">We deliver to major cities across the United States</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Các khu vực giao hàng</h2>
+            <p className="text-gray-600 text-lg">Chúng tôi giao hàng đến các thành phố lớn trên toàn quốc</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -166,9 +165,9 @@ const ShippingInfoPage: React.FC = () => {
           </div>
 
           <div className="text-center mt-8">
-            <p className="text-gray-600 mb-4">Don't see your city? We're expanding rapidly!</p>
+            <p className="text-gray-600 mb-4">Không thấy thành phố của bạn? Chúng tôi đang phát triển nhanh chóng!</p>
             <button className="bg-green-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-700 transition">
-              Request Delivery to Your Area
+              Yêu cầu giao hàng đến khu vực của bạn
             </button>
           </div>
         </div>
@@ -178,8 +177,8 @@ const ShippingInfoPage: React.FC = () => {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Packaging & Care</h2>
-            <p className="text-gray-600 text-lg">How we ensure your fruits arrive fresh and perfect</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Bao bì & Chăm sóc</h2>
+            <p className="text-gray-600 text-lg">Làm thế nào để đảm bảo trái cây đến tươi và hoàn hảo</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -201,22 +200,22 @@ const ShippingInfoPage: React.FC = () => {
             <div className="bg-green-50 rounded-2xl p-8">
               <div className="flex items-center space-x-3 mb-4">
                 <Shield className="w-8 h-8 text-green-600" />
-                <h3 className="text-2xl font-bold text-gray-900">Quality Guarantee</h3>
+                <h3 className="text-2xl font-bold text-gray-900">Đảm bảo chất lượng</h3>
               </div>
               <p className="text-gray-600 leading-relaxed">
-                We guarantee the quality of your fruits upon delivery. If you're not satisfied with the freshness 
-                or quality of any item, contact us within 24 hours for a full refund or replacement.
+                Chúng tôi đảm bảo chất lượng của trái cây của bạn khi đến tận nơi. Nếu bạn không hài lòng với tươi ngon 
+                hoặc chất lượng của bất kỳ mục nào, liên hệ chúng tôi trong vòng 24 giờ để được hoàn trả hoặc thay thế.
               </p>
             </div>
 
             <div className="bg-blue-50 rounded-2xl p-8">
               <div className="flex items-center space-x-3 mb-4">
                 <Globe className="w-8 h-8 text-blue-600" />
-                <h3 className="text-2xl font-bold text-gray-900">Environmental Commitment</h3>
+                <h3 className="text-2xl font-bold text-gray-900">Cam kết môi trường</h3>
               </div>
               <p className="text-gray-600 leading-relaxed">
-                We're committed to sustainable delivery practices. Our packaging is eco-friendly, 
-                and we optimize delivery routes to minimize our carbon footprint.
+                Chúng tôi cam kết áp dụng các thực hành giao hàng bền vững. Bao bì của chúng tôi là thân thiện với môi trường, 
+                và chúng tôi tối ưu hóa các tuyến giao hàng để giảm thiểu phát thải carbon của chúng tôi.
               </p>
             </div>
           </div>
@@ -226,27 +225,27 @@ const ShippingInfoPage: React.FC = () => {
       {/* FAQ Section */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Shipping FAQ</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Câu hỏi thường gặp về giao hàng</h2>
           
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Can I track my delivery in real-time?</h3>
-              <p className="text-gray-600">Yes! Once your order is shipped, you'll receive a tracking link to monitor your delivery in real-time.</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Tôi có thể theo dõi đơn hàng của mình trực tiếp không?</h3>
+              <p className="text-gray-600">Có! Một khi đơn hàng của bạn được gửi, bạn sẽ nhận được liên kết theo dõi để theo dõi đơn hàng của bạn trực tiếp.</p>
             </div>
             
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">What if I'm not home when my order arrives?</h3>
-              <p className="text-gray-600">For perishable items, we'll leave your order in a cool, shaded area and send you a photo confirmation. You can also schedule delivery for a specific time.</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Tôi không ở nhà khi đơn hàng đến?</h3>
+              <p className="text-gray-600">Đối với các mục dễ hỏng, chúng tôi sẽ để đơn hàng của bạn trong một khu vực mát mẻ và gửi cho bạn một ảnh chụp xác nhận. Bạn cũng có thể lên lịch giao hàng cho một thời gian cụ thể.</p>
             </div>
             
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Do you deliver on weekends?</h3>
-              <p className="text-gray-600">Yes! We offer weekend delivery for same-day and next-day options. Standard delivery operates Monday through Friday.</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Chúng tôi giao hàng vào cuối tuần không?</h3>
+              <p className="text-gray-600">Có! Chúng tôi cung cấp giao hàng vào cuối tuần cho các tùy chọn cùng ngày và ngày mai. Giao hàng tiêu chuẩn hoạt động từ thứ Hai đến thứ Sáu.</p>
             </div>
             
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Can I change my delivery address after placing an order?</h3>
-              <p className="text-gray-600">You can change your delivery address up to 2 hours before your scheduled delivery time by contacting our customer service.</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Tôi có thể thay đổi địa chỉ giao hàng sau khi đặt đơn hàng không?</h3>
+              <p className="text-gray-600">Bạn có thể thay đổi địa chỉ giao hàng đến 2 giờ trước thời gian giao hàng đã lên lịch bằng cách liên hệ dịch vụ khách hàng của chúng tôi.</p>
             </div>
           </div>
         </div>

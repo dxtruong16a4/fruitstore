@@ -237,7 +237,7 @@ const HomePage: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-green-600 animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Loading fresh fruits...</p>
+          <p className="text-gray-600">Đang tải trái cây tươi ngon...</p>
         </div>
       </div>
     );
@@ -252,31 +252,31 @@ const HomePage: React.FC = () => {
             <div className="space-y-6 animate-fade-in">
               <div className="inline-block">
                 <span className="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
-                  Fresh & Organic
+                  Trái cây tươi ngon
                 </span>
               </div>
               <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
-                Farm Fresh
+                Trái cây tươi ngon
                 <span className="block bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                  Fruits Delivered
+                  Được giao hàng tới cửa bạn
                 </span>
               </h1>
               <p className="text-xl text-gray-600 leading-relaxed">
-                Experience the taste of nature with our hand-picked, organic fruits delivered fresh to your doorstep every day.
+                Trải nghiệm vị ngon của thiên nhiên với trái cây tươi ngon được chọn lọc, đóng gói và giao hàng tới cửa bạn mỗi ngày.
               </p>
               <div className="flex flex-wrap gap-4">
                 <button 
                   className="bg-green-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-green-700 transition transform hover:scale-105 shadow-lg hover:shadow-xl"
                   onClick={() => navigate('/products')}
                 >
-                  Shop Now
+                  Mua ngay
                 </button>
                 {!isAuthenticated && (
                   <button 
                     className="bg-white text-gray-700 px-8 py-4 rounded-full font-semibold hover:bg-gray-50 transition border-2 border-gray-200"
                     onClick={() => navigate('/login')}
                   >
-                    Sign In
+                    Đăng nhập
                   </button>
                 )}
               </div>
@@ -286,7 +286,7 @@ const HomePage: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full blur-3xl opacity-20 animate-pulse"></div>
               <img
                 src="https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg?auto=compress&cs=tinysrgb&w=800"
-                alt="Fresh fruits"
+                alt="Trái cây tươi ngon"
                 className="relative rounded-3xl shadow-2xl w-full h-auto object-cover"
               />
             </div>
@@ -326,7 +326,7 @@ const HomePage: React.FC = () => {
                   Kết quả tìm kiếm cho "{searchQuery}"
                 </h2>
                 <p className="text-gray-600 text-lg">
-                  {searchLoading ? 'Đang tìm kiếm...' : `Tìm thấy ${searchResults.length} sản phẩm`}
+                  {searchLoading ? 'Đang tìm kiếm trái cây tươi ngon...' : `Tìm thấy ${searchResults.length} sản phẩm`}
                 </p>
               </div>
               <button 

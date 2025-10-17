@@ -27,9 +27,9 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   };
 
   const getStockStatus = (stock: number) => {
-    if (stock === 0) return { text: 'Out of Stock', color: 'text-red-600' };
-    if (stock < 10) return { text: 'Low Stock', color: 'text-orange-600' };
-    return { text: 'In Stock', color: 'text-green-600' };
+    if (stock === 0) return { text: 'Hết hàng', color: 'text-red-600' };
+    if (stock < 10) return { text: 'Hết hàng', color: 'text-orange-600' };
+    return { text: 'Có hàng', color: 'text-green-600' };
   };
 
   const stockStatus = getStockStatus(product.stockQuantity || 0);
@@ -92,40 +92,40 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               <span className="text-4xl font-bold text-green-600">
                 {formatPrice(product.price)}
               </span>
-              <span className="text-sm text-gray-500 ml-2">per kg</span>
+              <span className="text-sm text-gray-500 ml-2">mỗi kg</span>
             </div>
 
             {/* Stock Status */}
             <div className="mb-6">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Availability:</span>
+                <span className="text-sm text-gray-600">Tình trạng:</span>
                 <span className={`text-sm font-semibold ${stockStatus.color}`}>
-                  {stockStatus.text} ({product.stockQuantity || 0} units)
+                  {stockStatus.text} ({product.stockQuantity || 0} sản phẩm)
                 </span>
               </div>
             </div>
 
             {/* Description */}
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Mô tả</h3>
               <p className="text-gray-600 leading-relaxed">{product.description}</p>
             </div>
 
             {/* Features */}
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Why Choose This Product?</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">Tại sao chọn sản phẩm này?</h3>
               <div className="space-y-3">
                 <div className="flex items-center">
                   <Truck className="w-5 h-5 text-green-600 mr-3" />
-                  <span className="text-sm text-gray-600">Free delivery on orders over $50</span>
+                  <span className="text-sm text-gray-600">Miễn phí giao hàng trên đơn hàng trên 50.000 VNĐ</span>
                 </div>
                 <div className="flex items-center">
                   <Shield className="w-5 h-5 text-green-600 mr-3" />
-                  <span className="text-sm text-gray-600">100% fresh guarantee</span>
+                  <span className="text-sm text-gray-600">100% đảm bảo hàng tươi</span>
                 </div>
                 <div className="flex items-center">
                   <RotateCcw className="w-5 h-5 text-green-600 mr-3" />
-                  <span className="text-sm text-gray-600">Easy returns within 7 days</span>
+                  <span className="text-sm text-gray-600">Đổi trả dễ dàng trong vòng 7 ngày</span>
                 </div>
               </div>
             </div>
@@ -142,14 +142,14 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             >
               <ShoppingCart className="w-5 h-5" />
               <span>
-                {product.stockQuantity === 0 ? 'Out of Stock' : 'Add to Cart'}
+                {product.stockQuantity === 0 ? 'Hết hàng' : 'Thêm vào giỏ hàng'}
               </span>
             </button>
 
             {/* Additional Info */}
             <div className="mt-4 text-center">
               <p className="text-xs text-gray-500">
-                Need help? Contact our support team for assistance.
+                Cần trợ giúp? Liên hệ đội hỗ trợ của chúng tôi để được hỗ trợ.
               </p>
             </div>
           </div>

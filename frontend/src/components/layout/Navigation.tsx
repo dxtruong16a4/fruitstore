@@ -75,12 +75,6 @@ const Navigation: React.FC<NavigationProps> = ({
                 >
                   Đơn hàng
                 </button>
-                <button 
-                  onClick={() => navigate('/profile')}
-                  className="text-gray-700 hover:text-green-600 transition font-medium"
-                >
-                  Hồ sơ
-                </button>
               </>
             )}
           </div>

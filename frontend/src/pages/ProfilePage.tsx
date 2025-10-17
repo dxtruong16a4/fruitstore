@@ -5,6 +5,7 @@ import { useToast } from '../hooks/useToast';
 import { ProfileForm, ChangePasswordForm } from '../components';
 import { User as UserIcon, Settings, Lock } from 'lucide-react';
 import type { User } from '../types';
+import { PageLayout } from '../components/layout';
 
 const ProfilePage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -21,18 +22,18 @@ const ProfilePage: React.FC = () => {
   const handleProfileUpdate = async (profileData: Partial<User>) => {
     try {
       await dispatch(updateUserProfile(profileData)).unwrap();
-      showSuccess('Profile updated successfully!');
+      showSuccess('Thông tin tài khoản đã được cập nhật thành công!');
     } catch (error: any) {
-      showError('Failed to update profile', error.message);
+      showError('Lỗi khi cập nhật thông tin tài khoản', error.message);
     }
   };
 
   const handlePasswordChange = async (passwordData: { oldPassword: string; newPassword: string }) => {
     try {
       await dispatch(changeUserPassword(passwordData)).unwrap();
-      showSuccess('Password changed successfully!');
+      showSuccess('Mật khẩu đã được thay đổi thành công!');
     } catch (error: any) {
-      showError('Failed to change password', error.message);
+      showError('Lỗi khi thay đổi mật khẩu', error.message);
     }
   };
 
@@ -48,12 +49,12 @@ const ProfilePage: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in to view your profile</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Vui lòng đăng nhập để xem thông tin tài khoản của bạn</h2>
           <button
             onClick={() => window.location.href = '/login'}
             className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
           >
-            Go to Login
+            Đến trang đăng nhập
           </button>
         </div>
       </div>
@@ -61,7 +62,7 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <>
+    <PageLayout>
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
@@ -91,7 +92,7 @@ const ProfilePage: React.FC = () => {
                   }`}
                 >
                   <Settings className="w-4 h-4" />
-                  <span>Profile Information</span>
+                  <span>Thông tin tài khoản</span>
                 </button>
                 <button
                   onClick={() => setActiveTab('password')}
@@ -102,7 +103,7 @@ const ProfilePage: React.FC = () => {
                   }`}
                 >
                   <Lock className="w-4 h-4" />
-                  <span>Change Password</span>
+                  <span>Đổi mật khẩu</span>
                 </button>
               </nav>
             </div>
@@ -157,7 +158,7 @@ const ProfilePage: React.FC = () => {
           </div>
         ))}
       </div>
-    </>
+    </PageLayout>
   );
 };
 

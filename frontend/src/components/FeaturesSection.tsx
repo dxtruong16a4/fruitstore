@@ -19,18 +19,18 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({
   const defaultFeatures: Feature[] = [
     {
       icon: <Truck className="w-8 h-8 text-green-600" />,
-      title: "Free Delivery",
-      description: "On orders over $50"
+      title: "Miễn phí giao hàng",
+      description: "Trên 50.000 VNĐ"
     },
     {
       icon: <Shield className="w-8 h-8 text-green-600" />,
-      title: "100% Organic",
-      description: "Certified fresh produce"
+      title: "100% Trái cây tươi ngon",
+      description: "Trái cây tươi ngon được chọn lọc, đóng gói và giao hàng tới cửa bạn mỗi ngày."
     },
     {
       icon: <Clock className="w-8 h-8 text-green-600" />,
-      title: "24/7 Support",
-      description: "Always here to help"
+      title: "24/7 Hỗ trợ",
+      description: "Luôn sẵn sàng hỗ trợ bạn"
     }
   ];
 

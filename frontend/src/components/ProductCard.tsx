@@ -104,7 +104,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition flex items-center justify-center space-x-2"
           >
             <ShoppingCart className="w-5 h-5" />
-            <span>Add to Cart</span>
+            <span>Thêm vào giỏ hàng</span>
           </button>
         )}
       </div>

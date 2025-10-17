@@ -6,27 +6,26 @@ const ContactPage: React.FC = () => {
   const faqs = [
     {
       id: 1,
-      question: "How quickly do you deliver?",
-      answer: "We offer same-day delivery for orders placed before 2 PM, and next-day delivery for all other orders."
+      question: "Bạn giao hàng nhanh như thế nào?",
+      answer: "Chúng tôi cung cấp giao hàng ngay hôm đó cho đơn hàng đặt trước 2 PM, và giao hàng ngày mai cho tất cả các đơn hàng khác."
     },
     {
       id: 2,
-      question: "Do you offer organic fruits?",
-      answer: "Yes! We have a wide selection of certified organic fruits from local farms."
+      question: "Bạn có cung cấp trái cây hữu cơ không?",
+      answer: "Có! Chúng tôi có một số loại trái cây hữu cơ từ nông trại địa phương."
     },
     {
       id: 3,
-      question: "What if I'm not satisfied with my order?",
-      answer: "We offer a 100% satisfaction guarantee. Contact us within 24 hours and we'll make it right."
+      question: "Tôi không hài lòng với đơn hàng của mình, tôi có thể đổi trả không?",
+      answer: "Chúng tôi cung cấp đảm bảo 100% sự hài lòng. Liên hệ chúng tôi trong vòng 24 giờ và chúng tôi sẽ giải quyết nó."
     }
   ];
 
   return (
     <PageLayout
-      title="Get in Touch"
-      subtitle="We'd love to hear from you. Send us a message and we'll respond as soon as possible."
+      title="Liên hệ chúng tôi"
+      subtitle="Chúng tôi rất mong nhận được phản hồi từ bạn. Gửi cho chúng tôi một tin nhắn và chúng tôi sẽ trả lời sớm nhất có thể."
       showHero={true}
-      navigationProps={{ title: "Contact Us" }}
     >
 
       {/* Contact Info & Form */}

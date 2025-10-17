@@ -15,8 +15,8 @@ interface FAQSectionProps {
 
 const FAQSection: React.FC<FAQSectionProps> = ({
   faqs,
-  title = "Frequently Asked Questions",
-  subtitle = "Quick answers to common questions",
+  title = "Câu hỏi thường gặp",
+  subtitle = "Câu trả lời nhanh cho các câu hỏi thường gặp",
   className = ''
 }) => {
   return (

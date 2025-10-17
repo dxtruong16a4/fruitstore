@@ -47,7 +47,7 @@ const OrdersPage: React.FC = () => {
         setOrders(response.data.data || []);
         setTotalPages(response.data.totalPages || 0);
       } else {
-        showError('Failed to Load Orders', response.message || 'Unable to fetch your orders');
+        showError('Lỗi khi tải đơn hàng', response.message || 'Không thể tải đơn hàng của bạn');
         // Set empty orders array on error
         setOrders([]);
       }
@@ -56,10 +56,10 @@ const OrdersPage: React.FC = () => {
       
       // Handle authentication errors
       if (error.status === 401 || error.status === 403) {
-        showError('Authentication Required', 'Please sign in to view your orders');
+        showError('Yêu cầu xác thực', 'Vui lòng đăng nhập để xem đơn hàng của bạn');
         navigate('/login');
       } else {
-        showError('Failed to Load Orders', error.message || 'An unexpected error occurred while loading your orders');
+        showError('Lỗi khi tải đơn hàng', error.message || 'Đã xảy ra lỗi không mong muốn khi tải đơn hàng của bạn');
       }
       setOrders([]);
     } finally {
@@ -99,7 +99,7 @@ const OrdersPage: React.FC = () => {
 
   const handleCancelOrder = async (orderId: number) => {
     if (!isAuthenticated) {
-      showError('Authentication Required', 'Please sign in to cancel orders');
+      showError('Yêu cầu xác thực', 'Vui lòng đăng nhập để hủy đơn hàng');
       navigate('/login');
       return;
     }
@@ -107,31 +107,31 @@ const OrdersPage: React.FC = () => {
     try {
       const response = await orderApi.cancelOrder(orderId);
       if (response.success) {
-        showSuccess('Order Cancelled', 'Your order has been successfully cancelled');
+        showSuccess('Đơn hàng đã được hủy', 'Đơn hàng của bạn đã được hủy thành công');
         // Refresh orders list
         fetchOrders();
         // Close detail modal if open
         setIsDetailModalOpen(false);
         setSelectedOrder(null);
       } else {
-        showError('Failed to Cancel Order', response.message || 'Unable to cancel the order');
+        showError('Lỗi khi hủy đơn hàng', response.message || 'Không thể hủy đơn hàng');
       }
     } catch (error: any) {
       console.error('Error cancelling order:', error);
       
       // Handle authentication errors
       if (error.status === 401 || error.status === 403) {
-        showError('Authentication Required', 'Please sign in to cancel orders');
+        showError('Yêu cầu xác thực', 'Vui lòng đăng nhập để hủy đơn hàng');
         navigate('/login');
       } else {
-        showError('Failed to Cancel Order', error.message || 'An unexpected error occurred while cancelling the order');
+        showError('Lỗi khi hủy đơn hàng', error.message || 'Đã xảy ra lỗi không mong muốn khi hủy đơn hàng');
       }
     }
   };
 
   const handleViewOrderDetails = async (orderId: number) => {
     if (!isAuthenticated) {
-      showError('Authentication Required', 'Please sign in to view order details');
+      showError('Yêu cầu xác thực', 'Vui lòng đăng nhập để xem chi tiết đơn hàng');
       navigate('/login');
       return;
     }
@@ -144,17 +144,17 @@ const OrdersPage: React.FC = () => {
         setSelectedOrder(response.data);
         setIsDetailModalOpen(true);
       } else {
-        showError('Failed to Load Order Details', response.message || 'Unable to load order details');
+        showError('Lỗi khi tải chi tiết đơn hàng', response.message || 'Không thể tải chi tiết đơn hàng');
       }
     } catch (error: any) {
       console.error('Error fetching order details:', error);
       
       // Handle authentication errors
       if (error.status === 401 || error.status === 403) {
-        showError('Authentication Required', 'Please sign in to view order details');
+        showError('Yêu cầu xác thực', 'Vui lòng đăng nhập để xem chi tiết đơn hàng');
         navigate('/login');
       } else {
-        showError('Failed to Load Order Details', error.message || 'An unexpected error occurred while loading order details');
+        showError('Lỗi khi tải chi tiết đơn hàng', error.message || 'Đã xảy ra lỗi không mong muốn khi tải chi tiết đơn hàng');
       }
     } finally {
       setLoadingOrderDetail(false);
@@ -205,11 +205,11 @@ const OrdersPage: React.FC = () => {
             }}
             className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white text-black"
           >
-            <option value="createdAt-desc">Newest First</option>
-            <option value="createdAt-asc">Oldest First</option>
-            <option value="totalAmount-desc">Highest Amount</option>
-            <option value="totalAmount-asc">Lowest Amount</option>
-            <option value="status-asc">Status A-Z</option>
+            <option value="createdAt-desc">Mới nhất</option>
+            <option value="createdAt-asc">Cũ nhất</option>
+            <option value="totalAmount-desc">Cao nhất</option>
+            <option value="totalAmount-asc">Thấp nhất</option>
+            <option value="status-asc">Trạng thái A-Z</option>
           </select>
         </Box>
       </Box>
@@ -218,10 +218,10 @@ const OrdersPage: React.FC = () => {
         <Card>
           <CardContent sx={{ textAlign: 'center', py: 4 }}>
             <Typography variant="h6" gutterBottom>
-              No orders found
+              Không tìm thấy đơn hàng
             </Typography>
             <Typography variant="body2" color="text.secondary" paragraph>
-              Start shopping to see your orders here
+              Bắt đầu mua sắm để xem đơn hàng của bạn ở đây
             </Typography>
           </CardContent>
         </Card>
@@ -263,7 +263,7 @@ const OrdersPage: React.FC = () => {
                       onClick={() => handleViewOrderDetails(order.orderId)}
                       disabled={loadingOrderDetail}
                     >
-                      {loadingOrderDetail ? 'Loading...' : 'View Details'}
+                      {loadingOrderDetail ? 'Đang tải...' : 'Xem chi tiết'}
                     </Button>
                     {(order.status === 'PENDING' || order.status === 'CONFIRMED') && (
                       <Button 
@@ -272,7 +272,7 @@ const OrdersPage: React.FC = () => {
                         variant="outlined"
                         onClick={() => handleCancelOrder(order.orderId)}
                       >
-                        Cancel Order
+                        Hủy đơn hàng
                       </Button>
                     )}
                   </Box>
@@ -291,7 +291,7 @@ const OrdersPage: React.FC = () => {
                   variant="outlined"
                   size="small"
                 >
-                  Previous
+                  Trước
                 </Button>
                 
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -315,7 +315,7 @@ const OrdersPage: React.FC = () => {
                   variant="outlined"
                   size="small"
                 >
-                  Next
+                  Tiếp
                 </Button>
               </Box>
             </Box>

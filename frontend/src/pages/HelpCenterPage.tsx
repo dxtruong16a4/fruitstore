@@ -10,76 +10,76 @@ const HelpCenterPage: React.FC = () => {
   const faqs = [
     {
       id: 1,
-      question: "How do I place an order?",
-      answer: "Placing an order is easy! Simply browse our selection of fresh fruits, add items to your cart, and proceed to checkout. You can create an account for faster checkout or checkout as a guest."
+      question: "Làm thế nào để đặt hàng?",
+      answer: "Đặt hàng rất đơn giản! Chỉ cần duyệt qua số lượng trái cây tươi, thêm vào giỏ hàng và tiến hành thanh toán. Bạn có thể tạo tài khoản để thanh toán nhanh hơn hoặc thanh toán dưới dạng khách."
     },
     {
       id: 2,
-      question: "What are your delivery options?",
-      answer: "We offer same-day delivery for orders placed before 2 PM, and next-day delivery for all other orders. Delivery is free on orders over $50. We also offer scheduled delivery for your convenience."
+      question: "Bạn có cung cấp giao hàng nhanh không?",
+      answer: "Chúng tôi cung cấp giao hàng ngay hôm đó cho đơn hàng đặt trước 2 PM, và giao hàng ngày mai cho tất cả các đơn hàng khác. Giao hàng miễn phí trên đơn hàng trên 50.000 VNĐ. Chúng tôi cũng cung cấp giao hàng đặt trước cho bạn thuận tiện."
     },
     {
       id: 3,
-      question: "How do I track my order?",
-      answer: "Once your order is confirmed, you'll receive a tracking number via email. You can also track your order by logging into your account and visiting the 'My Orders' section."
+      question: "Làm thế nào để theo dõi đơn hàng của mình?",
+      answer: "Khi đơn hàng được xác nhận, bạn sẽ nhận được một số tracking number qua email. Bạn cũng có thể theo dõi đơn hàng bằng cách đăng nhập vào tài khoản của mình và truy cập vào phần 'Đơn hàng của tôi'."
     },
     {
       id: 4,
-      question: "What if I'm not satisfied with my fruits?",
-      answer: "We stand behind the quality of our products. If you're not completely satisfied, contact us within 24 hours and we'll provide a full refund or replacement."
+      question: "Tôi không hài lòng với trái cây của mình, tôi có thể đổi trả không?",
+      answer: "Chúng tôi đảm bảo chất lượng của sản phẩm của chúng tôi. Nếu bạn không hài lòng hoàn toàn, liên hệ chúng tôi trong vòng 24 giờ và chúng tôi sẽ cung cấp hoàn trả đầy đủ hoặc thay thế."
     },
     {
       id: 5,
-      question: "Do you offer organic fruits?",
-      answer: "Yes! We have a wide selection of certified organic fruits from local farms. Look for the 'Organic' label on our product pages."
+      question: "Bạn có cung cấp trái cây hữu cơ không?",
+      answer: "Có! Chúng tôi có một số loại trái cây hữu cơ từ nông trại địa phương. Tìm kiếm nhãn 'Hữu cơ' trên trang sản phẩm của chúng tôi."
     },
     {
       id: 6,
-      question: "How should I store my fruits?",
-      answer: "Most fruits should be stored in the refrigerator to maintain freshness. Bananas and some tropical fruits can be stored at room temperature. Check individual product pages for specific storage instructions."
+      question: "Làm thế nào để lưu trữ trái cây của mình?",
+      answer: "Hầu hết các loại trái cây nên được lưu trữ trong tủ lạnh để duy trì tươi. Chuối và một số loại trái cây tropical có thể được lưu trữ ở nhiệt độ phòng. Kiểm tra trang sản phẩm cụ thể để có hướng dẫn lưu trữ."
     },
     {
       id: 7,
-      question: "Can I modify or cancel my order?",
-      answer: "Orders can be modified or cancelled within 30 minutes of placement. After that, please contact our customer service team for assistance."
+      question: "Tôi có thể sửa đổi hoặc hủy đơn hàng của mình không?",
+      answer: "Đơn hàng có thể được sửa đổi hoặc hủy trong vòng 30 phút sau khi đặt hàng. Sau đó, vui lòng liên hệ đội hỗ trợ khách hàng của chúng tôi để được hỗ trợ."
     },
     {
       id: 8,
-      question: "What payment methods do you accept?",
-      answer: "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and Apple Pay for your convenience."
+      question: "Bạn chấp nhận phương thức thanh toán nào?",
+      answer: "Chúng tôi chấp nhận tất cả các thẻ tín dụng chính (Visa, MasterCard, American Express), PayPal và Apple Pay cho sự tiện lợi của bạn."
     }
   ];
 
   const helpCategories = [
     {
-      title: "Ordering & Payment",
+      title: "Đặt hàng & Thanh toán",
       icon: "🛒",
-      topics: ["How to place an order", "Payment methods", "Order confirmation", "Guest checkout"]
+      topics: ["Làm thế nào để đặt hàng", "Phương thức thanh toán", "Xác nhận đơn hàng", "Thanh toán khách"]
     },
     {
-      title: "Delivery & Shipping",
+      title: "Giao hàng & Vận chuyển",
       icon: "🚚",
-      topics: ["Delivery options", "Shipping costs", "Delivery times", "Track your order"]
+      topics: ["Các tùy chọn giao hàng", "Chi phí vận chuyển", "Thời gian giao hàng", "Theo dõi đơn hàng của bạn"]
     },
     {
-      title: "Returns & Refunds",
+      title: "Đổi trả & Hoàn trả",
       icon: "↩️",
-      topics: ["Return policy", "How to return items", "Refund process", "Quality guarantee"]
+      topics: ["Chính sách đổi trả", "Làm thế nào để đổi trả sản phẩm", "Quy trình hoàn trả", "Đảm bảo chất lượng"]
     },
     {
-      title: "Account & Profile",
+      title: "Tài khoản & Hồ sơ",
       icon: "👤",
-      topics: ["Create account", "Login issues", "Update profile", "Order history"]
+      topics: ["Tạo tài khoản", "Vấn đề đăng nhập", "Cập nhật hồ sơ", "Lịch sử đơn hàng"]
     },
     {
-      title: "Products & Quality",
+      title: "Sản phẩm & Chất lượng",
       icon: "🍎",
-      topics: ["Product information", "Organic options", "Storage tips", "Seasonal availability"]
+      topics: ["Thông tin sản phẩm", "Tùy chọn hữu cơ", "Hướng dẫn lưu trữ", "Khả năng sản xuất theo mùa"]
     },
     {
-      title: "Technical Support",
+      title: "Hỗ trợ kỹ thuật",
       icon: "💻",
-      topics: ["Website issues", "Mobile app", "Browser compatibility", "Account security"]
+      topics: ["Vấn đề trang web", "Ứng dụng di động", "Tương thích trình duyệt", "Bảo mật tài khoản"]
     }
   ];
 
@@ -94,13 +94,12 @@ const HelpCenterPage: React.FC = () => {
 
   return (
     <PageLayout
-      title="How can we help you?"
-      subtitle="Find answers to common questions or get in touch with our support team."
+      title="Làm thế nào để chúng tôi có thể giúp bạn?"
+      subtitle="Tìm câu trả lời cho các câu hỏi thường gặp hoặc liên hệ với đội hỗ trợ của chúng tôi."
       showHero={true}
-      navigationProps={{ title: "Help Center" }}
       heroProps={{
         showSearch: true,
-        searchPlaceholder: "Search for help...",
+        searchPlaceholder: "Tìm kiếm hỗ trợ...",
         onSearch: setSearchQuery
       }}
     >
@@ -112,10 +111,10 @@ const HelpCenterPage: React.FC = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              {searchQuery ? 'Search Results' : 'Frequently Asked Questions'}
+              {searchQuery ? 'Kết quả tìm kiếm' : 'Các câu hỏi thường gặp'}
             </h2>
             <p className="text-gray-600 text-lg">
-              {searchQuery ? `Found ${filteredFAQs.length} results` : 'Quick answers to common questions'}
+              {searchQuery ? `Tìm thấy ${filteredFAQs.length} kết quả` : 'Câu trả lời nhanh cho các câu hỏi thường gặp'}
             </p>
           </div>
 

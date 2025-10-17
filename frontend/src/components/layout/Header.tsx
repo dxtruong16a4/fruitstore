@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import { logout } from '../../redux/slices/authSlice';
+import SearchBar from '../SearchBar';
 import {
   AppBar,
   Toolbar,
@@ -70,6 +71,17 @@ const Header: React.FC = () => {
     handleMenuClose();
   };
 
+  const handleSearch = (query: string) => {
+    if (query.trim()) {
+      navigate(`/products?search=${encodeURIComponent(query.trim())}`);
+      setMobileOpen(false);
+    }
+  };
+
+  const handleSearchClear = () => {
+    // Clear search functionality - can be extended if needed
+  };
+
   const navigationItems = [
     { label: 'Trang chủ', path: '/', icon: <Home /> },
     { label: 'Sản phẩm', path: '/products', icon: <Store /> },
@@ -83,6 +95,18 @@ const Header: React.FC = () => {
   const drawer = (
     <Box>
       <Toolbar />
+      <Divider />
+      
+      {/* Mobile Search Bar */}
+      <Box sx={{ p: 2 }}>
+        <SearchBar
+          onSearch={handleSearch}
+          onClear={handleSearchClear}
+          placeholder="Tìm kiếm sản phẩm..."
+          className="w-full"
+        />
+      </Box>
+      
       <Divider />
       <List>
         {navigationItems.map((item) => (
@@ -186,6 +210,16 @@ const Header: React.FC = () => {
                 </>
               )}
 
+              {/* Search Bar - Desktop */}
+              <Box sx={{ mx: 2, minWidth: 300 }}>
+                <SearchBar
+                  onSearch={handleSearch}
+                  onClear={handleSearchClear}
+                  placeholder="Tìm kiếm sản phẩm..."
+                  className="w-full"
+                />
+              </Box>
+
               {isAuthenticated ? (
                 <Button
                   color="inherit"
@@ -255,6 +289,12 @@ const Header: React.FC = () => {
                 <Assignment fontSize="small" />
               </ListItemIcon>
               Đơn hàng
+            </MenuItem>
+            <MenuItem onClick={() => { handleNavigation('/profile'); handleMenuClose(); }}>
+              <ListItemIcon>
+                <Person fontSize="small" />
+              </ListItemIcon>
+              Hồ sơ
             </MenuItem>
           </>
         )}

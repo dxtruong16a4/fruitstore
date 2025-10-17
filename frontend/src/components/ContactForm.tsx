@@ -38,19 +38,19 @@ const ContactForm: React.FC<ContactFormProps> = ({
       onSubmit(formData);
     } else {
       // Default behavior
-      alert('Thank you for your message! We\'ll get back to you soon.');
+      alert('Cảm ơn bạn đã gửi tin nhắn! Chúng tôi sẽ liên hệ lại với bạn sớm.');
       setFormData({ name: '', email: '', subject: '', message: '' });
     }
   };
 
   return (
     <div className={className}>
-      <h2 className="text-3xl font-bold text-gray-900 mb-8">Send us a Message</h2>
+      <h2 className="text-3xl font-bold text-gray-900 mb-8">Gửi tin nhắn cho chúng tôi</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-            Full Name
+            Tên đầy đủ
           </label>
           <input
             type="text"
@@ -60,13 +60,13 @@ const ContactForm: React.FC<ContactFormProps> = ({
             onChange={handleInputChange}
             required
             className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="Your full name"
+            placeholder="Nhập tên đầy đủ của bạn"
           />
         </div>
 
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-            Email Address
+            Email
           </label>
           <input
             type="email"
@@ -76,13 +76,13 @@ const ContactForm: React.FC<ContactFormProps> = ({
             onChange={handleInputChange}
             required
             className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="your.email@example.com"
+            placeholder="your.email@example.com.vn"
           />
         </div>
 
         <div>
           <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-            Subject
+            Chủ đề
           </label>
           <input
             type="text"
@@ -92,13 +92,13 @@ const ContactForm: React.FC<ContactFormProps> = ({
             onChange={handleInputChange}
             required
             className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="What's this about?"
+            placeholder="Về điều gì?"
           />
         </div>
 
         <div>
           <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-            Message
+            Tin nhắn
           </label>
           <textarea
             id="message"
@@ -108,7 +108,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
             required
             rows={6}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="Tell us how we can help you..."
+            placeholder="Nói cho chúng tôi biết làm thế nào để giúp bạn..."
           />
         </div>
 
@@ -117,7 +117,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
           className="w-full bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition flex items-center justify-center space-x-2"
         >
           <Send className="w-5 h-5" />
-          <span>Send Message</span>
+          <span>Gửi tin nhắn</span>
         </button>
       </form>
     </div>

@@ -11,10 +11,10 @@ interface NewsletterSectionProps {
 }
 
 const NewsletterSection: React.FC<NewsletterSectionProps> = ({
-  title = "Get Fresh Updates",
-  subtitle = "Subscribe to our newsletter for exclusive deals and health tips",
-  placeholder = "Enter your email",
-  buttonText = "Subscribe",
+  title = "Nhận cập nhật mới nhất",
+  subtitle = "Đăng ký nhận cập nhật mới nhất từ chúng tôi",
+  placeholder = "Nhập email của bạn",
+  buttonText = "Đăng ký",
   onSubscribe,
   className = ''
 }) => {
@@ -27,7 +27,7 @@ const NewsletterSection: React.FC<NewsletterSectionProps> = ({
       onSubscribe(email);
     } else {
       // Default behavior
-      alert('Thank you for subscribing!');
+      alert('Cảm ơn bạn đã đăng ký!');
     }
   };
 
@@ -36,7 +36,7 @@ const NewsletterSection: React.FC<NewsletterSectionProps> = ({
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <Apple className="w-16 h-16 text-white mx-auto mb-6" />
         <h2 className="text-4xl font-bold text-white mb-4">
-          {title}
+          🍎 {title}
         </h2>
         <p className="text-green-100 text-lg mb-8">
           {subtitle}

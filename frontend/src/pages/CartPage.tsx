@@ -116,7 +116,7 @@ const CartPage: React.FC = () => {
                     <ListItem>
                       <ListItemText
                         primary={item.productName}
-                        secondary={`$${item.productPrice} mỗi cái`}
+                        secondary={`${item.productPrice.toLocaleString('vi-VN')} VNĐ mỗi cái`}
                       />
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <Button
@@ -135,7 +135,7 @@ const CartPage: React.FC = () => {
                           +
                         </Button>
                         <Typography sx={{ minWidth: 80, textAlign: 'right' }}>
-                          ${item.subtotal.toFixed(2)}
+                          {item.subtotal.toLocaleString('vi-VN')} VNĐ
                         </Typography>
                         <Button
                           color="error"
@@ -160,7 +160,7 @@ const CartPage: React.FC = () => {
                   Tổng sản phẩm: {totalItems}
                 </Typography>
                 <Typography variant="h5" color="primary">
-                  Tổng cộng: ${totalAmount.toFixed(2)}
+                  Tổng cộng: {totalAmount.toLocaleString('vi-VN')} VNĐ
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', gap: 2 }}>

@@ -36,7 +36,7 @@ const Footer: React.FC<FooterProps> = ({
               <Leaf className="w-8 h-8 text-green-500" />
               <span className="text-xl font-bold">FruitStore</span>
             </div>
-            <p className="text-gray-400">
+            <p className="text-gray-400" style={{ textAlign: 'justify' }}>
               Nguồn cung cấp trái cây tươi, hữu cơ đáng tin cậy được giao hàng hàng ngày.
             </p>
           </div>

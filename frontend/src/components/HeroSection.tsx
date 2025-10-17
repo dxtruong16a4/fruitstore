@@ -15,14 +15,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   subtitle,
   backgroundImage: _backgroundImage, // Keep for future use
   showSearch = false,
-  searchPlaceholder = "Search...",
+  searchPlaceholder = "Tìm kiếm...",
   onSearch,
   className = ''
 }) => {
   return (
     <section className={`py-20 bg-gradient-to-r from-green-600 to-emerald-600 text-white ${className}`}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 className="text-5xl font-bold mb-6">{title}</h1>
+        <h1 className="text-5xl font-bold mb-6">🍎 {title}</h1>
         {subtitle && (
           <p className="text-xl text-green-100 leading-relaxed mb-8">
             {subtitle}
