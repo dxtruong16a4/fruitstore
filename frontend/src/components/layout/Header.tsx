@@ -32,6 +32,7 @@ import {
   Assignment,
   Login,
   Logout,
+  Dashboard,
 } from '@mui/icons-material';
 
 const Header: React.FC = () => {
@@ -279,6 +280,14 @@ const Header: React.FC = () => {
           </MenuItem>
           {isAuthenticated && (
             <>
+              {user?.role.includes('admin') && (
+                <MenuItem onClick={() => { handleNavigation('/admin'); handleMenuClose(); }}>
+                  <ListItemIcon>
+                    <Dashboard fontSize="small" />
+                  </ListItemIcon>
+                  Dashboard
+                </MenuItem>
+              )}
               <MenuItem onClick={() => { handleNavigation('/cart'); handleMenuClose(); }}>
                 <ListItemIcon>
                   <ShoppingCart fontSize="small" />

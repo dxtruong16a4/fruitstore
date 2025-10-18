@@ -15,13 +15,13 @@ export const store = configureStore({
       .concat(apiSlice.middleware)
       .concat(
         // Custom middleware can be added here
-        (store: any) => (next: any) => (action: any) => {
+        (_store: any) => (next: any) => (action: any) => {
           // Logger middleware for development
           if (import.meta.env.DEV) {
             // console.group(action.type);
             // console.info('dispatching', action);
             const result = next(action);
-            // console.log('next state', store.getState());
+            // console.log('next state', _store.getState());
             // console.groupEnd();
             return result;
           }

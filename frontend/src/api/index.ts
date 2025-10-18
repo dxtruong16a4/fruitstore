@@ -3,8 +3,9 @@ export { authApi } from './authApi';
 export { categoryApi } from './categoryApi';
 export { productApi } from './productApi';
 export { cartApi } from './cartApi';
-export { orderApi, adminOrderApi } from './orderApi';
+export { orderApi } from './orderApi';
 export { discountApi } from './discountApi';
+export { adminApi } from './adminApi';
 
 // Export HTTP client
 export { default as httpClient, axiosClient } from './axiosClient';
@@ -13,11 +14,11 @@ export { default as httpClient, axiosClient } from './axiosClient';
 export type { Category } from './categoryApi';
 export type { Product, ProductFilter } from './productApi';
 export type { Cart, CartItem, AddToCartRequest, UpdateCartItemRequest, CartStats } from './cartApi';
-export type { Order, OrderItem, CreateOrderRequest, UpdateOrderStatusRequest, OrderStatistics } from './orderApi';
-export type { 
-  Discount, 
-  DiscountValidationResponse, 
-  DiscountUsage, 
+export type { OrderItem, OrderResponse, OrderStatistics } from './orderApi';
+export type {
+  Discount,
+  DiscountValidationResponse,
+  DiscountUsage,
   DiscountUsageStats,
   CreateDiscountRequest,
   UpdateDiscountRequest,

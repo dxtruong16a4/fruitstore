@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { cartApi, type Cart, type AddToCartRequest } from '../../api/cartApi';
+import { cartApi, type AddToCartRequest } from '../../api/cartApi';
 import { loadCartItems, setCartLoading, setCartError } from '../slices/cartSlice';
 
 // Load cart from backend

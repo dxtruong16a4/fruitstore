@@ -21,6 +21,7 @@ import HelpCenterPage from '../pages/HelpCenterPage';
 import TrackOrderPage from '../pages/TrackOrderPage';
 import ReturnsPage from '../pages/ReturnsPage';
 import ShippingInfoPage from '../pages/ShippingInfoPage';
+import DashboardPage from '../pages/admin/DashboardPage';
 
 // Component imports
 import ProtectedRoute from './ProtectedRoute';
@@ -74,25 +75,45 @@ const AppRoutes: React.FC = () => {
       />
       
       {/* Admin Routes with AdminLayout */}
-      <Route 
-        path="/admin" 
+      <Route
+        path="/admin"
         element={
           <AdminLayout>
             <ProtectedRoute requireAdmin>
-              <AdminPage />
+              <DashboardPage />
             </ProtectedRoute>
           </AdminLayout>
-        } 
+        }
       />
-      <Route 
-        path="/admin/*" 
+      <Route
+        path="/admin/dashboard"
+        element={
+          <AdminLayout>
+            <ProtectedRoute requireAdmin>
+              <DashboardPage />
+            </ProtectedRoute>
+          </AdminLayout>
+        }
+      />
+      <Route
+        path="/admin/overview"
         element={
           <AdminLayout>
             <ProtectedRoute requireAdmin>
               <AdminPage />
             </ProtectedRoute>
           </AdminLayout>
-        } 
+        }
+      />
+      <Route
+        path="/admin/*"
+        element={
+          <AdminLayout>
+            <ProtectedRoute requireAdmin>
+              <AdminPage />
+            </ProtectedRoute>
+          </AdminLayout>
+        }
       />
       
       {/* 404 Route */}

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import AdminHeader from '../components/layout/AdminHeader';
 import AdminSidebar from '../components/layout/AdminSidebar';
-import Footer from '../components/layout/Footer';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -39,9 +38,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       >
         {children}
       </Box>
-      
-      {/* Footer */}
-      <Footer />
     </Box>
   );
 };
