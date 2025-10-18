@@ -14,7 +14,7 @@ import { PageLayout } from '../components/layout';
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const { toasts, removeToast, showSuccess, showError } = useToast();
   
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
@@ -265,18 +265,26 @@ const HomePage: React.FC = () => {
                 Trải nghiệm vị ngon của thiên nhiên với trái cây tươi ngon được chọn lọc, đóng gói và giao hàng tới cửa bạn mỗi ngày.
               </p>
               <div className="flex flex-wrap gap-4">
-                <button 
+                <button
                   className="bg-green-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-green-700 transition transform hover:scale-105 shadow-lg hover:shadow-xl"
                   onClick={() => navigate('/products')}
                 >
                   Mua ngay
                 </button>
                 {!isAuthenticated && (
-                  <button 
+                  <button
                     className="bg-white text-gray-700 px-8 py-4 rounded-full font-semibold hover:bg-gray-50 transition border-2 border-gray-200"
                     onClick={() => navigate('/login')}
                   >
                     Đăng nhập
+                  </button>
+                )}
+                {isAuthenticated && user?.role === 'admin' && (
+                  <button
+                    className="bg-blue-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-blue-700 transition transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    onClick={() => navigate('/admin')}
+                  >
+                    📊 Admin Dashboard
                   </button>
                 )}
               </div>

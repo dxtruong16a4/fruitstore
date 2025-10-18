@@ -22,6 +22,11 @@ import TrackOrderPage from '../pages/TrackOrderPage';
 import ReturnsPage from '../pages/ReturnsPage';
 import ShippingInfoPage from '../pages/ShippingInfoPage';
 import DashboardPage from '../pages/admin/DashboardPage';
+import UserManagementPage from '../pages/admin/UserManagementPage';
+import CategoryManagementPage from '../pages/admin/CategoryManagementPage';
+import ProductManagementPage from '../pages/admin/ProductManagementPage';
+import OrderManagementPage from '../pages/admin/OrderManagementPage';
+import DiscountManagementPage from '../pages/admin/DiscountManagementPage';
 
 // Component imports
 import ProtectedRoute from './ProtectedRoute';
@@ -91,6 +96,56 @@ const AppRoutes: React.FC = () => {
           <AdminLayout>
             <ProtectedRoute requireAdmin>
               <DashboardPage />
+            </ProtectedRoute>
+          </AdminLayout>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <AdminLayout>
+            <ProtectedRoute requireAdmin>
+              <UserManagementPage />
+            </ProtectedRoute>
+          </AdminLayout>
+        }
+      />
+      <Route
+        path="/admin/categories"
+        element={
+          <AdminLayout>
+            <ProtectedRoute requireAdmin>
+              <CategoryManagementPage />
+            </ProtectedRoute>
+          </AdminLayout>
+        }
+      />
+      <Route
+        path="/admin/products"
+        element={
+          <AdminLayout>
+            <ProtectedRoute requireAdmin>
+              <ProductManagementPage />
+            </ProtectedRoute>
+          </AdminLayout>
+        }
+      />
+      <Route
+        path="/admin/orders"
+        element={
+          <AdminLayout>
+            <ProtectedRoute requireAdmin>
+              <OrderManagementPage />
+            </ProtectedRoute>
+          </AdminLayout>
+        }
+      />
+      <Route
+        path="/admin/discounts"
+        element={
+          <AdminLayout>
+            <ProtectedRoute requireAdmin>
+              <DiscountManagementPage />
             </ProtectedRoute>
           </AdminLayout>
         }

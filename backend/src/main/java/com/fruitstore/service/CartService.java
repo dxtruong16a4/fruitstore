@@ -47,12 +47,12 @@ public class CartService {
     /**
      * Get cart by user ID
      * Automatically creates cart if it doesn't exist
-     * 
+     *
      * @param userId the user ID
      * @return cart response
      * @throws IllegalArgumentException if user not found
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public CartResponse getCartByUserId(Long userId) {
         // Verify user exists
         User user = userRepository.findById(userId)
