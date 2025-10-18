@@ -89,7 +89,7 @@ public class AdminOrderController {
     /**
      * Update order status (admin)
      * Requires ADMIN role
-     * 
+     *
      * @param id the order ID
      * @param request the status update request
      * @return updated order response
@@ -99,9 +99,14 @@ public class AdminOrderController {
     public ResponseEntity<ApiResponse<OrderResponse>> updateOrderStatus(
             @PathVariable Long id,
             @Valid @RequestBody UpdateOrderStatusRequest request) {
-        
-        OrderResponse response = orderService.updateOrderStatus(id, request);
-        return ResponseEntity.ok(ApiResponse.success("Order status updated successfully", response));
+
+        try {
+            OrderResponse response = orderService.updateOrderStatus(id, request);
+            return ResponseEntity.ok(ApiResponse.success("Order status updated successfully", response));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest()
+                .body(ApiResponse.error(e.getMessage()));
+        }
     }
 
     /**

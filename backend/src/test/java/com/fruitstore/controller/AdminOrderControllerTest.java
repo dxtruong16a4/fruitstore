@@ -217,4 +217,43 @@ class AdminOrderControllerTest {
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.message").value("Invalid order status: invalid"));
     }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void updateOrderStatus_WithInvalidTransition_ShouldReturnBadRequest() throws Exception {
+        // Given - Try to transition from PENDING to SHIPPED (invalid)
+        UpdateOrderStatusRequest request = new UpdateOrderStatusRequest();
+        request.setStatus(OrderStatus.SHIPPED);
+        request.setAdminNotes("Invalid transition");
+
+        when(orderService.updateOrderStatus(anyLong(), any(UpdateOrderStatusRequest.class)))
+                .thenThrow(new IllegalArgumentException("Only pending orders can be confirmed"));
+
+        // When & Then
+        mockMvc.perform(put("/api/admin/orders/1/status")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message").value("Only pending orders can be confirmed"));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void updateOrderStatus_CancelledOrder_ShouldReturnBadRequest() throws Exception {
+        // Given - Try to transition from CANCELLED to any status (invalid)
+        UpdateOrderStatusRequest request = new UpdateOrderStatusRequest();
+        request.setStatus(OrderStatus.DELIVERED);
+
+        when(orderService.updateOrderStatus(anyLong(), any(UpdateOrderStatusRequest.class)))
+                .thenThrow(new IllegalArgumentException("Order cannot be cancelled in current status: CANCELLED"));
+
+        // When & Then
+        mockMvc.perform(put("/api/admin/orders/1/status")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message").value("Order cannot be cancelled in current status: CANCELLED"));
+    }
 }

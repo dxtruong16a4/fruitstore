@@ -287,16 +287,16 @@ public class OrderService {
         OrderStatus newStatus = request.getStatus();
 
         if (!isValidStatusTransition(currentStatus, newStatus)) {
-            throw new IllegalArgumentException("Invalid status transition from " + currentStatus + " to " + newStatus);
+            String errorMessage = getStatusTransitionErrorMessage(currentStatus, newStatus);
+            throw new IllegalArgumentException(errorMessage);
         }
 
-        // Update status
-        order.setStatus(newStatus);
-        
-        // Set specific timestamps based on status
+        // Call status transition methods which handle status updates and timestamps
+        // These methods check the current status before transitioning
         switch (newStatus) {
             case PENDING:
                 // No action needed for pending
+                order.setStatus(newStatus);
                 break;
             case CONFIRMED:
                 order.confirm();
@@ -606,6 +606,44 @@ public class OrderService {
             default:
                 return false;
         }
+    }
+
+    /**
+     * Generate a descriptive error message for invalid status transitions
+     *
+     * @param current the current order status
+     * @param newStatus the requested new status
+     * @return descriptive error message
+     */
+    private String getStatusTransitionErrorMessage(OrderStatus current, OrderStatus newStatus) {
+        switch (current) {
+            case PENDING:
+                if (newStatus == OrderStatus.CONFIRMED) {
+                    return "Only pending orders can be confirmed";
+                } else if (newStatus == OrderStatus.CANCELLED) {
+                    return "Only pending orders can be cancelled";
+                }
+                break;
+            case CONFIRMED:
+                if (newStatus == OrderStatus.SHIPPED) {
+                    return "Only confirmed orders can be shipped";
+                } else if (newStatus == OrderStatus.CANCELLED) {
+                    return "Only confirmed orders can be cancelled";
+                }
+                break;
+            case SHIPPED:
+                if (newStatus == OrderStatus.DELIVERED) {
+                    return "Only shipped orders can be delivered";
+                }
+                break;
+            case DELIVERED:
+                return "Order cannot be cancelled in current status: DELIVERED";
+            case CANCELLED:
+                return "Order cannot be cancelled in current status: CANCELLED";
+            default:
+                break;
+        }
+        return "Invalid status transition from " + current + " to " + newStatus;
     }
 
     private OrderListResponse mapToOrderListResponse(Page<Order> orders) {
