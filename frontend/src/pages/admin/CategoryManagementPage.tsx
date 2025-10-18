@@ -23,7 +23,7 @@ import {
   Chip,
   IconButton,
 } from '@mui/material';
-import { Category, Edit, Delete, Add, CheckCircle, Cancel } from '@mui/icons-material';
+import { Category, Edit, Add, CheckCircle, Cancel } from '@mui/icons-material';
 import { adminApi, type CategoryResponse } from '../../api/adminApi';
 
 const CategoryManagementPage: React.FC = () => {
@@ -34,7 +34,6 @@ const CategoryManagementPage: React.FC = () => {
   const [editingCategory, setEditingCategory] = useState<CategoryResponse | null>(null);
   const [formData, setFormData] = useState({ name: '', description: '' });
   const [saving, setSaving] = useState(false);
-  const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
 
   useEffect(() => {
     fetchCategories();
@@ -132,24 +131,6 @@ const CategoryManagementPage: React.FC = () => {
     }
   };
 
-  const handleDelete = async (categoryId: number) => {
-    try {
-      setSaving(true);
-      const result = await adminApi.deleteCategory(categoryId);
-
-      if (result.success) {
-        await fetchCategories();
-        setDeleteConfirm(null);
-      } else {
-        setError(result.message || 'Failed to delete category');
-      }
-    } catch (err) {
-      setError('An error occurred while deleting category');
-      console.error(err);
-    } finally {
-      setSaving(false);
-    }
-  };
 
   if (loading) {
     return (
@@ -227,14 +208,6 @@ const CategoryManagementPage: React.FC = () => {
                       >
                         {category.isActive ? <Cancel fontSize="small" /> : <CheckCircle fontSize="small" />}
                       </IconButton>
-                      <IconButton
-                        size="small"
-                        onClick={() => setDeleteConfirm(category.categoryId)}
-                        disabled={saving || (category.productCount || 0) > 0}
-                        title={(category.productCount || 0) > 0 ? `Cannot delete: ${category.productCount} product(s) associated` : 'Delete'}
-                      >
-                        <Delete fontSize="small" color={((category.productCount || 0) > 0) ? 'disabled' : 'error'} />
-                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -281,26 +254,6 @@ const CategoryManagementPage: React.FC = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={deleteConfirm !== null} onClose={() => setDeleteConfirm(null)}>
-        <DialogTitle>Confirm Delete</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Are you sure you want to delete this category? This action cannot be undone.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteConfirm(null)}>Cancel</Button>
-          <Button 
-            onClick={() => deleteConfirm !== null && handleDelete(deleteConfirm)}
-            variant="contained"
-            color="error"
-            disabled={saving}
-          >
-            {saving ? 'Deleting...' : 'Delete'}
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Container>
   );
 };
