@@ -10,10 +10,13 @@ import {
   Typography,
   Divider,
   Alert,
-  CircularProgress
+  CircularProgress,
+  InputAdornment
 } from '@mui/material';
+import { CheckCircle, Error, Info } from '@mui/icons-material';
 import { useAppSelector } from '../redux';
 import type { CreateOrderRequest } from '../api/orderApi';
+import { discountApi, type DiscountValidationResponse } from '../api/discountApi';
 
 interface CheckoutFormProps {
   open: boolean;
@@ -41,6 +44,15 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [discountValidation, setDiscountValidation] = useState<{
+    isValidating: boolean;
+    result: DiscountValidationResponse | null;
+    error: string | null;
+  }>({
+    isValidating: false,
+    result: null,
+    error: null
+  });
 
   const handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -54,6 +66,55 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
         ...prev,
         [field]: ''
       }));
+    }
+
+    // Clear discount validation when discount code changes
+    if (field === 'discountCode') {
+      setDiscountValidation({
+        isValidating: false,
+        result: null,
+        error: null
+      });
+    }
+  };
+
+  const handleValidateDiscount = async () => {
+    if (!formData.discountCode.trim()) {
+      setDiscountValidation({
+        isValidating: false,
+        result: null,
+        error: 'Vui lòng nhập mã giảm giá'
+      });
+      return;
+    }
+
+    setDiscountValidation(prev => ({ ...prev, isValidating: true, error: null }));
+
+    try {
+      const response = await discountApi.validateDiscount({
+        code: formData.discountCode.trim(),
+        orderAmount: totalAmount
+      });
+
+      if (response.success) {
+        setDiscountValidation({
+          isValidating: false,
+          result: response.data,
+          error: null
+        });
+      } else {
+        setDiscountValidation({
+          isValidating: false,
+          result: null,
+          error: response.message || 'Mã giảm giá không hợp lệ'
+        });
+      }
+    } catch (error: any) {
+      setDiscountValidation({
+        isValidating: false,
+        result: null,
+        error: error.response?.data?.message || 'Lỗi khi kiểm tra mã giảm giá'
+      });
     }
   };
 
@@ -145,10 +206,29 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                 </Box>
               ))}
               <Divider sx={{ my: 1 }} />
+              
+              {/* Discount amount if valid discount is applied */}
+              {discountValidation.result?.valid && discountValidation.result.calculatedDiscountAmount && (
+                <>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                    <Typography variant="body2" color="success.main">
+                      Giảm giá ({formData.discountCode}):
+                    </Typography>
+                    <Typography variant="body2" color="success.main" fontWeight="medium">
+                      -${discountValidation.result.calculatedDiscountAmount.toFixed(2)}
+                    </Typography>
+                  </Box>
+                  <Divider sx={{ my: 1 }} />
+                </>
+              )}
+              
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="h6">Total:</Typography>
                 <Typography variant="h6" color="primary">
-                  ${totalAmount.toFixed(2)}
+                  ${discountValidation.result?.valid && discountValidation.result.calculatedDiscountAmount 
+                    ? (totalAmount - discountValidation.result.calculatedDiscountAmount).toFixed(2)
+                    : totalAmount.toFixed(2)
+                  }
                 </Typography>
               </Box>
             </Box>
@@ -214,14 +294,77 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
               disabled={loading}
             />
 
-            <TextField
-              fullWidth
-              label="Mã giảm giá"
-              value={formData.discountCode}
-              onChange={handleInputChange('discountCode')}
-              helperText="Nhập mã giảm giá nếu bạn có"
-              disabled={loading}
-            />
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
+              <TextField
+                fullWidth
+                label="Mã giảm giá"
+                value={formData.discountCode}
+                onChange={handleInputChange('discountCode')}
+                helperText="Nhập mã giảm giá nếu bạn có"
+                disabled={loading}
+                InputProps={{
+                  endAdornment: formData.discountCode.trim() && (
+                    <InputAdornment position="end">
+                      {discountValidation.result?.valid ? (
+                        <CheckCircle color="success" />
+                      ) : discountValidation.error ? (
+                        <Error color="error" />
+                      ) : null}
+                    </InputAdornment>
+                  )
+                }}
+              />
+              <Button
+                variant="outlined"
+                onClick={handleValidateDiscount}
+                disabled={loading || !formData.discountCode.trim() || discountValidation.isValidating}
+                sx={{ minWidth: 100, height: 56 }}
+                startIcon={discountValidation.isValidating ? <CircularProgress size={16} /> : null}
+              >
+                {discountValidation.isValidating ? 'Đang kiểm tra...' : 'Kiểm tra'}
+              </Button>
+            </Box>
+
+            {/* Discount validation notifications */}
+            {discountValidation.result?.valid && (
+              <Alert 
+                severity="success" 
+                icon={<CheckCircle />}
+                sx={{ mt: 1 }}
+              >
+                <Typography variant="body2">
+                  <strong>Mã giảm giá hợp lệ!</strong> Bạn sẽ được giảm ${discountValidation.result.calculatedDiscountAmount?.toFixed(2)}
+                  {discountValidation.result.discountType === 'PERCENTAGE' 
+                    ? ` (${discountValidation.result.discountValue}%)` 
+                    : ''
+                  }
+                </Typography>
+              </Alert>
+            )}
+
+            {discountValidation.error && (
+              <Alert 
+                severity="error" 
+                icon={<Error />}
+                sx={{ mt: 1 }}
+              >
+                <Typography variant="body2">
+                  <strong>Mã giảm giá không hợp lệ:</strong> {discountValidation.error}
+                </Typography>
+              </Alert>
+            )}
+
+            {discountValidation.result?.valid && discountValidation.result.minOrderAmount && (
+              <Alert 
+                severity="info" 
+                icon={<Info />}
+                sx={{ mt: 1 }}
+              >
+                <Typography variant="body2">
+                  Mã giảm giá này yêu cầu đơn hàng tối thiểu ${discountValidation.result.minOrderAmount.toFixed(2)}
+                </Typography>
+              </Alert>
+            )}
           </Box>
         </Box>
       </DialogContent>

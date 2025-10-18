@@ -20,10 +20,18 @@ export interface Discount {
 }
 
 export interface DiscountValidationResponse {
-  isValid: boolean;
+  valid: boolean;
+  code: string;
   message: string;
-  discountAmount?: number;
-  discount?: Discount;
+  discountType?: 'PERCENTAGE' | 'FIXED_AMOUNT';
+  discountValue?: number;
+  calculatedDiscountAmount?: number;
+  minOrderAmount?: number;
+  maxDiscountAmount?: number;
+  usageLimit?: number;
+  usedCount?: number;
+  remainingUsage?: number;
+  description?: string;
 }
 
 export interface DiscountUsage {

@@ -276,7 +276,8 @@ public class DiscountService {
             usage.getOrder().setOrderId(orderId);
         }
         
-        usage.setDiscountAmount(discountAmount);
+        // Ensure discount amount is properly scaled to 2 decimal places
+        usage.setDiscountAmount(discountAmount.setScale(2, java.math.RoundingMode.HALF_UP));
 
         discountUsageRepository.save(usage);
 
@@ -295,8 +296,11 @@ public class DiscountService {
      */
     @Transactional
     public void recordDiscountUsage(Discount discount, User user, Order order, BigDecimal discountAmount) {
+        // Ensure discount amount is properly scaled to 2 decimal places
+        BigDecimal scaledDiscountAmount = discountAmount.setScale(2, java.math.RoundingMode.HALF_UP);
+        
         // Create discount usage record
-        DiscountUsage usage = new DiscountUsage(discount, user, order, discountAmount);
+        DiscountUsage usage = new DiscountUsage(discount, user, order, scaledDiscountAmount);
         discountUsageRepository.save(usage);
 
         // Increment used count

@@ -32,7 +32,7 @@ public class Discount {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = com.fruitstore.util.DiscountTypeConverter.class)
     @Column(name = "discount_type", nullable = false, length = 20)
     private DiscountType discountType = DiscountType.PERCENTAGE;
 
@@ -152,7 +152,7 @@ public class Discount {
 
         BigDecimal discountAmount;
         if (discountType.isPercentage()) {
-            discountAmount = orderAmount.multiply(discountValue).divide(new BigDecimal("100"));
+            discountAmount = orderAmount.multiply(discountValue).divide(new BigDecimal("100"), 2, java.math.RoundingMode.HALF_UP);
         } else {
             discountAmount = discountValue;
         }
@@ -167,7 +167,8 @@ public class Discount {
             discountAmount = orderAmount;
         }
 
-        return discountAmount;
+        // Ensure the result is properly scaled to 2 decimal places
+        return discountAmount.setScale(2, java.math.RoundingMode.HALF_UP);
     }
 
     /**
