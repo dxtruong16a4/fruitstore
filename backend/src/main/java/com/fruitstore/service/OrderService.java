@@ -596,7 +596,9 @@ public class OrderService {
             case PENDING:
                 return newStatus == OrderStatus.CONFIRMED || newStatus == OrderStatus.CANCELLED;
             case CONFIRMED:
-                return newStatus == OrderStatus.DELIVERED || newStatus == OrderStatus.CANCELLED;
+                return newStatus == OrderStatus.SHIPPED || newStatus == OrderStatus.CANCELLED;
+            case SHIPPED:
+                return newStatus == OrderStatus.DELIVERED;
             case DELIVERED:
                 return false; // Final state
             case CANCELLED:

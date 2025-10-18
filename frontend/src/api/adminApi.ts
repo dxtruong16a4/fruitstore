@@ -150,11 +150,19 @@ export interface OrderItemResponse {
 
 export interface OrderResponse {
   orderId: number;
-  userId: number;
-  username: string;
+  orderNumber: string;
+  user: {
+    userId: number;
+    username: string;
+    fullName?: string;
+  };
+  username?: string;
   totalAmount: number;
   status: 'PENDING' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
   shippingAddress?: string;
+  phoneNumber?: string;
+  customerName?: string;
+  customerEmail?: string;
   notes?: string;
   orderItems?: OrderItemResponse[];
   createdAt: string;

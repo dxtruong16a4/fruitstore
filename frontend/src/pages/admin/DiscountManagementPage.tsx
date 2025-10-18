@@ -121,8 +121,27 @@ const DiscountManagementPage: React.FC = () => {
   };
 
   const handleSave = async () => {
-    if (!formData.code.trim() || formData.discountValue <= 0) {
-      setError('Please fill in all required fields');
+    // Clear previous errors
+    setError(null);
+
+    // Validation
+    if (!formData.code.trim()) {
+      setError('Discount code is required');
+      return;
+    }
+
+    if (formData.discountValue <= 0) {
+      setError('Discount value must be greater than 0');
+      return;
+    }
+
+    if (formData.discountType === 'PERCENTAGE' && formData.discountValue > 100) {
+      setError('Percentage discount cannot exceed 100%');
+      return;
+    }
+
+    if (formData.maxUsageCount !== undefined && formData.maxUsageCount <= 0) {
+      setError('Max usage count must be greater than 0');
       return;
     }
 
@@ -131,7 +150,12 @@ const DiscountManagementPage: React.FC = () => {
       let result;
 
       if (editingDiscount) {
-        result = await adminApi.updateDiscount(editingDiscount.discountId, formData);
+        // For updates, include the current isActive status
+        const updateData = {
+          ...formData,
+          isActive: editingDiscount.isActive
+        };
+        result = await adminApi.updateDiscount(editingDiscount.discountId, updateData);
       } else {
         result = await adminApi.createDiscount(formData);
       }

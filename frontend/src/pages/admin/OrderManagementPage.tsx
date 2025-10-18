@@ -31,7 +31,6 @@ import {
 import { ShoppingCart, Edit, Visibility } from '@mui/icons-material';
 import { adminApi, type OrderResponse } from '../../api/adminApi';
 
-const ORDER_STATUSES = ['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
 
 const getStatusColor = (status: string): 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' => {
   switch (status) {
@@ -99,14 +98,25 @@ const OrderManagementPage: React.FC = () => {
     setPage(0);
   };
 
-  const handleViewOrder = (order: OrderResponse) => {
-    setSelectedOrder(order);
+  const handleViewOrder = async (order: OrderResponse) => {
+    try {
+      // Fetch full order details including address and notes
+      const result = await adminApi.getOrderById(order.orderId);
+      if (result.success && result.data) {
+        setSelectedOrder(result.data);
+      } else {
+        setSelectedOrder(order);
+      }
+    } catch (error) {
+      console.error('Error fetching order details:', error);
+      setSelectedOrder(order);
+    }
     setOpenViewDialog(true);
   };
 
   const handleEditStatus = (order: OrderResponse) => {
     setSelectedOrder(order);
-    setNewStatus(order.status);
+    setNewStatus(''); // Reset to empty to force user to select a new status
     setNotes(order.notes || '');
     setOpenEditDialog(true);
   };
@@ -126,6 +136,21 @@ const OrderManagementPage: React.FC = () => {
   const handleUpdateStatus = async () => {
     if (!selectedOrder) return;
 
+    // Validate status transitions
+    const currentStatus = selectedOrder.status;
+    const validTransitions: { [key: string]: string[] } = {
+      'PENDING': ['CONFIRMED', 'CANCELLED'],
+      'CONFIRMED': ['SHIPPED', 'CANCELLED'],
+      'SHIPPED': ['DELIVERED'],
+      'DELIVERED': [],
+      'CANCELLED': []
+    };
+
+    if (!validTransitions[currentStatus]?.includes(newStatus)) {
+      setError(`Invalid status transition from ${currentStatus} to ${newStatus}`);
+      return;
+    }
+
     try {
       setUpdating(true);
       const result = await adminApi.updateOrderStatusAdmin(selectedOrder.orderId, newStatus, notes);
@@ -133,6 +158,7 @@ const OrderManagementPage: React.FC = () => {
       if (result.success) {
         await fetchOrders();
         handleCloseEditDialog();
+        setError(null); // Clear any previous errors
       } else {
         setError(result.message || 'Failed to update order status');
       }
@@ -188,7 +214,7 @@ const OrderManagementPage: React.FC = () => {
                 {orders.map((order) => (
                   <TableRow key={order.orderId} hover>
                     <TableCell sx={{ fontWeight: 500 }}>#{order.orderId}</TableCell>
-                    <TableCell>{order.username}</TableCell>
+                    <TableCell>{order.customerName || order.user?.username || 'Unknown'}</TableCell>
                     <TableCell align="right">₫{order.totalAmount.toLocaleString()}</TableCell>
                     <TableCell>
                       <Chip
@@ -243,7 +269,7 @@ const OrderManagementPage: React.FC = () => {
               </Box>
               <Box>
                 <Typography variant="body2" color="text.secondary">Customer</Typography>
-                <Typography variant="body1" sx={{ fontWeight: 500 }}>{selectedOrder.username}</Typography>
+                <Typography variant="body1" sx={{ fontWeight: 500 }}>{selectedOrder.customerName || selectedOrder.user?.username || 'Unknown'}</Typography>
               </Box>
               <Box>
                 <Typography variant="body2" color="text.secondary">Total Amount</Typography>
@@ -296,11 +322,25 @@ const OrderManagementPage: React.FC = () => {
                   label="Status"
                   onChange={(e) => setNewStatus(e.target.value)}
                 >
-                  {ORDER_STATUSES.map((status) => (
-                    <MenuItem key={status} value={status}>
-                      {status}
-                    </MenuItem>
-                  ))}
+                  <MenuItem value="">
+                    <em>Select new status</em>
+                  </MenuItem>
+                  {(() => {
+                    const currentStatus = selectedOrder?.status;
+                    const validTransitions: { [key: string]: string[] } = {
+                      'PENDING': ['CONFIRMED', 'CANCELLED'],
+                      'CONFIRMED': ['SHIPPED', 'CANCELLED'],
+                      'SHIPPED': ['DELIVERED'],
+                      'DELIVERED': [],
+                      'CANCELLED': []
+                    };
+                    const allowedStatuses = validTransitions[currentStatus || ''] || [];
+                    return allowedStatuses.map((status) => (
+                      <MenuItem key={status} value={status}>
+                        {status}
+                      </MenuItem>
+                    ));
+                  })()}
                 </Select>
               </FormControl>
               <TextField
@@ -320,7 +360,7 @@ const OrderManagementPage: React.FC = () => {
           <Button 
             onClick={handleUpdateStatus} 
             variant="contained" 
-            disabled={updating || newStatus === selectedOrder?.status}
+            disabled={updating || !newStatus || newStatus === selectedOrder?.status}
           >
             {updating ? 'Updating...' : 'Update'}
           </Button>
