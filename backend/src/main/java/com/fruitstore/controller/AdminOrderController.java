@@ -67,7 +67,7 @@ public class AdminOrderController {
      */
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<OrderResponse>> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<OrderResponse>> getOrderById(@PathVariable("id") Long id) {
         OrderResponse response = orderService.getOrderById(id);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
@@ -97,7 +97,7 @@ public class AdminOrderController {
     @PutMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<OrderResponse>> updateOrderStatus(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @Valid @RequestBody UpdateOrderStatusRequest request) {
 
         try {
@@ -118,7 +118,7 @@ public class AdminOrderController {
      */
     @PutMapping("/{id}/cancel")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<OrderResponse>> cancelOrder(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<OrderResponse>> cancelOrder(@PathVariable("id") Long id) {
         OrderResponse response = orderService.cancelOrder(id);
         return ResponseEntity.ok(ApiResponse.success("Order cancelled successfully", response));
     }

@@ -61,7 +61,7 @@ public class CategoryController {
      * @return category response
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<CategoryResponse>> getCategoryById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<CategoryResponse>> getCategoryById(@PathVariable("id") Long id) {
         CategoryResponse category = categoryService.getCategoryById(id);
         return ResponseEntity.ok(ApiResponse.success(category));
     }
@@ -69,12 +69,12 @@ public class CategoryController {
     /**
      * Get active category by ID
      * Public endpoint - no authentication required
-     * 
+     *
      * @param id the category ID
      * @return active category response
      */
     @GetMapping("/{id}/active")
-    public ResponseEntity<ApiResponse<CategoryResponse>> getActiveCategoryById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<CategoryResponse>> getActiveCategoryById(@PathVariable("id") Long id) {
         CategoryResponse category = categoryService.getActiveCategoryById(id);
         return ResponseEntity.ok(ApiResponse.success(category));
     }

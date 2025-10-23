@@ -66,7 +66,7 @@ public class ProductController {
      * @return product response
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ProductResponse>> getProductById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<ProductResponse>> getProductById(@PathVariable("id") Long id) {
         ProductResponse product = productService.getProductById(id);
         return ResponseEntity.ok(ApiResponse.success(product));
     }
@@ -74,12 +74,12 @@ public class ProductController {
     /**
      * Get active product by ID
      * Public endpoint - no authentication required
-     * 
+     *
      * @param id the product ID
      * @return active product response
      */
     @GetMapping("/{id}/active")
-    public ResponseEntity<ApiResponse<ProductResponse>> getActiveProductById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<ProductResponse>> getActiveProductById(@PathVariable("id") Long id) {
         ProductResponse product = productService.getActiveProductById(id);
         return ResponseEntity.ok(ApiResponse.success(product));
     }

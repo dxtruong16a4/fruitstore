@@ -91,8 +91,8 @@ public class OrderController {
     @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<OrderResponse>> getOrderById(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @PathVariable Long id) {
-        
+            @PathVariable("id") Long id) {
+
         OrderResponse response = orderService.getOrderById(id, userDetails.getUserId());
         return ResponseEntity.ok(ApiResponse.success(response));
     }
@@ -127,8 +127,8 @@ public class OrderController {
     @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<OrderResponse>> cancelOrder(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @PathVariable Long id) {
-        
+            @PathVariable("id") Long id) {
+
         OrderResponse response = orderService.cancelOrder(id, userDetails.getUserId());
         return ResponseEntity.ok(ApiResponse.success("Order cancelled successfully", response));
     }
@@ -222,8 +222,8 @@ public class OrderController {
     @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<Boolean>> canCancelOrder(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @PathVariable Long id) {
-        
+            @PathVariable("id") Long id) {
+
         boolean canCancel = orderService.canCancelOrder(id, userDetails.getUserId());
         return ResponseEntity.ok(ApiResponse.success(canCancel));
     }
